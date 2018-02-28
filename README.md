@@ -3,6 +3,8 @@
 This is an example chat application. It's complete and functional, but leaves
 plenty of room for improvement.
 
+Woo! CodeU is lots of fun.
+
 ## Step 1: Download Java
 
 Check whether you already have Java installed by opening a console and typing:
