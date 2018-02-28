@@ -38,9 +38,7 @@
       style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
 
       <h1>CodeU Chat App</h1>
-      <%-- Could maybe replace this with some sort of team logo later --%>
       <img src="/resources/codeU.png">
-      <%-- TODO: Replace Team 12 with Team Name --%>
       <h2>Welcome to Team 12's CodeU 2018 Project!</h2>
 
       <ul>
