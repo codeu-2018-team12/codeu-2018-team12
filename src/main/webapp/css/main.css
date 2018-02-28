@@ -49,6 +49,11 @@ h1 {
   color: #757575;
 }
 
+img {
+    margin: 0 auto;
+    width: 40%;
+}
+
 input {
   font-size: 18px;
 }
