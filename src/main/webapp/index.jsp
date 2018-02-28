@@ -47,11 +47,13 @@
         <li><a href="/login">Login</a> to get started.</li>
         <li>Go to the <a href="/conversations">conversations</a> page to
             create or join a conversation.</li>
-        <li>View the <a href="/about.jsp">about</a> page to learn more about us and the
-            project.</li>
+        <li>View the <a href="/about.jsp">about</a> page to learn more about us
+            and the project.</li>
         <li>You can <a href="/testdata">load test data</a> to fill the site with
             example data.</li>
-        <li>You can view the project's GitHub page <a href="https://github.com/codeu-2018-team12/codeu-2018-team12">here</a>.</li>
+        <li>You can view the project's GitHub page
+            <a href="https://github.com/codeu-2018-team12/codeu-2018-team12">
+              here</a>.</li>
       </ul>
     </div>
   </div>
