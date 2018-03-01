@@ -66,5 +66,27 @@
       </p>
     </div>
   </div>
+
+  <div id="container">
+    <div style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
+
+      <h1>About Team 12</h1>
+
+      <p>Welcome to our page!</p>
+
+      <ul>
+        <li><strong>Jeremy Archer:</strong> Jeremy is from Chicago, IL and works as a site reliability engineer in  New York.</li>
+        <li><strong>Alison Rosenman:</strong> Alison is from Mercer
+        Island, WA and is a student at Haverford College.</li>
+        <li><strong>Marie Zimmerman:</strong> Marie is from Atlanta, 
+        Georgia and is a student at Georgia Tech.</li>
+        <li><strong>Maria Mahin:</strong> Maria is from Queens, NY and
+        is a student at Hunter College.</li>
+        <li><strong>Kevin Kane:</strong> Kevin is from Laurel, Maryland
+        and is a student at the University of Maryland, College Park.</li>
+      </ul>
+    </div>
+  </div>
+
 </body>
 </html>
