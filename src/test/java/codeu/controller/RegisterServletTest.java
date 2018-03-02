@@ -28,8 +28,8 @@ public class RegisterServletTest {
 
   @Test
   public void testDoGet() throws IOException, ServletException {
-      registerServlet.doGet(mockRequest, mockResponse);
+    registerServlet.doGet(mockRequest, mockResponse);
 
-      Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
