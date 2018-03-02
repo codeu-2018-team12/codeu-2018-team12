@@ -46,7 +46,7 @@ public class PersistentDataStoreTest {
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
-    String passwordTwo = "test_password_two";
+    String passwordTwo = "test_password_one";
     Instant creationTwo = Instant.ofEpochMilli(2000);
     User inputUserTwo = new User(idTwo, nameTwo, passwordTwo, creationTwo);
 
