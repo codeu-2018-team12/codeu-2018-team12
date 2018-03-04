@@ -29,7 +29,7 @@ public class RegisterServletTest {
     mockResponse = Mockito.mock(HttpServletResponse.class);
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/register.jsp"))
-            .thenReturn(mockRequestDispatcher);
+        .thenReturn(mockRequestDispatcher);
   }
 
   @Test
@@ -46,7 +46,7 @@ public class RegisterServletTest {
     registerServlet.doPost(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest)
-            .setAttribute("error", "Please enter only letters, numbers, and spaces.");
+        .setAttribute("error", "Please enter only letters, numbers, and spaces.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -84,11 +84,8 @@ public class RegisterServletTest {
 
     registerServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest)
-            .setAttribute("error", "That username is already taken.");
+    Mockito.verify(mockRequest).setAttribute("error", "That username is already taken.");
 
     Mockito.verify(mockUserStore, Mockito.never()).addUser(Mockito.any(User.class));
-
   }
-
 }
