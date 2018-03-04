@@ -29,7 +29,7 @@ public class RegisterServletTest {
     mockResponse = Mockito.mock(HttpServletResponse.class);
     mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/register.jsp"))
-        .thenReturn(mockRequestDispatcher);
+            .thenReturn(mockRequestDispatcher);
   }
 
   @Test

@@ -2,6 +2,7 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
+
 import java.io.IOException;
 import java.util.UUID;
 import java.time.Instant;
@@ -10,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet class responsible for user registration. */
+/**
+ * Servlet class responsible for user registration.
+ */
 public class RegisterServlet extends HttpServlet {
 
   /**
@@ -38,7 +41,7 @@ public class RegisterServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
 
     request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
   }
