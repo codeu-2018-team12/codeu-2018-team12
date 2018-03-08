@@ -47,9 +47,16 @@ public class RegisterServlet extends HttpServlet {
 
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String confirmPassword = request.getParameter("confirmPassword");
 
     if (!username.matches("[\\w*\\s*]*")) {
       request.setAttribute("error", "Please enter only letters, numbers, and spaces.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
+    if (password!= null && confirmPassword!= null &&!password.equals(confirmPassword)) {
+      request.setAttribute("error", "Your password and confirmation password do not match.");
       request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
       return;
     }
