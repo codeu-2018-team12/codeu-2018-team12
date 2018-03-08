@@ -97,7 +97,7 @@ public class RegisterServletTest {
     registerServlet.doPost(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest)
-            .setAttribute("error", "Your password and confirmation password do not match.");
+        .setAttribute("error", "Your password and confirmation password do not match.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
