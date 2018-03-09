@@ -55,6 +55,12 @@ public class RegisterServlet extends HttpServlet {
       return;
     }
 
+    if (confirmPassword == null) {
+      request.setAttribute("error", "Please enter a confirmation password.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
     if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
       request.setAttribute("error", "Your password and confirmation password do not match.");
       request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
