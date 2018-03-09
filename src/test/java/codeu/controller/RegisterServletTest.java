@@ -54,7 +54,6 @@ public class RegisterServletTest {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
     Mockito.when(mockRequest.getParameter("confirmPassword")).thenReturn("test confirm password");
 
-
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(false);
     registerServlet.setUserStore(mockUserStore);
@@ -76,7 +75,6 @@ public class RegisterServletTest {
   public void testDoPost_ExistingUser() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
     Mockito.when(mockRequest.getParameter("confirmPassword")).thenReturn("test confirm password");
-
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(true);
@@ -100,8 +98,7 @@ public class RegisterServletTest {
 
     registerServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest)
-        .setAttribute("error", "Please enter a confirmation password.");
+    Mockito.verify(mockRequest).setAttribute("error", "Please enter a confirmation password.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
