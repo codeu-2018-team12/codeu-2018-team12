@@ -26,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet class responsible for loading test data. */
 public class TestDataServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 1;
+
   /** Store class that gives access to Conversations. */
   private ConversationStore conversationStore;
 

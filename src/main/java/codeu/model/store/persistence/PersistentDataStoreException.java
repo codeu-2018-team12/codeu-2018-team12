@@ -16,6 +16,9 @@ package codeu.model.store.persistence;
 
 /** Exception indicating that something went wrong with data storage. */
 public class PersistentDataStoreException extends Exception {
+
+  private static final long serialVersionUID = 1;
+
   /**
    * Constructs a new PersistentDataStoreException.
    *

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet class responsible for user registration. */
 public class RegisterServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 1;
+
   /** Store class that gives access to Users. */
   private UserStore userStore;
 

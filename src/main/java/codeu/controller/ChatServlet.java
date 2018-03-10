@@ -34,6 +34,8 @@ import org.jsoup.safety.Whitelist;
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
 
+  private static final long serialVersionUID = 1;
+
   /** Store class that gives access to Conversations. */
   private ConversationStore conversationStore;
 
