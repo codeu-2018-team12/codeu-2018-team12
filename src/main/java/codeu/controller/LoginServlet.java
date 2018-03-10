@@ -25,8 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet class responsible for the login page. */
 public class LoginServlet extends HttpServlet {
 
-  private static final long serialVersionUID = 1;
-
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
