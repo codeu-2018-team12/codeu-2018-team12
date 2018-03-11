@@ -47,6 +47,7 @@ public class RegisterServlet extends HttpServlet {
 
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String confirmPassword = request.getParameter("confirmPassword");
 
     if (!username.matches("[\\w*\\s*]*")) {
       request.setAttribute("error", "Please enter only letters, numbers, and spaces.");
@@ -54,8 +55,20 @@ public class RegisterServlet extends HttpServlet {
       return;
     }
 
-    if (password == null || password.length() < 8) {
+    if (password != null && password.length() < 8) {
       request.setAttribute("error", "Please enter a password that is at least 8 characters.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
+    if (confirmPassword == null) {
+      request.setAttribute("error", "Please enter a confirmation password.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
+    if (password != null && !password.equals(confirmPassword)) {
+      request.setAttribute("error", "Your password and confirmation password do not match.");
       request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
       return;
     }
