@@ -112,7 +112,7 @@ public class RegisterServletTest {
     registerServlet.doPost(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest)
-            .setAttribute("error", "Please enter a password that is at least 8 characters.");
+        .setAttribute("error", "Please enter a password that is at least 8 characters.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
