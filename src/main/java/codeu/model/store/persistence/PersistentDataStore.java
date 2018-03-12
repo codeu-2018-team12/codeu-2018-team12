@@ -17,7 +17,6 @@ package codeu.model.store.persistence;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.store.persistence.PersistentDataStoreException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -49,8 +48,8 @@ public class PersistentDataStore {
   /**
    * Loads all User objects from the Datastore service and returns them in a List.
    *
-   * @throws PersistentDataStoreException if an error was detected during the load from the
-   *     Datastore service
+   * @throws codeu.model.store.persistence.PersistentDataStoreException if an error was detected
+   *     during the load from the Datastore service
    */
   public List<User> loadUsers() throws PersistentDataStoreException {
 
@@ -64,8 +63,9 @@ public class PersistentDataStore {
       try {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         String userName = (String) entity.getProperty("username");
+        String password = (String) entity.getProperty("password");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        User user = new User(uuid, userName, null, creationTime);
+        User user = new User(uuid, userName, password, creationTime);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -81,8 +81,8 @@ public class PersistentDataStore {
   /**
    * Loads all Conversation objects from the Datastore service and returns them in a List.
    *
-   * @throws PersistentDataStoreException if an error was detected during the load from the
-   *     Datastore service
+   * @throws codeu.model.store.persistence.PersistentDataStoreException if an error was detected
+   *     during the load from the Datastore service
    */
   public List<Conversation> loadConversations() throws PersistentDataStoreException {
 
@@ -114,8 +114,8 @@ public class PersistentDataStore {
   /**
    * Loads all Message objects from the Datastore service and returns them in a List.
    *
-   * @throws PersistentDataStoreException if an error was detected during the load from the
-   *     Datastore service
+   * @throws codeu.model.store.persistence.PersistentDataStoreException if an error was detected
+   *     during the load from the Datastore service
    */
   public List<Message> loadMessages() throws PersistentDataStoreException {
 
@@ -150,6 +150,7 @@ public class PersistentDataStore {
     Entity userEntity = new Entity("chat-users");
     userEntity.setProperty("uuid", user.getId().toString());
     userEntity.setProperty("username", user.getName());
+    userEntity.setProperty("password", user.getPassword());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     datastore.put(userEntity);
   }
@@ -175,3 +176,4 @@ public class PersistentDataStore {
     datastore.put(conversationEntity);
   }
 }
+ 

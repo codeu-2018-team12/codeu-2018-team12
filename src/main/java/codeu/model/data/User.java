@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc.
+\// Copyright 2017 Google Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class User {
    *
    * @param id the ID of this User
    * @param name the username of this User
-    *@param password the password of this User
+   * @param password the password of this User
    * @param creation the creation time of this User
    */
   public User(UUID id, String name, String password, Instant creation) {
