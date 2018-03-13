@@ -73,7 +73,6 @@ public class LoginServletTest {
   @Test
   public void testDoPost_CorrectPass() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test_username");
-
     Mockito.when(mockRequest.getParameter("password")).thenReturn("password");
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
