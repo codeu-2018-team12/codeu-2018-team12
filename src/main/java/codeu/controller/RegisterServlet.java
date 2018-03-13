@@ -57,6 +57,12 @@ public class RegisterServlet extends HttpServlet {
       return;
     }
 
+    if (password == null || password.length() < 8) {
+      request.setAttribute("error", "Please enter a password that is at least 8 characters.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
     if (confirmPassword == null) {
       request.setAttribute("error", "Please enter a confirmation password.");
       request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
