@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
+import org.mindrot.jbcrypt.*;
 import org.mockito.Mockito;
 
 public class LoginServletTest {
@@ -72,11 +73,13 @@ public class LoginServletTest {
   @Test
   public void testDoPost_CorrectPass() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test_username");
+
     Mockito.when(mockRequest.getParameter("password")).thenReturn("password");
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
-    User testUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    String hashedPassword = BCrypt.hashpw("password", BCrypt.gensalt());
+    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, Instant.now());
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(testUser);
     loginServlet.setUserStore(mockUserStore);
 
@@ -98,7 +101,8 @@ public class LoginServletTest {
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
-    User testUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    String hashedPassword = BCrypt.hashpw("password", BCrypt.gensalt());
+    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, Instant.now());
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(testUser);
     loginServlet.setUserStore(mockUserStore);
 
