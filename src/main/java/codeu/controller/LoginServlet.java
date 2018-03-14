@@ -21,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.mindrot.jbcrypt.*;
 
 /** Servlet class responsible for the login page. */
 public class LoginServlet extends HttpServlet {
@@ -68,7 +69,7 @@ public class LoginServlet extends HttpServlet {
 
     if (userStore.isUserRegistered(username)) {
       User user = userStore.getUser(username);
-      if (password.equals(user.getPassword())) {
+      if (BCrypt.checkpw(password, user.getPassword())) {
         request.getSession().setAttribute("user", username);
         response.sendRedirect("/conversations");
       } else {
