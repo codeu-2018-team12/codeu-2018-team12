@@ -47,7 +47,7 @@ public class PersistentDataStoreTest {
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
-    String passwordTwo = "test_password_one";
+    String passwordTwo = "test_password_two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
     User inputUserTwo = new User(idTwo, nameTwo, passwordTwo, creationTwo);
 
@@ -68,7 +68,7 @@ public class PersistentDataStoreTest {
     User resultUserTwo = resultUsers.get(1);
     Assert.assertEquals(idTwo, resultUserTwo.getId());
     Assert.assertEquals(nameTwo, resultUserTwo.getName());
-    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserOne.getPassword()));
+    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserTwo.getPassword()));
     Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
   }
 
@@ -83,7 +83,7 @@ public class PersistentDataStoreTest {
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
-    String passwordTwo = "test_password_one";
+    String passwordTwo = "test_password_two";
     String hashedPasswordTwo = BCrypt.hashpw(passwordTwo, BCrypt.gensalt());
     Instant creationTwo = Instant.ofEpochMilli(2000);
     User inputUserTwo = new User(idTwo, nameTwo, hashedPasswordTwo, creationTwo);
@@ -105,7 +105,7 @@ public class PersistentDataStoreTest {
     User resultUserTwo = resultUsers.get(1);
     Assert.assertEquals(idTwo, resultUserTwo.getId());
     Assert.assertEquals(nameTwo, resultUserTwo.getName());
-    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserOne.getPassword()));
+    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserTwo.getPassword()));
     Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
   }
 
