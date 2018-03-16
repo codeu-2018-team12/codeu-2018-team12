@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet class responsible for the chat page. */
+/** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
 
   /** Store class that gives access to Conversations. */
@@ -25,7 +25,7 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
-  /** Set up state for handling chat requests. */
+  /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
     super.init();
@@ -59,9 +59,9 @@ public class ProfileServlet extends HttpServlet {
   }
 
   /**
-   * This function fires when a user navigates to the chat page. It gets the conversation title from
-   * the URL, finds the corresponding Conversation, and fetches the messages in that Conversation.
-   * It then forwards to chat.jsp for rendering.
+   * This function fires when a user navigates to a user's profile page. It gets the username from
+   * the URL, finds the corresponding User, and fetches the messages posted by that user. It then
+   * forwards to profile.jsp for rendering.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
