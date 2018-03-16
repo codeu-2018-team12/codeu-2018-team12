@@ -7,7 +7,6 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -70,8 +69,7 @@ public class ProfileServlet extends HttpServlet {
     String name = requestUrl.substring("/profile/".length());
 
     User user = userStore.getUser(name);
-    UUID userId = user.getId();
-    List<Message> messages = messageStore.getMessagesByAuthor(userId);
+    List<Message> messages = messageStore.getMessagesByAuthor(user.getId());
 
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);
