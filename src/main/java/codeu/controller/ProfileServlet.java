@@ -86,12 +86,7 @@ public class ProfileServlet extends HttpServlet {
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
 
-  /**
-   * This function fires when a user submits the form on the chat page. It gets the logged-in
-   * username from the session, the conversation title from the URL, and the chat message from the
-   * submitted form data. It creates a new Message from that data, adds it to the model, and then
-   * redirects back to the chat page.
-   */
+  /** This function fires when a user submits the form on the profile page. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {}
