@@ -1,6 +1,5 @@
 package codeu.controller;
 
-import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
@@ -70,13 +69,10 @@ public class ProfileServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
     String name = requestUrl.substring("/profile/".length());
 
-    List<Conversation> conversations = conversationStore.getAllConversations();
-
     User user = userStore.getUser(name);
     UUID userId = user.getId();
     List<Message> messages = messageStore.getMessagesByAuthor(userId);
 
-    request.setAttribute("conversations", conversations);
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
