@@ -70,17 +70,19 @@ public class ProfileServlet extends HttpServlet {
     String name = requestUrl.substring("/profile/".length());
 
     User user = userStore.getUser(name);
-    List<Message> messages = messageStore.getMessagesByAuthor(user.getId());
+    List<Message> messages = null;
+    if (user != null) {
+      messages = messageStore.getMessagesByAuthor(user.getId());
 
-    Comparator<Message> comparator =
-        new Comparator<Message>() {
-          public int compare(Message m1, Message m2) {
-            return m2.getCreationTime().compareTo(m1.getCreationTime());
-          }
-        };
+      Comparator<Message> comparator =
+          new Comparator<Message>() {
+            public int compare(Message m1, Message m2) {
+              return m2.getCreationTime().compareTo(m1.getCreationTime());
+            }
+          };
 
-    messages.sort(comparator);
-
+      messages.sort(comparator);
+    }
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
