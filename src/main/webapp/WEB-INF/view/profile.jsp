@@ -51,13 +51,22 @@ User user = (User) request.getAttribute("user");
      <ul>
    <%
      for (Message message : messages) {
-       String conversationTitle = ConversationStore.getInstance().getConversationWithId(message.getConversationId()).getTitle();
-       Instant instant =  ConversationStore.getInstance().getConversationWithId(message.getConversationId()).getCreationTime();
-       LocalDateTime ldt = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-       DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yy HH:mm");
+       String conversationTitle = ConversationStore.getInstance()
+              .getConversationWithId(message.getConversationId())
+              .getTitle();
+       Instant instant =  ConversationStore.getInstance()
+              .getConversationWithId(message.getConversationId())
+              .getCreationTime();
+       LocalDateTime ldt =
+              LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+       DateTimeFormatter formatter =
+              DateTimeFormatter.ofPattern("MM-dd-yy HH:mm");
        String time = ldt.format(formatter);
    %>
-     <li><strong><%= time + " in " + conversationTitle %>:</strong> <%= message.getContent() %></li>
+     <li>
+     <strong>At <%= time + " in " + conversationTitle %>:</strong>
+     <%= message.getContent() %>
+    </li>
    <%
      }
    %>

@@ -104,7 +104,7 @@ public class ConversationStore {
     return false;
   }
 
-  /** Find and return the Conversation with the given title. */
+  /** Find and return the Conversation with the given Id. */
   public Conversation getConversationWithId(UUID Id) {
     for (Conversation conversation : conversations) {
       if (conversation.getId().equals(Id)) {

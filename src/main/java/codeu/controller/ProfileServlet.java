@@ -6,7 +6,6 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -73,15 +72,6 @@ public class ProfileServlet extends HttpServlet {
     List<Message> messages = null;
     if (user != null) {
       messages = messageStore.getMessagesByAuthor(user.getId());
-
-      Comparator<Message> comparator =
-          new Comparator<Message>() {
-            public int compare(Message m1, Message m2) {
-              return m2.getCreationTime().compareTo(m1.getCreationTime());
-            }
-          };
-
-      messages.sort(comparator);
     }
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);

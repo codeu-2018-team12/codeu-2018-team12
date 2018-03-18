@@ -17,6 +17,7 @@ package codeu.model.store.basic;
 import codeu.model.data.Message;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,13 @@ public class MessageStore {
 
   /** Singleton instance of MessageStore. */
   private static MessageStore instance;
+
+  private Comparator<Message> msgComparator =
+      new Comparator<Message>() {
+        public int compare(Message m1, Message m2) {
+          return m2.getCreationTime().compareTo(m1.getCreationTime());
+        }
+      };
 
   /**
    * Returns the singleton instance of MessageStore that should be shared between all servlet
@@ -99,6 +107,8 @@ public class MessageStore {
       }
     }
 
+    messagesInConversation.sort(msgComparator);
+
     return messagesInConversation;
   }
 
@@ -110,6 +120,8 @@ public class MessageStore {
         messagesWrittenByAuthor.add(message);
       }
     }
+
+    messagesWrittenByAuthor.sort(msgComparator);
 
     return messagesWrittenByAuthor;
   }

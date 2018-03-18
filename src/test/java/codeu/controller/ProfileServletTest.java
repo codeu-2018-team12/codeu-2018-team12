@@ -8,7 +8,6 @@ import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
@@ -68,25 +67,16 @@ public class ProfileServletTest {
             UUID.randomUUID(),
             testUser.getId(),
             "test message 1",
-            Instant.now()));
+            Instant.ofEpochMilli(2000)));
     fakeMessageList.add(
         new Message(
             UUID.randomUUID(),
             UUID.randomUUID(),
             testUser.getId(),
             "test message 2",
-            Instant.now()));
+            Instant.ofEpochMilli(1000)));
     Mockito.when(mockMessageStore.getMessagesByAuthor(testUser.getId()))
         .thenReturn(fakeMessageList);
-
-    Comparator<Message> comparator =
-        new Comparator<Message>() {
-          public int compare(Message m1, Message m2) {
-            return m2.getCreationTime().compareTo(m1.getCreationTime());
-          }
-        };
-
-    fakeMessageList.sort(comparator);
 
     profileServlet.doGet(mockRequest, mockResponse);
 
