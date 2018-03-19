@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.junit.Before;
 import org.junit.Test;
-import org.mindrot.jbcrypt.*;
 import org.mockito.Mockito;
 
 public class LogoutServletTest {
