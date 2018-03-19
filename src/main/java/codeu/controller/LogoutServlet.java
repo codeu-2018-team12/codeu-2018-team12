@@ -10,15 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 public class LogoutServlet extends HttpServlet {
 
   /**
-   * Set up state for handling logout-related requests. This method is only called when running in a
-   * server, not when running in a test.
-   */
-  @Override
-  public void init() throws ServletException {
-    super.init();
-  }
-
-  /**
    * This function fires when a user requests the /logout URL. It simply logs out the user and
    * redirects the user to the login page.
    */
