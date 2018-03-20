@@ -8,7 +8,6 @@
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 User user = (User) request.getAttribute("user");
-String biography = user.getBio();
 %>
 
 <!DOCTYPE html>
@@ -50,7 +49,8 @@ String biography = user.getBio();
   <h1 align ="center"><%= user.getName() %>'s Profile</h1>
   <div id="container">
   <h2>Biography</h2>
-    <%= biography %>
+    <%= user.getBio() %>
+  </div>
   <div id="container">
    <h2>Sent Messages</h2>
    <div id="messages">

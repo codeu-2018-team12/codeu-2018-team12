@@ -22,7 +22,7 @@ public class User {
   private final UUID id;
   private final String name;
   private final String hashedPassword;
-  private final String biography;
+  private String biography;
   private final Instant creation;
 
   /**
@@ -58,6 +58,10 @@ public class User {
 
   public String getBio() {
     return biography;
+  }
+
+  public void changeBio(String new_text) { //Is this the right file to put this in?? Where else might be better?
+    this.biography = new_text;
   }
 
   /** Returns the creation time of this User. */
