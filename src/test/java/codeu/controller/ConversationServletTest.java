@@ -101,6 +101,22 @@ public class ConversationServletTest {
   }
 
   @Test
+  public void testDoPost_EmptyConversationName() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    conversationServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockConversationStore, Mockito.never())
+        .addConversation(Mockito.any(Conversation.class));
+    Mockito.verify(mockRequest).setAttribute("error", "Please specify a name for this chat.");
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
+  @Test
   public void testDoPost_BadConversationName() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("bad !@#$% name");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
