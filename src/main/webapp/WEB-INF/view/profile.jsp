@@ -8,6 +8,7 @@
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 User user = (User) request.getAttribute("user");
+String biography = user.getBio();
 %>
 
 <!DOCTYPE html>
@@ -47,6 +48,9 @@ User user = (User) request.getAttribute("user");
   </head>
   <body onload="scrollChat()">
   <h1 align ="center"><%= user.getName() %>'s Profile</h1>
+  <div id="container">
+  <h2>Biography</h2>
+    <%= biography %>
   <div id="container">
    <h2>Sent Messages</h2>
    <div id="messages">
