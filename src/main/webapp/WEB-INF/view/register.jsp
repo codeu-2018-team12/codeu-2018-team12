@@ -39,7 +39,7 @@
       <input type="password" name="password" id="password">
       <br/>
       <label for="confirmPassword">Confirm Password: </label>
-      <input type="text" name="confirmPassword" id="confirmPassword">
+      <input type="password" name="confirmPassword" id="confirmPassword">
       <br/>
       <br/><br/>
       <button type="submit">Submit</button>
