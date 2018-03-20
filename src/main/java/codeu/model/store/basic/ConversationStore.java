@@ -15,10 +15,12 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.Message;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Comparator;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -29,6 +31,13 @@ public class ConversationStore {
 
   /** Singleton instance of ConversationStore. */
   private static ConversationStore instance;
+
+  private Comparator<Conversation> convoComparator =
+      new Comparator<Conversation>() {
+        public int compare(Conversation copvOne, Conversation copvTwo) {
+          return copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
+        }
+      };
 
   /**
    * Returns the singleton instance of ConversationStore that should be shared between all servlet
@@ -84,6 +93,7 @@ public class ConversationStore {
 
   /** Access the current set of conversations known to the application. */
   public List<Conversation> getAllConversations() {
+    conversations.sort(convoComparator);
     return conversations;
   }
 
