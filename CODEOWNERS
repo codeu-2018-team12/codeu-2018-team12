@@ -1,0 +1,6 @@
+# Code ownership file.
+#
+# Details: https://help.github.com/articles/about-codeowners/
+
+# Add everybody on the team to every pull request.
+*	@Mariamcm90 @mariezimmy @kkane098 @alisonrosenman

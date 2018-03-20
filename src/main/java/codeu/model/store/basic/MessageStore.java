@@ -17,6 +17,7 @@ package codeu.model.store.basic;
 import codeu.model.data.Message;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +30,13 @@ public class MessageStore {
 
   /** Singleton instance of MessageStore. */
   private static MessageStore instance;
+
+  private Comparator<Message> msgComparator =
+      new Comparator<Message>() {
+        public int compare(Message m1, Message m2) {
+          return m2.getCreationTime().compareTo(m1.getCreationTime());
+        }
+      };
 
   /**
    * Returns the singleton instance of MessageStore that should be shared between all servlet
@@ -88,6 +96,12 @@ public class MessageStore {
     persistentStorageAgent.writeThrough(message);
   }
 
+  /** Access the current set of conversations known to the application. */
+  public List<Message> getAllMessages() {
+    messages.sort(msgComparator);
+    return messages;
+  }
+
   /** Access the current set of Messages within the given Conversation. */
   public List<Message> getMessagesInConversation(UUID conversationId) {
 
@@ -99,7 +113,24 @@ public class MessageStore {
       }
     }
 
+    messagesInConversation.sort(msgComparator);
+
     return messagesInConversation;
+  }
+
+  /** Retrieves a list of messages belonging to a user with a specified ID */
+  public List<Message> getMessagesByAuthor(UUID authorId) {
+    List<Message> messagesWrittenByAuthor = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getAuthorId().equals(authorId)) {
+        messagesWrittenByAuthor.add(message);
+      }
+    }
+
+    messagesWrittenByAuthor.sort(msgComparator);
+
+    return messagesWrittenByAuthor;
   }
 
   /** Sets the List of Messages stored by this MessageStore. */

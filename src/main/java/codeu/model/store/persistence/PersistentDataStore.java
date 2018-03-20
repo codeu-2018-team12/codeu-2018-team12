@@ -26,6 +26,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.mindrot.jbcrypt.*;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -65,6 +66,9 @@ public class PersistentDataStore {
         String userName = (String) entity.getProperty("username");
         String password = (String) entity.getProperty("password");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        if (password != null && !password.startsWith("$2a$")) {
+          password = BCrypt.hashpw(password, BCrypt.gensalt());
+        }
         User user = new User(uuid, userName, password, creationTime);
         users.add(user);
       } catch (Exception e) {
