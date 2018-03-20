@@ -15,7 +15,6 @@
 package codeu.model.data;
 
 import codeu.model.store.basic.UserStore;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,6 @@ public class Conversation {
     this.creation = creation;
     this.title = title;
     this.conversationUsers.add(userStore.getUser(owner));
-
   }
 
   /** Returns the ID of this Conversation. */
@@ -74,6 +72,4 @@ public class Conversation {
   public List<User> getConversationUsers() {
     return conversationUsers;
   }
-
-
 }
