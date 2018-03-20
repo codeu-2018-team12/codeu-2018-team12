@@ -98,9 +98,11 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
+    request.setAttribute("conversationUsers", conversationUsers);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -113,6 +115,8 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    String button = request.getParameter("button");
 
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
@@ -135,6 +139,23 @@ public class ChatServlet extends HttpServlet {
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
       response.sendRedirect("/conversations");
+      return;
+    }
+
+    if ("joinButton".equals(button)) {
+      conversation.conversationUsers.add(user);
+    }
+
+    if ("leaveButton".equals(button)) {
+      conversation.conversationUsers.remove(user);
+    }
+
+    if (!conversation.conversationUsers.contains(user)) {
+      // user has not joined conversation, don't let them add a message
+      response.sendRedirect("/chat/" + conversationTitle);
+      request.setAttribute("error", "Join the conversation to add a message!");
+      request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+
       return;
     }
 

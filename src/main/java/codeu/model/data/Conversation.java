@@ -14,7 +14,11 @@
 
 package codeu.model.data;
 
+import codeu.model.store.basic.UserStore;
+
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -26,6 +30,8 @@ public class Conversation {
   public final UUID owner;
   public final Instant creation;
   public final String title;
+  public UserStore userStore = UserStore.getInstance();
+  public List<User> conversationUsers = new ArrayList<>();
 
   /**
    * Constructs a new Conversation.
@@ -40,6 +46,8 @@ public class Conversation {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
+    this.conversationUsers.add(userStore.getUser(owner));
+
   }
 
   /** Returns the ID of this Conversation. */
@@ -61,4 +69,11 @@ public class Conversation {
   public Instant getCreationTime() {
     return creation;
   }
+
+  /** Returns the set of users in this Conversation. */
+  public List<User> getConversationUsers() {
+    return conversationUsers;
+  }
+
+
 }

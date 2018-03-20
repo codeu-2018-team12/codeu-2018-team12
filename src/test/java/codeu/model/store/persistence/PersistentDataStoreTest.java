@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mindrot.jbcrypt.*;
 
 /**
  * Test class for PersistentDataStore. The PersistentDataStore class relies on DatastoreService,
@@ -37,7 +38,7 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testSaveAndLoadUsers() throws PersistentDataStoreException {
+  public void testSaveAndLoadUsersNoPassHash() throws PersistentDataStoreException {
     UUID idOne = UUID.randomUUID();
     String nameOne = "test_username_one";
     String passwordOne = "test_password_one";
@@ -46,7 +47,7 @@ public class PersistentDataStoreTest {
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
-    String passwordTwo = "test_password_one";
+    String passwordTwo = "test_password_two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
     User inputUserTwo = new User(idTwo, nameTwo, passwordTwo, creationTwo);
 
@@ -61,13 +62,50 @@ public class PersistentDataStoreTest {
     User resultUserOne = resultUsers.get(0);
     Assert.assertEquals(idOne, resultUserOne.getId());
     Assert.assertEquals(nameOne, resultUserOne.getName());
-    Assert.assertEquals(passwordOne, resultUserOne.getPassword());
+    Assert.assertTrue(BCrypt.checkpw(passwordOne, resultUserOne.getPassword()));
     Assert.assertEquals(creationOne, resultUserOne.getCreationTime());
 
     User resultUserTwo = resultUsers.get(1);
     Assert.assertEquals(idTwo, resultUserTwo.getId());
     Assert.assertEquals(nameTwo, resultUserTwo.getName());
-    Assert.assertEquals(passwordTwo, resultUserTwo.getPassword());
+    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserTwo.getPassword()));
+    Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
+  }
+
+  @Test
+  public void testSaveAndLoadUsersPassHash() throws PersistentDataStoreException {
+    UUID idOne = UUID.randomUUID();
+    String nameOne = "test_username_one";
+    String passwordOne = "test_password_one";
+    String hashedPasswordOne = BCrypt.hashpw(passwordOne, BCrypt.gensalt());
+    Instant creationOne = Instant.ofEpochMilli(1000);
+    User inputUserOne = new User(idOne, nameOne, hashedPasswordOne, creationOne);
+
+    UUID idTwo = UUID.randomUUID();
+    String nameTwo = "test_username_two";
+    String passwordTwo = "test_password_two";
+    String hashedPasswordTwo = BCrypt.hashpw(passwordTwo, BCrypt.gensalt());
+    Instant creationTwo = Instant.ofEpochMilli(2000);
+    User inputUserTwo = new User(idTwo, nameTwo, hashedPasswordTwo, creationTwo);
+
+    // save
+    persistentDataStore.writeThrough(inputUserOne);
+    persistentDataStore.writeThrough(inputUserTwo);
+
+    // load
+    List<User> resultUsers = persistentDataStore.loadUsers();
+
+    // confirm that what we saved matches what we loaded
+    User resultUserOne = resultUsers.get(0);
+    Assert.assertEquals(idOne, resultUserOne.getId());
+    Assert.assertEquals(nameOne, resultUserOne.getName());
+    Assert.assertTrue(BCrypt.checkpw(passwordOne, resultUserOne.getPassword()));
+    Assert.assertEquals(creationOne, resultUserOne.getCreationTime());
+
+    User resultUserTwo = resultUsers.get(1);
+    Assert.assertEquals(idTwo, resultUserTwo.getId());
+    Assert.assertEquals(nameTwo, resultUserTwo.getName());
+    Assert.assertTrue(BCrypt.checkpw(passwordTwo, resultUserTwo.getPassword()));
     Assert.assertEquals(creationTwo, resultUserTwo.getCreationTime());
   }
 

@@ -16,6 +16,7 @@ package codeu.model.store.persistence;
 
 /** Exception indicating that something went wrong with data storage. */
 public class PersistentDataStoreException extends Exception {
+
   /**
    * Constructs a new PersistentDataStoreException.
    *

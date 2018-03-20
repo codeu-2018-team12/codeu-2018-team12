@@ -17,18 +17,19 @@ public class MessageStoreTest {
   private PersistentStorageAgent mockPersistentStorageAgent;
 
   private final UUID CONVERSATION_ID_ONE = UUID.randomUUID();
+  private final UUID USER_ID_ONE = UUID.randomUUID();
   private final Message MESSAGE_ONE =
       new Message(
           UUID.randomUUID(),
           CONVERSATION_ID_ONE,
-          UUID.randomUUID(),
+          USER_ID_ONE,
           "message one",
           Instant.ofEpochMilli(1000));
   private final Message MESSAGE_TWO =
       new Message(
           UUID.randomUUID(),
           CONVERSATION_ID_ONE,
-          UUID.randomUUID(),
+          USER_ID_ONE,
           "message two",
           Instant.ofEpochMilli(2000));
   private final Message MESSAGE_THREE =
@@ -56,8 +57,27 @@ public class MessageStoreTest {
     List<Message> resultMessages = messageStore.getMessagesInConversation(CONVERSATION_ID_ONE);
 
     Assert.assertEquals(2, resultMessages.size());
-    assertEquals(MESSAGE_ONE, resultMessages.get(0));
-    assertEquals(MESSAGE_TWO, resultMessages.get(1));
+    assertEquals(MESSAGE_ONE, resultMessages.get(1));
+    assertEquals(MESSAGE_TWO, resultMessages.get(0));
+  }
+
+  @Test
+  public void getAllMessages() {
+    List<Message> allMessages = messageStore.getAllMessages();
+
+    Assert.assertEquals(3, allMessages.size());
+    assertEquals(MESSAGE_ONE, allMessages.get(2));
+    assertEquals(MESSAGE_TWO, allMessages.get(1));
+    assertEquals(MESSAGE_THREE, allMessages.get(0));
+  }
+
+  @Test
+  public void testGetMessagesByAuthor() {
+    List<Message> resultMessages = messageStore.getMessagesByAuthor(USER_ID_ONE);
+
+    Assert.assertEquals(2, resultMessages.size());
+    assertEquals(MESSAGE_ONE, resultMessages.get(1));
+    assertEquals(MESSAGE_TWO, resultMessages.get(0));
   }
 
   @Test
