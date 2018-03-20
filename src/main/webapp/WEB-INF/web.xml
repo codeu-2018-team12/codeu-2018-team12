@@ -37,16 +37,6 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>LogoutServlet</servlet-name>
-    <servlet-class>codeu.controller.LogoutServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>LogoutServlet</servlet-name>
-    <url-pattern>/logout</url-pattern>
-  </servlet-mapping>
-
-  <servlet>
     <servlet-name>RegisterServlet</servlet-name>
     <servlet-class>codeu.controller.RegisterServlet</servlet-class>
   </servlet>
@@ -55,6 +45,7 @@
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
+
   <servlet>
     <servlet-name>ConversationServlet</servlet-name>
     <servlet-class>codeu.controller.ConversationServlet</servlet-class>
@@ -83,6 +74,16 @@
   <servlet-mapping>
     <servlet-name>TestDataServlet</servlet-name>
     <url-pattern>/testdata</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ActivityServlet</servlet-name>
+    <servlet-class>codeu.controller.ActivityServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ActivityServlet</servlet-name>
+    <url-pattern>/activityFeed</url-pattern>
   </servlet-mapping>
 
   <servlet>
