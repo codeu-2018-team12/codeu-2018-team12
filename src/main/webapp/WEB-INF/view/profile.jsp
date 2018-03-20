@@ -62,7 +62,7 @@ User user = (User) request.getAttribute("user");
        LocalDateTime ldt =
               LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
        DateTimeFormatter formatter =
-              DateTimeFormatter.ofPattern("MM-dd-yy HH:mm");
+              DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
        String time = ldt.format(formatter);
    %>
      <li>
