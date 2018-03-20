@@ -96,6 +96,12 @@ public class MessageStore {
     persistentStorageAgent.writeThrough(message);
   }
 
+  /** Access the current set of conversations known to the application. */
+  public List<Message> getAllMessages() {
+    messages.sort(msgComparator);
+    return messages;
+  }
+
   /** Access the current set of Messages within the given Conversation. */
   public List<Message> getMessagesInConversation(UUID conversationId) {
 
@@ -112,6 +118,7 @@ public class MessageStore {
     return messagesInConversation;
   }
 
+  /** Retrieves a list of messages belonging to a user with a specified ID */
   public List<Message> getMessagesByAuthor(UUID authorId) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
