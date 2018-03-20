@@ -3,13 +3,14 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.store.basic.MessageStore" %>
+<%@ page import="codeu.model.store.basic.ConversationStore" %>
 <%@ page import="java.time.*" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.util.UUID" %>
 
 <%
-Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
-User user = (User) request.getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -33,7 +34,7 @@ User user = (User) request.getAttribute("user");
     #activity {
       background-color: white;
       height: 500px;
-      overflow: scroll
+      overflow-y: scroll
     }
   </style>
 
@@ -49,6 +50,29 @@ User user = (User) request.getAttribute("user");
   	<h1>Activity</h1>
   	<p>Here&#39s everything that happened on the site so far!</p>
     <div id="activity">
+      <ul>
+        <%
+          for (Message message : messages) {
+            UUID userId = message.getAuthorId();
+            String userName = UserStore.getInstance().getUser(userId).getName();
+            String content = message.getContent();
+            UUID conversationId = message.getConversationId();
+            String conversationName = ConversationStore.getInstance().getConversationWithId(conversationId).getTitle();
+
+            Instant creationTime = message.getCreationTime();
+            LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+            String time = ldt.format(formatter);
+         %>
+         <li>
+           <strong><%= time %>:</strong>
+              <%= userName + " sent a message to " + conversationName + ": " %>
+              <q><%= content %></q>
+         </li>
+         <%
+          }
+         %>
+      </ul>
     </div>
   </div>
 </body>
