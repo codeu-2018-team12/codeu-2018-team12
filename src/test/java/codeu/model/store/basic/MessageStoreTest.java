@@ -62,6 +62,16 @@ public class MessageStoreTest {
   }
 
   @Test
+  public void getAllMessages() {
+    List<Message> allMessages = messageStore.getAllMessages();
+
+    Assert.assertEquals(3, allMessages.size());
+    assertEquals(MESSAGE_ONE, allMessages.get(2));
+    assertEquals(MESSAGE_TWO, allMessages.get(1));
+    assertEquals(MESSAGE_THREE, allMessages.get(0));
+  }
+
+  @Test
   public void testGetMessagesByAuthor() {
     List<Message> resultMessages = messageStore.getMessagesByAuthor(USER_ID_ONE);
 
