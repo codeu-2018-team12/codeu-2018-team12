@@ -85,6 +85,21 @@ public class UserStore {
   }
 
   /**
+   * Finds all User objects whose username contains the given string
+   *
+   * @return the list of user objects.
+   */
+  public List<User> searchUsers(String search) {
+    ArrayList<User> result = new ArrayList<User>();
+    for (User user : users) {
+      if (user.getName().contains(search)) {
+        result.add(user);
+      }
+    }
+    return result;
+  }
+
+  /**
    * Access the User object with the given UUID.
    *
    * @return null if the UUID does not match any existing User.

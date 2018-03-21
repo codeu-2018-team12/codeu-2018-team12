@@ -6,15 +6,13 @@
 <%@ page import="java.time.*" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%
-List<Message> messages = (List<Message>) request.getAttribute("messages");
-User user = (User) request.getAttribute("user");
+List<User> users = (List<User>) request.getAttribute("users");
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
-  <% if (user != null) {%>
-    <title><%= user.getName() %></title>
+    <title>Search Results</title>
     <link rel="stylesheet" href="/css/main.css" type="text/css">
     <nav>
      <a id="navTitle" href="/">CodeU Chat App</a>
@@ -36,7 +34,7 @@ User user = (User) request.getAttribute("user");
      </div>
    </nav>
    <style>
-     #messages {
+     #users {
        background-color: white;
        height: 500px;
        overflow-y: scroll
@@ -52,49 +50,21 @@ User user = (User) request.getAttribute("user");
    </script>
   </head>
   <body onload="scrollChat()">
-  <h1 align ="center"><%= user.getName() %>'s Profile</h1>
+  <h1 align ="center">Search Results</h1>
   <div id="container">
-   <h2>Sent Messages</h2>
-   <div id="messages">
+   <h2>Users</h2>
+   <div id="users">
      <ul>
    <%
-     for (Message message : messages) {
-       String conversationTitle = ConversationStore.getInstance()
-              .getConversationWithId(message.getConversationId())
-              .getTitle();
-       Instant instant =  ConversationStore.getInstance()
-              .getConversationWithId(message.getConversationId())
-              .getCreationTime();
-       LocalDateTime ldt =
-              LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-       DateTimeFormatter formatter =
-              DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
-       String time = ldt.format(formatter);
+     for (User user : users) {
    %>
-     <li>
-     <strong>At <%= time + " in " + conversationTitle %>:</strong>
-     <%= message.getContent() %>
-    </li>
+   <li><a href="/profile/<%= user.getName() %>">
+     <%= user.getName() %></a></li>
    <%
      }
    %>
      </ul>
    </div>
-  </div>
-<% } else { %>
-  <title>Profile Not Found</title>
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if (request.getSession().getAttribute("user") != null) { %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-   <% } else { %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
-  </nav>
-  <h1 align="center">Profile Not Found</h1>
-<% } %>
+ </div>
 </body>
 </html>
