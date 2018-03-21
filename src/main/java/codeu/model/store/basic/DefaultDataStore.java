@@ -20,6 +20,7 @@ import codeu.model.data.User;
 import codeu.model.data.Activity;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -153,11 +154,14 @@ public class DefaultDataStore {
     for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
       User associatedUser = getRandomElement(users);
       Conversation conversation = getRandomElement(conversations);
-      String activityMessage = getRandomElement(activities).getActivityType();
+      Activity randomActivity = getRandomElement(activities);
+      String activityType = randomActivity.getActivityType();
+      String activityMessage = randomActivity.getActivityMessage();
 
       Activity activity =
           new Activity(
-              UUID.randomUUID(), associatedUser.getId(), conversation.getId(), Instant.now(), activityMessage);
+              UUID.randomUUID(), associatedUser.getId(), conversation.getId(), Instant.now(),
+                  activityType, activityMessage);
       PersistentStorageAgent.getInstance().writeThrough(activity);
       activities.add(activity);
     }

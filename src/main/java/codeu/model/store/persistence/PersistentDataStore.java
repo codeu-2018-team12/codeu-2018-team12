@@ -167,12 +167,14 @@ public class PersistentDataStore {
     for (Entity entity : results.asIterable()) {
       try {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
-        UUID memberUuid = UUID.fromString((String) entity.getProperty("member_uuid"));
-        UUID conversationUuid = UUID.fromString((String) entity.getProperty("conversation_uuid"));
+        UUID memberId = UUID.fromString((String) entity.getProperty("member_id"));
+        UUID conversationId = UUID.fromString((String) entity.getProperty("conversation_id"));
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String activityType = (String) entity.getProperty("activity_type");
+        String activityMessage = (String) entity.getProperty("activity_message");
 
-        Activity activity = new Activity(uuid, memberUuid, conversationUuid, creationTime, activityType);
+
+        Activity activity = new Activity(uuid, memberId, conversationId, creationTime, activityType, activityMessage);
         activities.add(activity);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -220,10 +222,11 @@ public class PersistentDataStore {
   public void writeThrough(Activity activity) {
     Entity conversationEntity = new Entity("chat-activities");
     conversationEntity.setProperty("uuid", activity.getId().toString());
-    conversationEntity.setProperty("member_uuid", activity.getUserId().toString());
-    conversationEntity.setProperty("conversation_uuid", activity.getConversationId().toString());
+    conversationEntity.setProperty("member_id", activity.getUserId());
+    conversationEntity.setProperty("conversation_id", activity.getConversationId());
     conversationEntity.setProperty("creation_time", activity.getCreationTime().toString());
     conversationEntity.setProperty("activity_type", activity.getActivityType());
+    conversationEntity.setProperty("activity_message", activity.getActivityMessage());
 
     datastore.put(conversationEntity);
   }

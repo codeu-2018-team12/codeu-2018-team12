@@ -16,9 +16,6 @@ package codeu.model.data;
 
 import java.time.Instant;
 import java.util.UUID;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
-import codeu.model.store.basic.UserStore;
 
 /**
  * Class representing a conversation, which can be thought of as a chat room. Conversations are
@@ -41,43 +38,14 @@ public class Activity {
    * @param activityType the type of activity represented by this message
    * @param conversationId the ID of the conversation associated with this activity
    */
-  public Activity(UUID id, UUID userId, UUID conversationId, Instant creation, String activityType) {
+  public Activity(UUID id, UUID userId, UUID conversationId, Instant creation,
+                  String activityType, String activityMessage) {
     this.id = id;
     this.user = userId;
     this.conversationId = conversationId;
     this.creation = creation;
     this.activityType = activityType;
-
-    String message;
-    User chatUser = UserStore.getInstance().getUser(userId);
-    String userName = chatUser.getName();
-
-    Conversation conversation = ConversationStore.getInstance().getConversationWithId(conversationId);
-    String conversationName = conversation.getTitle();
-
-    if (activityType.equals("joinedApp")) {
-
-      message = userName + "created an account!";
-
-    } else if (activityType.equals("joinedConvo")) {
-
-      message = userName + "joined the conversation " + conversationName;
-
-    } else if (activityType.equals("leftConvo")) {
-
-      message = userName + "left the conversation " + conversationName;
-
-    } else if (activityType.equals("createdConvo")) {
-
-      message = userName + "created a new conversation: " + conversationName;
-
-    } else {
-
-      String messageBody = MessageStore.getInstance().getMostRecentMessageFromConvo(conversationId);
-      message = userName + " sent a message in " + conversationName + ": \" " + messageBody + "\"";
-
-    }
-    this.activityMessage = message;
+    this.activityMessage = activityMessage;
   }
 
   /** Returns the ID of this activity */
