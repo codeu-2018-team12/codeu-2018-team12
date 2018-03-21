@@ -20,7 +20,7 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import com.vdurmont.emoji.EmojiParser;
+import codeu.resources.TextFormatter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -29,9 +29,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.commonmark.node.*;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
@@ -148,16 +145,7 @@ public class ChatServlet extends HttpServlet {
     // this removes any HTML from the message content
     String cleanedMessageContent =
         Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
-    Parser parser = Parser.builder().build();
-    Node document = parser.parse(cleanedMessageContent);
-    HtmlRenderer renderer = HtmlRenderer.builder().build();
-    String parsedMessageContent = renderer.render(document);
-    int parsedMessageLength = parsedMessageContent.length();
-    if (parsedMessageContent.startsWith("<p>")) {
-      parsedMessageContent = parsedMessageContent.substring(3, parsedMessageLength - 5);
-    }
-    String finalMessageContent = EmojiParser.parseToUnicode(parsedMessageContent);
-    finalMessageContent = EmojiParser.parseToHtmlHexadecimal(finalMessageContent);
+    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
     Message message =
         new Message(

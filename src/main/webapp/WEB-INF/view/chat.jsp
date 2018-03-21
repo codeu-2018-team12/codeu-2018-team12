@@ -45,7 +45,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     #chat {
       background-color: white;
       height: 500px;
-      overflow-y: scroll
+      overflow-y: scroll;
+      word-break: break-all;
+      word-wrap: break-word;
     }
   </style>
 
@@ -83,8 +85,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <hr/>
 
     <% if (request.getSession().getAttribute("user") != null) { %>
-    <textarea name="message" rows="4" cols="50" form="chatform"></textarea>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+        <textarea name="message"></textarea>
+        </br>
         <button type="submit">Send</button>
     </form>
     <% } else { %>
