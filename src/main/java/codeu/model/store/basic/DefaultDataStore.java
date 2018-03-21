@@ -17,6 +17,7 @@ package codeu.model.store.basic;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.data.Activity;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -28,8 +29,8 @@ import org.mindrot.jbcrypt.*;
 /**
  * This class makes it easy to add dummy data to your chat app instance. To use fake data, set
  * USE_DEFAULT_DATA to true, then adjust the COUNT variables to generate the corresponding amount of
- * users, conversations, and messages. Note that the data must be consistent, i.e. if a Message has
- * an author, that author must be a member of the Users list.
+ * users, conversations, activities, and messages. Note that the data must be consistent, i.e. if a
+ * Message has an author, that author must be a member of the Users list.
  */
 public class DefaultDataStore {
 
@@ -49,6 +50,12 @@ public class DefaultDataStore {
   private int DEFAULT_CONVERSATION_COUNT = 10;
 
   /**
+   * Default activity count. Only used if USE_DEFAULT_DATA is true. Each activity is assigned a
+   * random user and activity type.
+   */
+  private int DEFAULT_ACTIVITY_COUNT = 10;
+
+  /**
    * Default message count. Only used if USE_DEFAULT_DATA is true. Each message is assigned a random
    * author and conversation.
    */
@@ -63,17 +70,20 @@ public class DefaultDataStore {
   private List<User> users;
   private List<Conversation> conversations;
   private List<Message> messages;
+  private List<Activity> activities;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private DefaultDataStore() {
     users = new ArrayList<>();
     conversations = new ArrayList<>();
     messages = new ArrayList<>();
+    activities = new ArrayList<>();
 
     if (USE_DEFAULT_DATA) {
       addRandomUsers();
       addRandomConversations();
       addRandomMessages();
+      addRandomActivities();
     }
   }
 
@@ -91,6 +101,10 @@ public class DefaultDataStore {
 
   public List<Message> getAllMessages() {
     return messages;
+  }
+
+  public List<Activity> getAllActivities() {
+    return activities;
   }
 
   private void addRandomUsers() {
@@ -132,6 +146,20 @@ public class DefaultDataStore {
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(message);
       messages.add(message);
+    }
+  }
+
+  private void addRandomActivities() {
+    for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
+      User associatedUser = getRandomElement(users);
+      Conversation conversation = getRandomElement(conversations);
+      String activityMessage = getRandomElement(activities).getActivityType();
+
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(), associatedUser.getId(), conversation.getId(), Instant.now(), activityMessage);
+      PersistentStorageAgent.getInstance().writeThrough(activity);
+      activities.add(activity);
     }
   }
 
