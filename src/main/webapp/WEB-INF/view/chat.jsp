@@ -1,12 +1,9 @@
 <%--
   Copyright 2017 Google Inc.
-
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-
      http://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,7 +43,9 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
     #chat {
       background-color: white;
       height: 500px;
-      overflow-y: scroll
+      overflow-y: scroll;
+      word-break: break-all;
+      word-wrap: break-word;
     }
   </style>
 
@@ -54,7 +53,6 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
     };
   </script>
 </head>
@@ -81,50 +79,32 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
       </ul>
     </div>
 
-    <% if(request.getAttribute("error") != null){ %>
+    <hr/>
+
+    <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <hr/>
-
     <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession().getAttribute("user")) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-      <input type="text" name="message">
-      <br/>
-      <button type="submit">Send</button>
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+        <textarea name="message"></textarea>
+        </br>
+        <button type="submit">Send</button>
+        </br>
+        <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
     </form>
+    <% } %>
+
+    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute("user"))) { %>
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+            <button type="submit" name="button" value="joinButton">Join Conversation</button>
+    </form>
+
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
 
     <hr/>
-
-    <hr/>
-
-    <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-      <br/>
-      <button type="submit" name="button" value="joinButton">Join Conversation</button>
-    </form>
-    <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
-    <% } %>
-
-    <hr/>
-
-    <hr/>
-
-    <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-      <br/>
-      <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
-    </form>
-    <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
-    <% } %>
-
-    <hr/>
-
 
   </div>
 
