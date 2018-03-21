@@ -8,7 +8,6 @@
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 User user = (User) request.getAttribute("user");
-String total_url = "/profile/"+user.getName(); 
 %>
 
 <!DOCTYPE html>

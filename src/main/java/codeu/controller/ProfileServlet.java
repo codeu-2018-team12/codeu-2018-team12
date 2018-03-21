@@ -82,10 +82,9 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-        String requestUrl = request.getRequestURI();
-        String name = requestUrl.substring("/profile/".length());
-        User user = userStore.getUser(name);
-         user.biography = request.getParameter("newBio");
-      }
-
+    String requestUrl = request.getRequestURI();
+    String name = requestUrl.substring("/profile/".length());
+    User user = userStore.getUser(name);
+    user.biography = request.getParameter("newBio");
+  }
 }
