@@ -20,7 +20,7 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.resources.TextFormatter;
+import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;

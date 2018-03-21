@@ -1,4 +1,4 @@
-package codeu.resources;
+package codeu.utils;
 
 import com.vdurmont.emoji.EmojiParser;
 import org.commonmark.node.*;
