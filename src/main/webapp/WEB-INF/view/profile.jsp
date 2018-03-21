@@ -8,6 +8,7 @@
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 User user = (User) request.getAttribute("user");
+String total_url = "/profile/"+user.getName(); 
 %>
 
 <!DOCTYPE html>
@@ -49,7 +50,20 @@ User user = (User) request.getAttribute("user");
   <h1 align ="center"><%= user.getName() %>'s Profile</h1>
   <div id="container">
   <h2>Biography</h2>
-    <%= user.getBio() %>
+    <% if (user.getBio() != null) { %>
+        <%= user.getBio() %>
+    <% } else { %>
+    <p> Uh-oh, you haven't set up a biography yet! Please enter your bio below: </p> 
+    <% } %>  
+    <br>
+    <br>
+   <form action='' user method="POST">
+       <label for="newBio">New Bio: </label>
+       <input type="text" name="newBio" id="newBio">
+       <button type="submit">Submit</button> 
+       <% //This all works, just takes you to a blank screen... 
+       %>
+  </form>
   </div>
   <div id="container">
    <h2>Sent Messages</h2>
