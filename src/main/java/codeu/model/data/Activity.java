@@ -27,6 +27,7 @@ import codeu.model.store.basic.UserStore;
 public class Activity {
   public final UUID id;
   public final UUID user;
+  public final UUID conversationId;
   public final Instant creation;
   public final String activityType;
   public final String activityMessage;
@@ -40,13 +41,14 @@ public class Activity {
    * @param activityType the type of activity represented by this message
    * @param conversationId the ID of the conversation associated with this activity
    */
-  public Activity(UUID id, UUID userId, Instant creation, String activityType, UUID conversationId) {
+  public Activity(UUID id, UUID userId, UUID conversationId, Instant creation, String activityType) {
     this.id = id;
     this.user = userId;
+    this.conversationId = conversationId;
     this.creation = creation;
     this.activityType = activityType;
 
-    String message = "";
+    String message;
     User chatUser = UserStore.getInstance().getUser(userId);
     String userName = chatUser.getName();
 
@@ -78,26 +80,6 @@ public class Activity {
     this.activityMessage = message;
   }
 
-  /**
-   * Constructs a new activity. Invoked when a conversation id is not specified
-   *
-   * @param id the ID of this Activity
-   * @param userId the ID of the user who is attached to this activity
-   * @param creation the creation time of this activity
-   * @param activityType the type of activity represented by this message
-   */
-  public Activity(UUID id, UUID userId, Instant creation, String activityType) {
-    this.id = id;
-    this.user = userId;
-    this.creation = creation;
-    this.activityType = activityType;
-
-    User chatUser = UserStore.getInstance().getUser(userId);
-    String userName = chatUser.getName();
-
-    this.activityMessage = userName + "created an account!";
-  }
-
   /** Returns the ID of this activity */
   public UUID getId() {
     return id;
@@ -108,20 +90,31 @@ public class Activity {
     return user;
   }
 
+  /**
+   * Returns the ID of the conversation associated with this activity
+   * (Will return a nil/empty UUID if no conversation associated)
+   */
+  public UUID getConversationId(){
+    return  conversationId;
+  }
+
   /** Returns the creation time of this activity */
   public Instant getCreationTime() {
     return creation;
   }
 
-  /** Returns the type of this activity
-   * This method returns activity types of the following four formats:
+  /**
+   * Returns the type of this activity
+   * This method return strings describing activity types of the following five formats:
    * joinedApp - user newly created an account on the chat app
    * joinedConvo - user joined an existing conversation
    * leftConvo - user left a conversation
    * createdConvo - user created a new conversation
    * messageSent - user sent a message in a conversation
    */
-  public String getActivityType() { return activityType; }
+  public String getActivityType() {
+    return activityType;
+  }
 
   /** Returns the message of this activity. */
   public String getActivityMessage() {
