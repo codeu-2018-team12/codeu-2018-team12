@@ -55,7 +55,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = 0;
     };
   </script>
 </head>
