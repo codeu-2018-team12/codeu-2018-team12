@@ -45,7 +45,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     #chat {
       background-color: white;
       height: 500px;
-      overflow-y: scroll
+      overflow-y: scroll;
+      word-break: break-all;
+      word-wrap: break-word;
     }
   </style>
 
@@ -53,7 +55,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
     };
   </script>
 </head>
@@ -83,9 +84,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     <hr/>
 
     <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="text" name="message">
-        <br/>
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+        <textarea name="message"></textarea>
+        </br>
         <button type="submit">Send</button>
     </form>
     <% } else { %>
