@@ -86,5 +86,6 @@ public class ProfileServlet extends HttpServlet {
     String name = requestUrl.substring("/profile/".length());
     User user = userStore.getUser(name);
     user.biography = request.getParameter("newBio");
+    response.sendRedirect(requestUrl);
   }
 }
