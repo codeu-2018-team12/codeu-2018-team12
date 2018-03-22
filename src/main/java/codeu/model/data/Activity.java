@@ -38,13 +38,8 @@ public class Activity {
    * @param activityType the type of activity represented by this message
    * @param conversationId the ID of the conversation associated with this activity
    */
-  public Activity(
-      UUID id,
-      UUID userId,
-      UUID conversationId,
-      Instant creation,
-      String activityType,
-      String activityMessage) {
+  public Activity(UUID id, UUID userId, UUID conversationId,
+      Instant creation, String activityType, String activityMessage) {
     this.id = id;
     this.user = userId;
     this.conversationId = conversationId;
