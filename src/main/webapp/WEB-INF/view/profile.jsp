@@ -33,7 +33,7 @@ User user = (User) request.getAttribute("user");
        <form action="/search" method="GET">
          <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
          <datalist id="autocomplete">
-         <% for (User user : UserStore.getInstance().getUsers()) { %>
+         <% for (User searchUser : UserStore.getInstance().getUsers()) { %>
            <option value="<%=user.getName()%>">
          <% } %>
          </datalist>
