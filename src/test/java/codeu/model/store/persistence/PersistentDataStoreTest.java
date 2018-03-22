@@ -195,17 +195,18 @@ public class PersistentDataStoreTest {
     String messageTypeOne = "joinedApp";
     String messageOne = "Ada joined!";
     Activity inputActivityOne =
-            new Activity(idOne, userIdOne, conversationIdOne, creationOne, messageTypeOne, messageOne);
+        new Activity(idOne, userIdOne, conversationIdOne, creationOne, messageTypeOne, messageOne);
 
     UUID idTwo = UUID.randomUUID();
     UUID userIdTwo = UUID.randomUUID();
     UUID conversationIdTwo = UUID.randomUUID();
     Instant creationTwo = Instant.ofEpochMilli(1000);
     String messageTypeTwo = "messageSent";
-    String messageTwo = "Grace sent a message in Programming Chat: \"I've always been more interested " +
-            "in the future than in the past.\"";
+    String messageTwo =
+        "Grace sent a message in Programming Chat: \"I've always been more interested "
+            + "in the future than in the past.\"";
     Activity inputActivityTwo =
-            new Activity(idTwo, userIdTwo, conversationIdTwo, creationTwo, messageTypeTwo, messageTwo);
+        new Activity(idTwo, userIdTwo, conversationIdTwo, creationTwo, messageTypeTwo, messageTwo);
     // save
     persistentDataStore.writeThrough(inputActivityOne);
     persistentDataStore.writeThrough(inputActivityTwo);

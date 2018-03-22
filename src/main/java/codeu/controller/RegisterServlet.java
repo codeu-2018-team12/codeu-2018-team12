@@ -42,8 +42,8 @@ public class RegisterServlet extends HttpServlet {
   }
 
   /**
-   * Sets the ActivityStore used by this servlet. This function provides a common setup method for use
-   * by the test framework or the servlet's init() function.
+   * Sets the ActivityStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
    */
   void setActivityStore(ActivityStore activityStore) {
     this.activityStore = activityStore;
@@ -98,14 +98,15 @@ public class RegisterServlet extends HttpServlet {
     User user = new User(UUID.randomUUID(), username, passwordHash, Instant.now());
     userStore.addUser(user);
 
-      String message = username + " created an account!";
-      UUID userId = user.getId();
+    String message = username + " created an account!";
+    UUID userId = user.getId();
 
     // Empty/nil conversationId
-    UUID conversationId = new UUID( 0L , 0L );
+    UUID conversationId = new UUID(0L, 0L);
 
-    Activity activity = new Activity(UUID.randomUUID(), userId, conversationId, Instant.now(),
-            "joinedApp", message );
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(), userId, conversationId, Instant.now(), "joinedApp", message);
     activityStore.addActivity(activity);
 
     response.sendRedirect("/login");

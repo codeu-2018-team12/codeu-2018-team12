@@ -103,15 +103,14 @@ public class MessageStore {
   }
 
   /** Access the content of the most recent message within a given conversation */
-  public String getMostRecentMessageFromConvo(UUID conversationId){
+  public String getMostRecentMessageFromConvo(UUID conversationId) {
 
     String recentMessage = "";
     messages.sort(msgComparator);
 
-    for (Message message: messages) {
-      if (message.getConversationId().equals(conversationId))
-        recentMessage = message.getContent();
-        break;
+    for (Message message : messages) {
+      if (message.getConversationId().equals(conversationId)) recentMessage = message.getContent();
+      break;
     }
     return recentMessage;
   }

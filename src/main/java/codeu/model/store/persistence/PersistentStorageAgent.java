@@ -14,10 +14,10 @@
 
 package codeu.model.store.persistence;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.data.Activity;
 import java.util.List;
 
 /**
@@ -115,5 +115,7 @@ public class PersistentStorageAgent {
   }
 
   /** Write an Activity object to the Datastore service */
-  public void writeThrough(Activity activity) { persistentDataStore.writeThrough(activity); }
+  public void writeThrough(Activity activity) {
+    persistentDataStore.writeThrough(activity);
+  }
 }

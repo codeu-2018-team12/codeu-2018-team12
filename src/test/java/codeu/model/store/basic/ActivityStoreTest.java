@@ -1,7 +1,6 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
-import codeu.model.data.Conversation;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,9 +17,13 @@ public class ActivityStoreTest {
   private PersistentStorageAgent mockPersistentStorageAgent;
 
   private final Activity ACTIVITY_ONE =
-          new Activity(
-                  UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), Instant.ofEpochMilli(1000),
-                  "leftConvo", "test_message");
+      new Activity(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          Instant.ofEpochMilli(1000),
+          "leftConvo",
+          "test_message");
 
   @Before
   public void setup() {
@@ -34,16 +37,15 @@ public class ActivityStoreTest {
 
   @Test
   public void testGetActivityWithId_found() {
-    Activity resultActivity =
-            activityStore.getActivityWithId(ACTIVITY_ONE.getId());
+    Activity resultActivity = activityStore.getActivityWithId(ACTIVITY_ONE.getId());
 
     assertEquals(ACTIVITY_ONE, resultActivity);
   }
 
   @Test
   public void testGetActivityWithId_notFound() {
-    //Generates an empty/nil UUID object
-    UUID uuid = new UUID( 0L , 0L );
+    // Generates an empty/nil UUID object
+    UUID uuid = new UUID(0L, 0L);
     Activity resultActivity = activityStore.getActivityWithId(uuid);
 
     Assert.assertNull(resultActivity);
@@ -53,12 +55,16 @@ public class ActivityStoreTest {
   public void testAddActivity() {
     UUID activtiyId = UUID.randomUUID();
     Activity inputActivity =
-            new Activity(activtiyId, UUID.randomUUID(), UUID.randomUUID(), Instant.now(),
-                    "joinedConvo", "testMessage");
+        new Activity(
+            activtiyId,
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            Instant.now(),
+            "joinedConvo",
+            "testMessage");
 
     activityStore.addActivity(inputActivity);
-    Activity resultActivity =
-            activityStore.getActivityWithId(activtiyId);
+    Activity resultActivity = activityStore.getActivityWithId(activtiyId);
 
     assertEquals(inputActivity, resultActivity);
     Mockito.verify(mockPersistentStorageAgent).writeThrough(inputActivity);

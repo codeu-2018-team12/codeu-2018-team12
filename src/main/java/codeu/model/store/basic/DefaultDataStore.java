@@ -14,18 +14,18 @@
 
 package codeu.model.store.basic;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.data.Activity;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 import java.util.Random;
+import java.util.UUID;
 import org.mindrot.jbcrypt.*;
 
 /**
@@ -155,15 +155,19 @@ public class DefaultDataStore {
     for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
       User associatedUser = getRandomElement(users);
       Conversation conversation = getRandomElement(conversations);
-      List<String> activityTypes = Arrays.asList("joinedApp", "joinedConvo", "leftConvo",
-              "createdConvo", "messageSent");
+      List<String> activityTypes =
+          Arrays.asList("joinedApp", "joinedConvo", "leftConvo", "createdConvo", "messageSent");
       String activityType = getRandomElement(activityTypes);
       String activityMessage = generateActivityContent(associatedUser, conversation);
 
       Activity activity =
           new Activity(
-              UUID.randomUUID(), associatedUser.getId(), conversation.getId(), Instant.now(),
-                  activityType, activityMessage);
+              UUID.randomUUID(),
+              associatedUser.getId(),
+              conversation.getId(),
+              Instant.now(),
+              activityType,
+              activityMessage);
       PersistentStorageAgent.getInstance().writeThrough(activity);
       activities.add(activity);
     }
@@ -224,7 +228,7 @@ public class DefaultDataStore {
     return messageContent;
   }
 
-  private String generateActivityContent(User associatedUser, Conversation conversation){
+  private String generateActivityContent(User associatedUser, Conversation conversation) {
     Random random = new Random();
     int max = 4, min = 0;
     int randomNum = random.nextInt(max - min + 1) + min;
@@ -236,21 +240,28 @@ public class DefaultDataStore {
 
     } else if (randomNum == 1) {
 
-      activityMessage = associatedUser.getName() + " joined the conversation " + conversation.getTitle();
+      activityMessage =
+          associatedUser.getName() + " joined the conversation " + conversation.getTitle();
 
     } else if (randomNum == 2) {
 
-      activityMessage = associatedUser.getName() + " left the conversation " + conversation.getTitle();
+      activityMessage =
+          associatedUser.getName() + " left the conversation " + conversation.getTitle();
 
     } else if (randomNum == 3) {
 
-      activityMessage = associatedUser.getName() + " created a new conversation: " + conversation.getTitle();
+      activityMessage =
+          associatedUser.getName() + " created a new conversation: " + conversation.getTitle();
 
     } else {
 
-      activityMessage = associatedUser.getName() + " sent a message in " + conversation.getTitle() +
-              ": \" " + getRandomMessageContent() + "\"";
-
+      activityMessage =
+          associatedUser.getName()
+              + " sent a message in "
+              + conversation.getTitle()
+              + ": \" "
+              + getRandomMessageContent()
+              + "\"";
     }
     return activityMessage;
   }

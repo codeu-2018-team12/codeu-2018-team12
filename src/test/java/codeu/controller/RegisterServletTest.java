@@ -1,11 +1,10 @@
 package codeu.controller;
 
-import codeu.model.data.User;
 import codeu.model.data.Activity;
-import codeu.model.store.basic.UserStore;
+import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
+import codeu.model.store.basic.UserStore;
 import java.io.IOException;
-import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -77,8 +76,8 @@ public class RegisterServletTest {
     Assert.assertEquals(userArgumentCaptor.getValue().getName(), "test username");
 
     Mockito.verify(mockActivityStore).addActivity(activityArgumentCaptor.capture());
-    Assert.assertEquals(activityArgumentCaptor.getValue().getUserId(),
-            userArgumentCaptor.getValue().getId());
+    Assert.assertEquals(
+        activityArgumentCaptor.getValue().getUserId(), userArgumentCaptor.getValue().getId());
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }

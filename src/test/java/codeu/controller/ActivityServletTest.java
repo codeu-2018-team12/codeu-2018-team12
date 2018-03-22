@@ -25,7 +25,6 @@ public class ActivityServletTest {
   private RequestDispatcher mockRequestDispatcher;
   private ActivityStore mockActivityStore;
 
-
   @Before
   public void setup() {
     activityServlet = new ActivityServlet();

@@ -14,10 +14,10 @@
 
 package codeu.model.store.persistence;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.data.Activity;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -173,8 +173,9 @@ public class PersistentDataStore {
         String activityType = (String) entity.getProperty("activity_type");
         String activityMessage = (String) entity.getProperty("activity_message");
 
-
-        Activity activity = new Activity(uuid, memberId, conversationId, creationTime, activityType, activityMessage);
+        Activity activity =
+            new Activity(
+                uuid, memberId, conversationId, creationTime, activityType, activityMessage);
         activities.add(activity);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may

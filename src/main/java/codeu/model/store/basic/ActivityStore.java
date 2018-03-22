@@ -32,11 +32,11 @@ public class ActivityStore {
   private static ActivityStore instance;
 
   private Comparator<Activity> activityComparator =
-          new Comparator<Activity>() {
-            public int compare(Activity copvOne, Activity copvTwo) {
-              return copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
-            }
-          };
+      new Comparator<Activity>() {
+        public int compare(Activity copvOne, Activity copvTwo) {
+          return copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
+        }
+      };
 
   /**
    * Returns the singleton instance of ActivityStore that should be shared between all servlet
@@ -59,8 +59,8 @@ public class ActivityStore {
   }
 
   /**
-   * The PersistentStorageAgent responsible for loading Activities from and saving Activities
-   * to Datastore.
+   * The PersistentStorageAgent responsible for loading Activities from and saving Activities to
+   * Datastore.
    */
   private PersistentStorageAgent persistentStorageAgent;
 

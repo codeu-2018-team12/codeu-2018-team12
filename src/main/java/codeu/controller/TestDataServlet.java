@@ -14,10 +14,10 @@
 
 package codeu.controller;
 
+import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.basic.ActivityStore;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -74,8 +74,8 @@ public class TestDataServlet extends HttpServlet {
   }
 
   /**
-   * Sets the AcitvityStore used by this servlet. This function provides a common setup method for use
-   * by the test framework or the servlet's init() function.
+   * Sets the AcitvityStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
    */
   void setActivityStore(ActivityStore activityStore) {
     this.activityStore = activityStore;

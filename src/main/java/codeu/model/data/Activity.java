@@ -38,8 +38,13 @@ public class Activity {
    * @param activityType the type of activity represented by this message
    * @param conversationId the ID of the conversation associated with this activity
    */
-  public Activity(UUID id, UUID userId, UUID conversationId, Instant creation,
-                  String activityType, String activityMessage) {
+  public Activity(
+      UUID id,
+      UUID userId,
+      UUID conversationId,
+      Instant creation,
+      String activityType,
+      String activityMessage) {
     this.id = id;
     this.user = userId;
     this.conversationId = conversationId;
@@ -59,11 +64,11 @@ public class Activity {
   }
 
   /**
-   * Returns the ID of the conversation associated with this activity
-   * (Will return a nil/empty UUID if no conversation associated)
+   * Returns the ID of the conversation associated with this activity (Will return a nil/empty UUID
+   * if no conversation associated)
    */
-  public UUID getConversationId(){
-    return  conversationId;
+  public UUID getConversationId() {
+    return conversationId;
   }
 
   /** Returns the creation time of this activity */
@@ -72,13 +77,10 @@ public class Activity {
   }
 
   /**
-   * Returns the type of this activity
-   * This method return strings describing activity types of the following five formats:
-   * joinedApp - user newly created an account on the chat app
-   * joinedConvo - user joined an existing conversation
-   * leftConvo - user left a conversation
-   * createdConvo - user created a new conversation
-   * messageSent - user sent a message in a conversation
+   * This method returns a string describing an activity type of the following five formats: 1.
+   * joinedApp (user newly created an account on the chat app), 2. joinedConvo (user joined an
+   * existing conversation), 3. leftConvo (user left a conversation), 4. createdConvo (user created
+   * a new conversation), 5. messageSent (user sent a message in a conversation)
    */
   public String getActivityType() {
     return activityType;
@@ -88,6 +90,4 @@ public class Activity {
   public String getActivityMessage() {
     return activityMessage;
   }
-
 }
-
