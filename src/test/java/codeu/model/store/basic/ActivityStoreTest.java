@@ -43,7 +43,7 @@ public class ActivityStoreTest {
   @Test
   public void testGetActivityWithId_notFound() {
     //Generates an empty/nil UUID object
-    java.util.UUID uuid = new UUID( 0L , 0L );
+    UUID uuid = new UUID( 0L , 0L );
     Activity resultActivity = activityStore.getActivityWithId(uuid);
 
     Assert.assertNull(resultActivity);
