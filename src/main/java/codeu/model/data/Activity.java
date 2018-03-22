@@ -22,12 +22,12 @@ import java.util.UUID;
  * created by a User and contain Messages.
  */
 public class Activity {
-  public final UUID id;
-  public final UUID user;
-  public final UUID conversationId;
-  public final Instant creation;
-  public final String activityType;
-  public final String activityMessage;
+  private final UUID id;
+  private final UUID user;
+  private final UUID conversationId;
+  private final Instant creation;
+  private final String activityType;
+  private final String activityMessage;
 
   /**
    * Constructs a new activity. Invoked when a conversation id is specified
@@ -38,13 +38,8 @@ public class Activity {
    * @param activityType the type of activity represented by this message
    * @param conversationId the ID of the conversation associated with this activity
    */
-  public Activity(
-      UUID id,
-      UUID userId,
-      UUID conversationId,
-      Instant creation,
-      String activityType,
-      String activityMessage) {
+  public Activity(UUID id, UUID userId, UUID conversationId,
+      Instant creation, String activityType, String activityMessage) {
     this.id = id;
     this.user = userId;
     this.conversationId = conversationId;

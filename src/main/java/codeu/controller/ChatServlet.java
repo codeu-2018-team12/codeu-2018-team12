@@ -145,14 +145,14 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.conversationUsers.add(user);
+      conversation.getConversationUsers().add(user);
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.conversationUsers.remove(user);
+      conversation.getConversationUsers().remove(user);
     }
 
-    if (!conversation.conversationUsers.contains(user)) {
+    if (!conversation.getConversationUsers().contains(user)) {
       // user has not joined conversation, don't let them add a message
       response.sendRedirect("/chat/" + conversationTitle);
       request.setAttribute("error", "Join the conversation to add a message!");
@@ -177,7 +177,6 @@ public class ChatServlet extends HttpServlet {
             Instant.now());
 
     messageStore.addMessage(message);
-
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
