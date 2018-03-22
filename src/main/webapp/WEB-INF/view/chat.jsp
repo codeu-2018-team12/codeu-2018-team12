@@ -13,6 +13,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
@@ -85,7 +86,8 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession().getAttribute("user")) { %>
+    <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession()
+    .getAttribute("user"))) { %>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
         <textarea name="message"></textarea>
         </br>
@@ -95,7 +97,8 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
     </form>
     <% } %>
 
-    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute("user"))) { %>
+    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute
+    ("user")))){ %>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
             <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
