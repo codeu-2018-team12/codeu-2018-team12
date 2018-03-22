@@ -60,8 +60,6 @@ User user = (User) request.getAttribute("user");
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
-       <% //This all works, just takes you to a blank screen... 
-       %>
   </form>
   </div>
   <div id="container">
