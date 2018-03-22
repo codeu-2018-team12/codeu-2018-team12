@@ -33,8 +33,8 @@ User user = (User) request.getAttribute("user");
        <form action="/search" method="GET">
          <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
          <datalist id="autocomplete">
-         <% for (User searchUser : UserStore.getInstance().getUsers()) { %>
-           <option value="<%=searchUser.getName()%>">
+         <% for (User acUser : UserStore.getInstance().getUsers()) { %>
+           <option value="<%=acUser.getName()%>">
          <% } %>
          </datalist>
          <button type="submit">Search</button>
@@ -106,8 +106,8 @@ User user = (User) request.getAttribute("user");
        <form action="/search" method="GET">
          <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
          <datalist id="autocomplete">
-         <% for (User user : UserStore.getInstance().getUsers()) { %>
-           <option value="<%=user.getName()%>">
+         <% for (User acUser : UserStore.getInstance().getUsers()) { %>
+           <option value="<%=acUser.getName()%>">
          <% } %>
          </datalist>
          <button type="submit">Search</button>
