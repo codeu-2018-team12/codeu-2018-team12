@@ -1,8 +1,11 @@
 package codeu.controller;
 
 import codeu.model.data.User;
+import codeu.model.data.Activity;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.ActivityStore;
 import java.io.IOException;
+import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,15 +62,23 @@ public class RegisterServletTest {
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(false);
     registerServlet.setUserStore(mockUserStore);
 
+    ActivityStore mockActivityStore = Mockito.mock(ActivityStore.class);
+    registerServlet.setActivityStore(mockActivityStore);
+
     HttpSession mockSession = Mockito.mock(HttpSession.class);
     Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
     registerServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+    ArgumentCaptor<Activity> activityArgumentCaptor = ArgumentCaptor.forClass(Activity.class);
 
     Mockito.verify(mockUserStore).addUser(userArgumentCaptor.capture());
     Assert.assertEquals(userArgumentCaptor.getValue().getName(), "test username");
+
+    Mockito.verify(mockActivityStore).addActivity(activityArgumentCaptor.capture());
+    Assert.assertEquals(activityArgumentCaptor.getValue().getUserId(),
+            userArgumentCaptor.getValue().getId());
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
@@ -82,6 +93,9 @@ public class RegisterServletTest {
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(true);
     registerServlet.setUserStore(mockUserStore);
 
+    ActivityStore mockActivityStore = Mockito.mock(ActivityStore.class);
+    registerServlet.setActivityStore(mockActivityStore);
+
     HttpSession mockSession = Mockito.mock(HttpSession.class);
     Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
@@ -90,6 +104,7 @@ public class RegisterServletTest {
     Mockito.verify(mockRequest).setAttribute("error", "That username is already taken.");
 
     Mockito.verify(mockUserStore, Mockito.never()).addUser(Mockito.any(User.class));
+    Mockito.verify(mockActivityStore, Mockito.never()).addActivity(Mockito.any(Activity.class));
   }
 
   @Test
