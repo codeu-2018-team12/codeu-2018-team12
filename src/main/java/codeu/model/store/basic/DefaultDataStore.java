@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.Random;
 import org.mindrot.jbcrypt.*;
 
 /**
@@ -154,9 +155,10 @@ public class DefaultDataStore {
     for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
       User associatedUser = getRandomElement(users);
       Conversation conversation = getRandomElement(conversations);
-      Activity randomActivity = getRandomElement(activities);
-      String activityType = randomActivity.getActivityType();
-      String activityMessage = randomActivity.getActivityMessage();
+      List<String> activityTypes = Arrays.asList("joinedApp", "joinedConvo", "leftConvo",
+              "createdConvo", "messageSent");
+      String activityType = getRandomElement(activityTypes);
+      String activityMessage = generateActivityContent(associatedUser, conversation);
 
       Activity activity =
           new Activity(
@@ -220,5 +222,36 @@ public class DefaultDataStore {
     String messageContent = loremIpsum.substring(startIndex, endIndex).trim();
 
     return messageContent;
+  }
+
+  private String generateActivityContent(User associatedUser, Conversation conversation){
+    Random random = new Random();
+    int max = 4, min = 0;
+    int randomNum = random.nextInt(max - min + 1) + min;
+
+    String activityMessage;
+    if (randomNum == 0) {
+
+      activityMessage = associatedUser.getName() + " created an account!";
+
+    } else if (randomNum == 1) {
+
+      activityMessage = associatedUser.getName() + " joined the conversation " + conversation.getTitle();
+
+    } else if (randomNum == 2) {
+
+      activityMessage = associatedUser.getName() + " left the conversation " + conversation.getTitle();
+
+    } else if (randomNum == 3) {
+
+      activityMessage = associatedUser.getName() + " created a new conversation: " + conversation.getTitle();
+
+    } else {
+
+      activityMessage = associatedUser.getName() + " sent a message in " + conversation.getTitle() +
+              ": \" " + getRandomMessageContent() + "\"";
+
+    }
+    return activityMessage;
   }
 }
