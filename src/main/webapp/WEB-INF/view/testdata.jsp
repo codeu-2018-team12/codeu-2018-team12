@@ -17,7 +17,7 @@
 <html>
 <head>
   <title>Load Test Data</title>
- <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/main.css">
   <nav>
    <a id="navTitle" href="/">CodeU Chat App</a>
    <% if(request.getSession().getAttribute("user") != null){ %>

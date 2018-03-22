@@ -28,7 +28,7 @@ User user = (User) request.getAttribute("user");
        <a href="/register">Register</a>
      <% } %>
      <a href="/about.jsp">About</a>
-     <div id="search-container" style="padding-left:16px;">
+     <div id="search-container" style="padding-left:16px;padding-bottom:20px">
        <form action="/search" method="GET">
          <input type="text" placeholder="Search for a user.." name="search" id="search">
          <button type="submit">Search</button>

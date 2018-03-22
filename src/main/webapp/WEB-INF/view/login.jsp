@@ -19,18 +19,24 @@
   <title>Login</title>
  <link rel="stylesheet" href="/css/main.css">
  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if (request.getSession().getAttribute("user") != null) { %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-     <a href="/activityFeed">Activity Feed</a>
-     <a href="/conversations">Conversations</a>
-     <a href="/logout">Logout</a>
-   <% } else { %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
- </nav>
+  <a id="navTitle" href="/">CodeU Chat App</a>
+  <% if (request.getSession().getAttribute("user") != null) { %>
+    <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+    <a href="/activityFeed">Activity Feed</a>
+    <a href="/conversations">Conversations</a>
+    <a href="/logout">Logout</a>
+  <% } else { %>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  <% } %>
+  <a href="/about.jsp">About</a>
+  <div id="search-container" style="padding-left:16px;padding-bottom:20px">
+    <form action="/search" method="GET">
+      <input type="text" placeholder="Search for a user.." name="search" id="search">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+</nav>
 </head>
 <body>
 
