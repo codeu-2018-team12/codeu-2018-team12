@@ -17,6 +17,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.User" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
@@ -27,25 +28,30 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
-    <nav>
-     <a id="navTitle" href="/">CodeU Chat App</a>
-     <% if (request.getSession().getAttribute("user") != null) { %>
-       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-       <a href="/activityFeed">Activity Feed</a>
-       <a href="/conversations">Conversations</a>
-       <a href="/logout">Logout</a>
-     <% } else { %>
-       <a href="/login">Login</a>
-       <a href="/register">Register</a>
-     <% } %>
-     <a href="/about.jsp">About</a>
-     <div id="search-container" style="padding-left:16px;padding-bottom:20px">
-       <form action="/search" method="GET">
-         <input type="text" placeholder="Search for a user.." name="search" id="search">
-         <button type="submit">Search</button>
-       </form>
-     </div>
-   </nav>
+  <nav>
+   <a id="navTitle" href="/">CodeU Chat App</a>
+   <% if (request.getSession().getAttribute("user") != null) { %>
+     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+     <a href="/activityFeed">Activity Feed</a>
+     <a href="/conversations">Conversations</a>
+     <a href="/logout">Logout</a>
+   <% } else { %>
+     <a href="/login">Login</a>
+     <a href="/register">Register</a>
+   <% } %>
+   <a href="/about.jsp">About</a>
+   <div id="search-container" style="padding-left:16px;padding-bottom:20px">
+     <form action="/search" method="GET">
+       <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
+       <datalist id="autocomplete">
+       <% for (User user : UserStore.getInstance().getUsers()) { %>
+         <option value="<%=user.getName()%>">
+       <% } %>
+       </datalist>
+       <button type="submit">Search</button>
+     </form>
+   </div>
+ </nav>
 
   <style>
     #chat {

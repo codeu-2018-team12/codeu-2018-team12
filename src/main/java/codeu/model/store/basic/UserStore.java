@@ -136,4 +136,9 @@ public class UserStore {
   public void setUsers(List<User> users) {
     this.users = users;
   }
+
+  /** @return the list of all user objects stored in the datastore. */
+  public List<User> getUsers() {
+    return users;
+  }
 }

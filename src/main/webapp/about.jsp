@@ -13,6 +13,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+<%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.User" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +34,12 @@
   <a href="/about.jsp">About</a>
   <div id="search-container" style="padding-left:16px;padding-bottom:20px">
     <form action="/search" method="GET">
-      <input type="text" placeholder="Search for a user.." name="search" id="search">
+      <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
+      <datalist id="autocomplete">
+      <% for (User user : UserStore.getInstance().getUsers()) { %>
+        <option value="<%=user.getName()%>">
+      <% } %>
+      </datalist>
       <button type="submit">Search</button>
     </form>
   </div>

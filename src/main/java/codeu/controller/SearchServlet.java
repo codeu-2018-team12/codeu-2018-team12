@@ -32,8 +32,8 @@ public class SearchServlet extends HttpServlet {
   }
 
   /**
-   * This function fires when a user requests the /logout URL. It simply logs out the user and
-   * redirects the user to the login page.
+   * This function fires when a user requests the /search URL. It finds the set of users that match
+   * the given string and forwards that information to search.jsp
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
