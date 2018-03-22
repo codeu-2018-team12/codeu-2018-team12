@@ -20,6 +20,7 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the chat page. */
@@ -98,9 +100,11 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
+    request.setAttribute("conversationUsers", conversationUsers);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -113,6 +117,8 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    String button = request.getParameter("button");
 
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
@@ -138,17 +144,36 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
+    if ("joinButton".equals(button)) {
+      conversation.conversationUsers.add(user);
+    }
+
+    if ("leaveButton".equals(button)) {
+      conversation.conversationUsers.remove(user);
+    }
+
+    if (!conversation.conversationUsers.contains(user)) {
+      // user has not joined conversation, don't let them add a message
+      response.sendRedirect("/chat/" + conversationTitle);
+      request.setAttribute("error", "Join the conversation to add a message!");
+      request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+
+      return;
+    }
+
     String messageContent = request.getParameter("message");
 
     // this removes any HTML from the message content
-    String cleanedMessageContent = Jsoup.clean(messageContent, Whitelist.none());
+    String cleanedMessageContent =
+        Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
     Message message =
         new Message(
             UUID.randomUUID(),
             conversation.getId(),
             user.getId(),
-            cleanedMessageContent,
+            finalMessageContent,
             Instant.now());
 
     messageStore.addMessage(message);

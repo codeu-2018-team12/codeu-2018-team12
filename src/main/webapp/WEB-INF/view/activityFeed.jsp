@@ -43,7 +43,6 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
   <script>
     function scrollBox() {
       var activityDiv = document.getElementById('activity');
-        activityDiv.scrollTop = activityDiv.scrollHeight;
     };
   </script>
 </head>
