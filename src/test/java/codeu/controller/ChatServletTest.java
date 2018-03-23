@@ -216,8 +216,8 @@ public class ChatServletTest {
 
     chatServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest).setAttribute("error", "Join the conversation to add a message!");
-    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+    Mockito.verify(mockMessageStore, Mockito.never()).addMessage(Mockito.any(Message.class));
+    Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
 
   @Test
