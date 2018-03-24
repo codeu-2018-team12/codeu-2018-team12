@@ -145,14 +145,14 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.conversationUsers.add(user);
+      conversation.getConversationUsers.add(user);
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.conversationUsers.remove(user);
+      conversation.getCnversationUsers.remove(user);
     }
 
-    if (button == null && conversation.conversationUsers.contains(user)) {
+    if (button == null && conversation.getConversationUsers.contains(user)) {
       String messageContent = request.getParameter("message");
 
       // this removes any HTML from the message content
