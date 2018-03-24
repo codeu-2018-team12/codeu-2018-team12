@@ -48,9 +48,12 @@ User user = (User) request.getAttribute("user");
   <h1 align ="center"><%= user.getName() %>'s Profile</h1>
   <div id="container">
   <h2>Biography</h2>
-    <% if (user.getBio() != null) { %>
-        <%= user.getBio() %>
-    <% } if (request.getSession().getAttribute("user") == user) {
+    <% if (user.getBio() != null) { 
+         user.getBio(); %>
+     } else {%>
+        <p> This user has not yet set up their biography! </p>
+     <% } %>
+    <% if (request.getAttribute("user") == user) { //Right now, this condition executes even if not logged in!
      %>
      <p> You can change your biography below: </p>
      <form action='' user method="POST">
@@ -58,9 +61,7 @@ User user = (User) request.getAttribute("user");
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
   </form>
-    <% } else {%>
-    <p> This user has not set up their biography yet! </p> 
-    <% } %>
+  <% } %>
     <br>
     <br>
   
