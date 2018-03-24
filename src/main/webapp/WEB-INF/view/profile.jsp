@@ -53,7 +53,7 @@ User user = (User) request.getAttribute("user");
      } else {%>
         <p> This user has not yet set up their biography! </p>
      <% } %>
-    <% if (request.getAttribute("user") == user) { //Right now, this condition executes even if not logged in!
+    <% if (request.getSession().getAttribute("user") == user) { //Right now, this condition executes even if not logged in!
      %>
      <p> You can change your biography below: </p>
      <form action='' user method="POST">
