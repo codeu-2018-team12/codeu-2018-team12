@@ -41,7 +41,6 @@ User user = (User) request.getAttribute("user");
      // scroll the chat div to the bottom
      function scrollChat() {
        var msgDiv = document.getElementById('messages');
-       msgDiv.scrollTop = msgDiv.scrollHeight;
      };
    </script>
   </head>
@@ -51,16 +50,22 @@ User user = (User) request.getAttribute("user");
   <h2>Biography</h2>
     <% if (user.getBio() != null) { %>
         <%= user.getBio() %>
-    <% } else { %>
+    <% } if (request.getSession().getAttribute("user").equals(user)) { %>
     <p> Uh-oh, you haven't set up a biography yet! Please enter your bio below: </p> 
-    <% } %>  
-    <br>
-    <br>
-   <form action='' user method="POST">
+
+     <form action='' user method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
   </form>
+    <% } else {%>
+    <p> This user has not set up their biography yet!< /p> 
+     <% request.getSession().getAttribute("user"); %> <p> is the request.getSession().getAttribute </p>
+     
+    <% } %> 
+    <br>
+    <br>
+  
   </div>
   <div id="container">
    <h2>Sent Messages</h2>

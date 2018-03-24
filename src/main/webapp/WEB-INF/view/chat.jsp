@@ -1,12 +1,9 @@
 <%--
   Copyright 2017 Google Inc.
-
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
-
      http://www.apache.org/licenses/LICENSE-2.0
-
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +14,12 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.User" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
+List<User> conversationUsers = (List<User>) request.getAttribute("conversationUsers");
+User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
 %>
 
 <!DOCTYPE html>
@@ -45,7 +45,9 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     #chat {
       background-color: white;
       height: 500px;
-      overflow-y: scroll
+      overflow-y: scroll;
+      word-break: break-all;
+      word-wrap: break-word;
     }
   </style>
 
@@ -53,7 +55,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
     };
   </script>
 </head>
@@ -82,11 +83,22 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
     <hr/>
 
-    <% if (request.getSession().getAttribute("user") != null) { %>
-    <form action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <input type="text" name="message">
-        <br/>
+    <% if (request.getAttribute("error") != null) { %>
+      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+    <% } %>
+
+    <% if (user != null && conversationUsers.contains(user)) { %>
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+        <textarea name="message"></textarea>
+        </br>
         <button type="submit">Send</button>
+        </br>
+        <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
+    </form>
+    <% } else if (user != null && !(conversationUsers.contains(user))) { %>
+    <p> Join the conversation to send a message! </p>
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+            <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
