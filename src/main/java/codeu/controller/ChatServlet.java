@@ -85,7 +85,7 @@ public class ChatServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
     String conversationTitle = requestUrl.substring("/chat/".length());
 
@@ -116,7 +116,7 @@ public class ChatServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {
+          throws IOException, ServletException {
 
     String button = request.getParameter("button");
 
@@ -157,17 +157,17 @@ public class ChatServlet extends HttpServlet {
 
       // this removes any HTML from the message content
       String cleanedMessageContent =
-          Jsoup.clean(
-              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+              Jsoup.clean(
+                      messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
       Message message =
-          new Message(
-              UUID.randomUUID(),
-              conversation.getId(),
-              user.getId(),
-              finalMessageContent,
-              Instant.now());
+              new Message(
+                      UUID.randomUUID(),
+                      conversation.getId(),
+                      user.getId(),
+                      finalMessageContent,
+                      Instant.now());
       messageStore.addMessage(message);
     }
     // redirect to a GET request

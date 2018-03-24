@@ -14,22 +14,25 @@
 
 package codeu.model.store.basic;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import org.mindrot.jbcrypt.*;
 
 /**
  * This class makes it easy to add dummy data to your chat app instance. To use fake data, set
  * USE_DEFAULT_DATA to true, then adjust the COUNT variables to generate the corresponding amount of
- * users, conversations, and messages. Note that the data must be consistent, i.e. if a Message has
- * an author, that author must be a member of the Users list.
+ * users, conversations, activities, and messages. Note that the data must be consistent, i.e. if a
+ * Message has an author, that author must be a member of the Users list.
  */
 public class DefaultDataStore {
 
@@ -49,6 +52,12 @@ public class DefaultDataStore {
   private int DEFAULT_CONVERSATION_COUNT = 10;
 
   /**
+   * Default activity count. Only used if USE_DEFAULT_DATA is true. Each activity is assigned a
+   * random user and activity type.
+   */
+  private int DEFAULT_ACTIVITY_COUNT = 10;
+
+  /**
    * Default message count. Only used if USE_DEFAULT_DATA is true. Each message is assigned a random
    * author and conversation.
    */
@@ -63,17 +72,20 @@ public class DefaultDataStore {
   private List<User> users;
   private List<Conversation> conversations;
   private List<Message> messages;
+  private List<Activity> activities;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private DefaultDataStore() {
     users = new ArrayList<>();
     conversations = new ArrayList<>();
     messages = new ArrayList<>();
+    activities = new ArrayList<>();
 
     if (USE_DEFAULT_DATA) {
       addRandomUsers();
       addRandomConversations();
       addRandomMessages();
+      addRandomActivities();
     }
   }
 
@@ -91,6 +103,10 @@ public class DefaultDataStore {
 
   public List<Message> getAllMessages() {
     return messages;
+  }
+
+  public List<Activity> getAllActivities() {
+    return activities;
   }
 
   private void addRandomUsers() {
@@ -132,6 +148,28 @@ public class DefaultDataStore {
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(message);
       messages.add(message);
+    }
+  }
+
+  private void addRandomActivities() {
+    for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
+      User associatedUser = getRandomElement(users);
+      Conversation conversation = getRandomElement(conversations);
+      List<String> activityTypes =
+          Arrays.asList("joinedApp", "joinedConvo", "leftConvo", "createdConvo", "messageSent");
+      String activityType = getRandomElement(activityTypes);
+      String activityMessage = generateActivityContent(associatedUser, conversation);
+
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              associatedUser.getId(),
+              conversation.getId(),
+              Instant.now(),
+              activityType,
+              activityMessage);
+      PersistentStorageAgent.getInstance().writeThrough(activity);
+      activities.add(activity);
     }
   }
 
@@ -188,5 +226,43 @@ public class DefaultDataStore {
     String messageContent = loremIpsum.substring(startIndex, endIndex).trim();
 
     return messageContent;
+  }
+
+  private String generateActivityContent(User associatedUser, Conversation conversation) {
+    Random random = new Random();
+    int max = 4, min = 0;
+    int randomNum = random.nextInt(max - min + 1) + min;
+
+    String activityMessage;
+    if (randomNum == 0) {
+
+      activityMessage = associatedUser.getName() + " created an account!";
+
+    } else if (randomNum == 1) {
+
+      activityMessage =
+          associatedUser.getName() + " joined the conversation " + conversation.getTitle();
+
+    } else if (randomNum == 2) {
+
+      activityMessage =
+          associatedUser.getName() + " left the conversation " + conversation.getTitle();
+
+    } else if (randomNum == 3) {
+
+      activityMessage =
+          associatedUser.getName() + " created a new conversation: " + conversation.getTitle();
+
+    } else {
+
+      activityMessage =
+          associatedUser.getName()
+              + " sent a message in "
+              + conversation.getTitle()
+              + ": \" "
+              + getRandomMessageContent()
+              + "\"";
+    }
+    return activityMessage;
   }
 }
