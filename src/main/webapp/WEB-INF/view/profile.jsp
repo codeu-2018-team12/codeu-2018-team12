@@ -50,19 +50,17 @@ User user = (User) request.getAttribute("user");
   <h2>Biography</h2>
     <% if (user.getBio() != null) { %>
         <%= user.getBio() %>
-    <% } if (request.getSession().getAttribute("user").equals(user)) { %>
-    <p> Uh-oh, you haven't set up a biography yet! Please enter your bio below: </p> 
-
+    <% } if (request.getSession().getAttribute("user") == user) {
+     %>
+     <p> You can change your biography below: </p>
      <form action='' user method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
   </form>
     <% } else {%>
-    <p> This user has not set up their biography yet!< /p> 
-     <% request.getSession().getAttribute("user"); %> <p> is the request.getSession().getAttribute </p>
-     
-    <% } %> 
+    <p> This user has not set up their biography yet! </p> 
+    <% } %>
     <br>
     <br>
   
