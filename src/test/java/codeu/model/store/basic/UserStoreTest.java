@@ -17,12 +17,18 @@ public class UserStoreTest {
   private PersistentStorageAgent mockPersistentStorageAgent;
 
   private final User USER_ONE =
-      new User(UUID.randomUUID(), "test_username_one", "password one", null, Instant.ofEpochMilli(1000));
+      new User(
+          UUID.randomUUID(), "test_username_one", "password one", null, Instant.ofEpochMilli(1000));
   private final User USER_TWO =
-      new User(UUID.randomUUID(), "test_username_two", "password two", null, Instant.ofEpochMilli(2000));
+      new User(
+          UUID.randomUUID(), "test_username_two", "password two", null, Instant.ofEpochMilli(2000));
   private final User USER_THREE =
       new User(
-          UUID.randomUUID(), "test_username_three", "password three", null, Instant.ofEpochMilli(3000));
+          UUID.randomUUID(),
+          "test_username_three",
+          "password three",
+          null,
+          Instant.ofEpochMilli(3000));
 
   @Before
   public void setup() {

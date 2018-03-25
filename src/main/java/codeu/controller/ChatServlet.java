@@ -85,7 +85,7 @@ public class ChatServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws IOException, ServletException {
+      throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
     String conversationTitle = requestUrl.substring("/chat/".length());
 
@@ -116,7 +116,7 @@ public class ChatServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-          throws IOException, ServletException {
+      throws IOException, ServletException {
 
     String button = request.getParameter("button");
 
@@ -145,29 +145,29 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.getConversationUsers.add(user);
+      conversation.getConversationUsers().add(user);
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.getCnversationUsers.remove(user);
+      conversation.getConversationUsers().remove(user);
     }
 
-    if (button == null && conversation.getConversationUsers.contains(user)) {
+    if (button == null && conversation.getConversationUsers().contains(user)) {
       String messageContent = request.getParameter("message");
 
       // this removes any HTML from the message content
       String cleanedMessageContent =
-              Jsoup.clean(
-                      messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+          Jsoup.clean(
+              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
       Message message =
-              new Message(
-                      UUID.randomUUID(),
-                      conversation.getId(),
-                      user.getId(),
-                      finalMessageContent,
-                      Instant.now());
+          new Message(
+              UUID.randomUUID(),
+              conversation.getId(),
+              user.getId(),
+              finalMessageContent,
+              Instant.now());
       messageStore.addMessage(message);
     }
     // redirect to a GET request

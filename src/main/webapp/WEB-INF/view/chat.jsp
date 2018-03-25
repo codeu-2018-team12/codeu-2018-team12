@@ -13,7 +13,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
-<%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
 <%
@@ -88,14 +87,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-<<<<<<< HEAD
     <% if (user != null && conversationUsers.contains(user)) { %>
-||||||| merged common ancestors
-    <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession().getAttribute("user")) { %>
-=======
-    <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession()
-    .getAttribute("user"))) { %>
->>>>>>> 74ed601bdcd96513b0834584170866cb9823321a
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
         <textarea name="message"></textarea>
         </br>
@@ -103,19 +95,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         </br>
         <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
     </form>
-<<<<<<< HEAD
     <% } else if (user != null && !(conversationUsers.contains(user))) { %>
     <p> Join the conversation to send a message! </p>
-||||||| merged common ancestors
-    <% } %>
-
-    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute("user"))) { %>
-=======
-    <% } %>
-
-    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute
-    ("user")))){ %>
->>>>>>> 74ed601bdcd96513b0834584170866cb9823321a
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
             <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
