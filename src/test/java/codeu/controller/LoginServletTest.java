@@ -78,7 +78,7 @@ public class LoginServletTest {
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
     String hashedPassword = BCrypt.hashpw("password", BCrypt.gensalt());
-    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, Instant.now());
+    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, "test biography", Instant.now());
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(testUser);
     loginServlet.setUserStore(mockUserStore);
 
@@ -101,7 +101,7 @@ public class LoginServletTest {
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
     String hashedPassword = BCrypt.hashpw("password", BCrypt.gensalt());
-    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, Instant.now());
+    User testUser = new User(UUID.randomUUID(), "test_username", hashedPassword, "test biography", Instant.now());
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(testUser);
     loginServlet.setUserStore(mockUserStore);
 
