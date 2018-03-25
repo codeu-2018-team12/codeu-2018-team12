@@ -33,6 +33,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
      <a href="/activityFeed">Activity Feed</a>
      <a href="/conversations">Conversations</a>
+      <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>  
+     <a href="<%=profileaddress %>">Your Profile</a> 
      <a href="/logout">Logout</a>
    <% } else { %>
      <a href="/login">Login</a>

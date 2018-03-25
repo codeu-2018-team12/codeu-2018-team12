@@ -3,6 +3,7 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.ConversationStore" %>
+<%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.time.*" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%
@@ -53,15 +54,14 @@ User user = (User) request.getAttribute("user");
      } else {%>
         <p> This user has not yet set up their biography! </p>
      <% } %>
-    <% if (request.getSession().getAttribute("user") == user) { //Right now, this condition executes even if not logged in!
-     %>
+ 
      <p> You can change your biography below: </p>
      <form action='' user method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
   </form>
-  <% } %>
+
     <br>
     <br>
   
