@@ -53,7 +53,6 @@ User user = (User) request.getAttribute("user");
      // scroll the chat div to the bottom
      function scrollChat() {
        var msgDiv = document.getElementById('messages');
-       msgDiv.scrollTop = 0;
      };
    </script>
   </head>

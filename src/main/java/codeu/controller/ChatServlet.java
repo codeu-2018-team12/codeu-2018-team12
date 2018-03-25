@@ -20,7 +20,7 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.resources.TextFormatter;
+import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -100,9 +100,11 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
+    request.setAttribute("conversationUsers", conversationUsers);
     request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
   }
 
@@ -115,6 +117,8 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    String button = request.getParameter("button");
 
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
@@ -140,23 +144,32 @@ public class ChatServlet extends HttpServlet {
       return;
     }
 
-    String messageContent = request.getParameter("message");
+    if ("joinButton".equals(button)) {
+      conversation.conversationUsers.add(user);
+    }
 
-    // this removes any HTML from the message content
-    String cleanedMessageContent =
-        Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
-    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+    if ("leaveButton".equals(button)) {
+      conversation.conversationUsers.remove(user);
+    }
 
-    Message message =
-        new Message(
-            UUID.randomUUID(),
-            conversation.getId(),
-            user.getId(),
-            finalMessageContent,
-            Instant.now());
+    if (button == null && conversation.conversationUsers.contains(user)) {
+      String messageContent = request.getParameter("message");
 
-    messageStore.addMessage(message);
+      // this removes any HTML from the message content
+      String cleanedMessageContent =
+          Jsoup.clean(
+              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+      String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
+      Message message =
+          new Message(
+              UUID.randomUUID(),
+              conversation.getId(),
+              user.getId(),
+              finalMessageContent,
+              Instant.now());
+      messageStore.addMessage(message);
+    }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }

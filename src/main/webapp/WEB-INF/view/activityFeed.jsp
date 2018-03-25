@@ -53,7 +53,6 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
   <script>
     function scrollBox() {
       var activityDiv = document.getElementById('activity');
-        activityDiv.scrollTop = 0;
     };
   </script>
 </head>
