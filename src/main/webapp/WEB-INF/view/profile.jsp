@@ -47,6 +47,26 @@ User user = (User) request.getAttribute("user");
   <body onload="scrollChat()">
   <h1 align ="center"><%= user.getName() %>'s Profile</h1>
   <div id="container">
+  <h2>Biography</h2>
+    <% if (user.getBio() != null) { %>
+        <%= user.getBio() %>
+    <% } else { %>
+        <p> This user has not yet set up their biography! </p>
+     <% }
+     if (request.getSession().getAttribute("user").equals(user.getName())) {
+     %>
+     <p> You can change your biography below: </p>
+     <form action='' user method="POST">
+       <label for="newBio">New Bio: </label>
+       <input type="text" name="newBio" id="newBio">
+       <button type="submit">Submit</button> 
+  </form>
+  <% } %>
+    <br>
+    <br>
+  
+  </div>
+  <div id="container">
    <h2>Sent Messages</h2>
    <div id="messages">
      <ul>

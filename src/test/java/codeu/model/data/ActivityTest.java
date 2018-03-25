@@ -19,22 +19,24 @@ import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UserTest {
+public class ActivityTest {
 
   @Test
   public void testCreate() {
+
     UUID id = UUID.randomUUID();
-    String name = "test_username";
-    String password = "password";
-    String biography = "test biography right here";
+    UUID userId = UUID.randomUUID();
+    UUID conversationId = UUID.randomUUID();
     Instant creation = Instant.now();
+    String activityType = "messageSent";
+    String message = "testMessage";
 
-    User user = new User(id, name, password, biography, creation);
+    Activity activity = new Activity(id, userId, conversationId, creation, activityType, message);
 
-    Assert.assertEquals(id, user.getId());
-    Assert.assertEquals(name, user.getName());
-    Assert.assertEquals(password, user.getPassword());
-    Assert.assertEquals(biography, user.getBio());
-    Assert.assertEquals(creation, user.getCreationTime());
+    Assert.assertEquals(id, activity.getId());
+    Assert.assertEquals(userId, activity.getUserId());
+    Assert.assertEquals(conversationId, activity.getConversationId());
+    Assert.assertEquals(creation, activity.getCreationTime());
+    Assert.assertEquals(activityType, activity.getActivityType());
   }
 }

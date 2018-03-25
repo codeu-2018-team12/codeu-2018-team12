@@ -101,6 +101,8 @@ public class ConversationServlet extends HttpServlet {
 
     String conversationTitle = request.getParameter("conversationTitle");
     if (conversationTitle.isEmpty()) {
+      List<Conversation> conversations = conversationStore.getAllConversations();
+      request.setAttribute("conversations", conversations);
       request.setAttribute("error", "Please specify a name for this chat.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
       return;
