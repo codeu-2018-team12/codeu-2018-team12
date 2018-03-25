@@ -78,7 +78,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
          %>
          <li>
            <strong><%= time %>:</strong>
-              <%= userName + " sent a message to " + conversationName + ": " %>
+              <a href="/profile/<%= userName %>"><%= userName %></a><%=" sent a message to " + conversationName + ": " %>
               <q><%= content %></q>
          </li>
          <%
