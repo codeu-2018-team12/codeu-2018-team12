@@ -54,14 +54,14 @@ User user = (User) request.getAttribute("user");
      } else {%>
         <p> This user has not yet set up their biography! </p>
      <% } %>
- 
+ <%if (request.getSession().getAttribute("user").equals(user.getName())) { %>
      <p> You can change your biography below: </p>
      <form action='' user method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button> 
   </form>
-
+<% } %>
     <br>
     <br>
   
