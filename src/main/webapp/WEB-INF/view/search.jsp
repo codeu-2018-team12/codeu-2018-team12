@@ -50,8 +50,8 @@ List<User> users = (List<User>) request.getAttribute("users");
    <script>
      // scroll the chat div to the bottom
      function scrollChat() {
-       var msgDiv = document.getElementById('messages');
-       msgDiv.scrollTop = 0;
+       var userDiv = document.getElementById('users');
+       userDiv.scrollTop = 0;
      };
    </script>
   </head>
