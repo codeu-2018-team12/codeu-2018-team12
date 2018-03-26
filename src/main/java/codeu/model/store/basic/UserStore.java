@@ -17,8 +17,10 @@ package codeu.model.store.basic;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -90,12 +92,22 @@ public class UserStore {
    * @return the list of user objects.
    */
   public List<User> searchUsers(String search) {
+
+    Comparator<User> userComparator =
+        new Comparator<User>() {
+          public int compare(User u1, User u2) {
+            return StringUtils.getLevenshteinDistance(search, u1.getName())
+                - StringUtils.getLevenshteinDistance(search, u2.getName());
+          }
+        };
+
     ArrayList<User> result = new ArrayList<User>();
     for (User user : users) {
       if (user.getName().contains(search)) {
         result.add(user);
       }
     }
+    result.sort(userComparator);
     return result;
   }
 
