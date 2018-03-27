@@ -2,6 +2,12 @@
 <%@ page import="codeu.model.data.User" %>
 <html>
 <body>
+  <style>
+    #search-container {
+      padding-left:16px;
+      padding-bottom:20px
+    }
+  </style>
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <% if (request.getSession().getAttribute("user") != null) { %>
@@ -14,12 +20,12 @@
       <a href="/register">Register</a>
     <% } %>
     <a href="/about.jsp">About</a>
-    <div id="search-container" style="padding-left:16px;padding-bottom:20px">
+    <div id="search-container">
       <form action="/search" method="GET">
         <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
         <datalist id="autocomplete">
         <% for (User user : UserStore.getInstance().getUsers()) { %>
-          <option value="<%=user.getName()%>">
+          <option value="<%= user.getName() %>">
         <% } %>
         </datalist>
         <button type="submit">Search</button>
