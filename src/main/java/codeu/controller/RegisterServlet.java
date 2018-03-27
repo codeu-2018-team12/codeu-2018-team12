@@ -101,7 +101,6 @@ public class RegisterServlet extends HttpServlet {
     String message = username + " created an account!";
     UUID userId = user.getId();
 
-    // Empty/nil conversationId
     UUID conversationId = new UUID(0L, 0L);
 
     Activity activity =
