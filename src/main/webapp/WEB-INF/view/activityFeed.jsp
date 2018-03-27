@@ -43,6 +43,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         <%
           for (Activity activity : activities) {
             String type = activity.getActivityType();
+            String message = activity.getActivityMessage();
             Instant creationTime = activity.getCreationTime();
             LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
@@ -50,8 +51,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         %>
         <li>
           <strong><%= time %>:</strong>
-          <% if (type.equals("joinedApp")) %>
-          <%= activity.getActivityMessage() %>
+          <%= message %>
         </li>
          <%
           }
