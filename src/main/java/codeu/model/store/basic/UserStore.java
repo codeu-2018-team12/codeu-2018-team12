@@ -65,9 +65,16 @@ public class UserStore {
   }
 
   /** Load a set of randomly-generated Users objects. */
-  public void loadTestData() {
-    System.out.println("test");
-    users.addAll(DefaultDataStore.getInstance().getAllUsers());
+  public boolean loadTestData() {
+    boolean loaded = false;
+    try {
+      users.addAll(DefaultDataStore.getInstance().getAllUsers());
+      loaded = true;
+    } catch (Exception e) {
+      loaded = false;
+      System.err.println("ERROR: Unable to establish initial store (users).");
+    }
+    return loaded;
   }
 
   /**

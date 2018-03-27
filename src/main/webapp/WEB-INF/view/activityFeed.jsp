@@ -62,7 +62,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         %>
         <li>
           <strong><%= time %>:</strong>
-          <% if (type == "joinedApp") %>
+          <% if (type.equals("joinedApp")) %>
           <%= activity.getActivityMessage() %>
         </li>
          <%
