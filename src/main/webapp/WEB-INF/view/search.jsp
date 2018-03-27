@@ -33,7 +33,7 @@ List<User> users = (List<User>) request.getAttribute("users");
    </script>
   </head>
   <body onload="scrollChat()">
-  <h1 align ="center">Search Results</h1>
+  <h1 id="title">Search Results</h1>
   <div id="container">
    <h2>Users</h2>
    <div id="users">

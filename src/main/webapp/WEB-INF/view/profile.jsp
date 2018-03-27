@@ -34,7 +34,7 @@ User user = (User) request.getAttribute("user");
     </script>
   </head>
   <body onload="scrollChat()">
-  <h1 align ="center"><%= user.getName() %>'s Profile</h1>
+  <h1 id="title"><%= user.getName() %>'s Profile</h1>
   <div id="container">
    <h2>Sent Messages</h2>
    <div id="messages">

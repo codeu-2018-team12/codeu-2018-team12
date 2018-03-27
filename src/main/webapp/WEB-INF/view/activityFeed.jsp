@@ -35,7 +35,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 </head>
 <body onload="scrollBox()">
   <div id="container">
-  	<h1>Activity</h1>
+  	<h1 id="title">Activity</h1>
   	<p>Here&#39s everything that happened on the site so far!</p>
     <div id="activity">
       <ul>
