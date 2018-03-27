@@ -23,6 +23,10 @@ public class UserStoreTest {
   private final User USER_THREE =
       new User(
           UUID.randomUUID(), "test_username_three", "password three", Instant.ofEpochMilli(3000));
+  private final User USER_FOUR =
+      new User(UUID.randomUUID(), "username_four", "password four", Instant.ofEpochMilli(4000));
+  private final User USER_FIVE =
+      new User(UUID.randomUUID(), "test_user", "password five", Instant.ofEpochMilli(4000));
 
   @Before
   public void setup() {
@@ -33,6 +37,8 @@ public class UserStoreTest {
     userList.add(USER_ONE);
     userList.add(USER_TWO);
     userList.add(USER_THREE);
+    userList.add(USER_FOUR);
+    userList.add(USER_FIVE);
     userStore.setUsers(userList);
   }
 
@@ -83,6 +89,27 @@ public class UserStoreTest {
   @Test
   public void testIsUserRegistered_false() {
     Assert.assertFalse(userStore.isUserRegistered("fake username"));
+  }
+
+  @Test
+  public void testSearchUsers() {
+    List<User> results = userStore.searchUsers("test");
+    Assert.assertEquals(results.size(), 4);
+    assertEquals(results.get(0), USER_FIVE);
+    assertEquals(results.get(1), USER_ONE);
+    assertEquals(results.get(2), USER_TWO);
+    assertEquals(results.get(3), USER_THREE);
+  }
+
+  @Test
+  public void testGetUsers() {
+    List<User> results = userStore.getUsers();
+    Assert.assertEquals(results.size(), 5);
+    assertEquals(results.get(0), USER_ONE);
+    assertEquals(results.get(1), USER_TWO);
+    assertEquals(results.get(2), USER_THREE);
+    assertEquals(results.get(3), USER_FOUR);
+    assertEquals(results.get(4), USER_FIVE);
   }
 
   private void assertEquals(User expectedUser, User actualUser) {

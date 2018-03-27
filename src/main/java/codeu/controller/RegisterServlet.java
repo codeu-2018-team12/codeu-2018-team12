@@ -98,7 +98,8 @@ public class RegisterServlet extends HttpServlet {
     User user = new User(UUID.randomUUID(), username, passwordHash, Instant.now());
     userStore.addUser(user);
 
-    String message = username + " created an account!";
+    String message =
+        "<a href=\"/profile/" + username + "\">" + username + "</a>" + " created an account!";
     UUID userId = user.getId();
 
     UUID conversationId = new UUID(0L, 0L);
