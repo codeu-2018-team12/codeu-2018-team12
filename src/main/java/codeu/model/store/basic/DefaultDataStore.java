@@ -14,22 +14,20 @@
 
 package codeu.model.store.basic;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import org.mindrot.jbcrypt.*;
+import java.util.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * This class makes it easy to add dummy data to your chat app instance. To use fake data, set
  * USE_DEFAULT_DATA to true, then adjust the COUNT variables to generate the corresponding amount of
- * users, conversations, and messages. Note that the data must be consistent, i.e. if a Message has
- * an author, that author must be a member of the Users list.
+ * users, conversations, activities, and messages. Note that the data must be consistent, i.e. if a
+ * Message has an author, that author must be a member of the Users list.
  */
 public class DefaultDataStore {
 
@@ -49,6 +47,12 @@ public class DefaultDataStore {
   private int DEFAULT_CONVERSATION_COUNT = 10;
 
   /**
+   * Default activity count. Only used if USE_DEFAULT_DATA is true. Each activity is assigned a
+   * random user and activity type.
+   */
+  private int DEFAULT_ACTIVITY_COUNT = 10;
+
+  /**
    * Default message count. Only used if USE_DEFAULT_DATA is true. Each message is assigned a random
    * author and conversation.
    */
@@ -63,17 +67,20 @@ public class DefaultDataStore {
   private List<User> users;
   private List<Conversation> conversations;
   private List<Message> messages;
+  private List<Activity> activities;
 
   /** This class is a singleton, so its constructor is private. Call getInstance() instead. */
   private DefaultDataStore() {
     users = new ArrayList<>();
     conversations = new ArrayList<>();
     messages = new ArrayList<>();
+    activities = new ArrayList<>();
 
     if (USE_DEFAULT_DATA) {
       addRandomUsers();
       addRandomConversations();
       addRandomMessages();
+      addRandomActivities();
     }
   }
 
@@ -93,6 +100,10 @@ public class DefaultDataStore {
     return messages;
   }
 
+  public List<Activity> getAllActivities() {
+    return activities;
+  }
+
   private void addRandomUsers() {
 
     List<String> randomUsernames = getRandomUsernames();
@@ -102,7 +113,7 @@ public class DefaultDataStore {
       User user =
           new User(
               UUID.randomUUID(),
-              randomUsernames.get(i),
+              getRandomElement(randomUsernames),
               BCrypt.hashpw("password", BCrypt.gensalt()),
               Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(user);
@@ -132,6 +143,55 @@ public class DefaultDataStore {
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(message);
       messages.add(message);
+    }
+  }
+
+  private void addRandomActivities() {
+    for (int i = 0; i < DEFAULT_ACTIVITY_COUNT; i++) {
+      String activityType;
+      Random random = new Random();
+      int max = 4, min = 0;
+      int randomNum = random.nextInt(max - min + 1) + min;
+      if (randomNum == 0) {
+        activityType = "joinedApp";
+      } else if (randomNum == 1) {
+        activityType = "joinedConvo";
+      } else if (randomNum == 2) {
+        activityType = "leftConvo";
+      } else if (randomNum == 3) {
+        activityType = "createdConvo";
+      } else {
+        activityType = "messageSent";
+      }
+
+      UUID conversationId, associatedUserId;
+      User user = getRandomElement(users);
+      associatedUserId = user.getId();
+
+      Conversation conversation = getRandomElement(conversations);
+      associatedUserId = conversation.getOwnerId();
+
+      if (activityType.equals("joinedApp")) {
+        conversationId = new UUID(0L, 0L);
+      } else if (activityType.equals("createdConvo")) {
+        conversationId = conversation.getId();
+      } else {
+        conversation = getRandomElement(conversations);
+        conversationId = conversation.getId();
+      }
+
+      String activityMessage = generateActivityContent(user, conversation, activityType);
+
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              associatedUserId,
+              conversationId,
+              Instant.now(),
+              activityType,
+              activityMessage);
+      PersistentStorageAgent.getInstance().writeThrough(activity);
+      activities.add(activity);
     }
   }
 
@@ -188,5 +248,33 @@ public class DefaultDataStore {
     String messageContent = loremIpsum.substring(startIndex, endIndex).trim();
 
     return messageContent;
+  }
+
+  private String generateActivityContent(
+      User user, Conversation conversation, String activityType) {
+    String activityMessage;
+    String associatedUser = user.getName();
+
+    if (activityType.equals("joinedApp")) {
+      activityMessage = associatedUser + " created an account!";
+    } else {
+      String conversationTitle = conversation.getTitle();
+      if (activityType.equals("joinedConvo")) {
+        activityMessage = associatedUser + " joined the conversation " + conversationTitle;
+      } else if (activityType.equals("leftConvo")) {
+        activityMessage = associatedUser + " left the conversation " + conversationTitle;
+      } else if (activityType.equals("createdConvo")) {
+        activityMessage = associatedUser + " created a new conversation: " + conversationTitle;
+      } else {
+        activityMessage =
+            associatedUser
+                + " sent a message in "
+                + conversationTitle
+                + ": \" "
+                + getRandomMessageContent()
+                + "\"";
+      }
+    }
+    return activityMessage;
   }
 }

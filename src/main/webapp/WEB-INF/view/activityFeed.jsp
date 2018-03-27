@@ -2,6 +2,7 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="codeu.model.data.Activity" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.store.basic.MessageStore" %>
 <%@ page import="codeu.model.store.basic.ConversationStore" %>
@@ -10,7 +11,7 @@
 <%@ page import="java.util.UUID" %>
 
 <%
-List<Message> messages = (List<Message>) request.getAttribute("messages");
+List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 %>
 
 <!DOCTYPE html>
@@ -18,19 +19,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 <head>
   <title>Activity</title>
   <link rel="stylesheet" href="/css/main.css">
-   <nav>
-     <a id="navTitle" href="/">CodeU Chat App</a>
-     <% if(request.getSession().getAttribute("user") != null){ %>
-       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-       <a href="/activityFeed">Activity Feed</a>
-       <a href="/conversations">Conversations</a>
-       <a href="/logout">Logout</a>
-     <% } else{ %>
-       <a href="/login">Login</a>
-       <a href="/register">Register</a>
-     <% } %>
-     <a href="/about.jsp">About</a>
-   </nav>
+  <jsp:include page="./navbar.jsp" />
   <style>
     #activity {
       background-color: white;
@@ -47,28 +36,23 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 </head>
 <body onload="scrollBox()">
   <div id="container">
-  	<h1>Activity</h1>
+  	<h1 id="title">Activity</h1>
   	<p>Here&#39s everything that happened on the site so far!</p>
     <div id="activity">
       <ul>
         <%
-          for (Message message : messages) {
-            UUID userId = message.getAuthorId();
-            String userName = UserStore.getInstance().getUser(userId).getName();
-            String content = message.getContent();
-            UUID conversationId = message.getConversationId();
-            String conversationName = ConversationStore.getInstance().getConversationWithId(conversationId).getTitle();
-
-            Instant creationTime = message.getCreationTime();
+          for (Activity activity : activities) {
+            String type = activity.getActivityType();
+            Instant creationTime = activity.getCreationTime();
             LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
             String time = ldt.format(formatter);
-         %>
-         <li>
-           <strong><%= time %>:</strong>
-              <%= userName + " sent a message to " + conversationName + ": " %>
-              <q><%= content %></q>
-         </li>
+        %>
+        <li>
+          <strong><%= time %>:</strong>
+          <% if (type.equals("joinedApp")) %>
+          <%= activity.getActivityMessage() %>
+        </li>
          <%
           }
          %>

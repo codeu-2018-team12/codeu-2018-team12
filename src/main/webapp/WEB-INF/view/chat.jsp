@@ -14,10 +14,12 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.User" %>
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 List<User> conversationUsers = (List<User>) request.getAttribute("conversationUsers");
+User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
 %>
 
 <!DOCTYPE html>
@@ -25,19 +27,7 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if (request.getSession().getAttribute("user") != null) { %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-     <a href="/activityFeed">Activity Feed</a>
-     <a href="/conversations">Conversations</a>
-     <a href="/logout">Logout</a>
-   <% } else { %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
- </nav>
+  <jsp:include page="./navbar.jsp" />
 
   <style>
     #chat {
@@ -72,7 +62,7 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
         String author = UserStore.getInstance()
           .getUser(message.getAuthorId()).getName();
     %>
-      <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
+      <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
     <%
       }
     %>
@@ -85,7 +75,7 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if (request.getSession().getAttribute("user") != null && conversationUsers.contains(request.getSession().getAttribute("user")) { %>
+    <% if (user != null && conversationUsers.contains(user)) { %>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
         <textarea name="message"></textarea>
         </br>
@@ -93,13 +83,11 @@ List<User> conversationUsers = (List<User>) request.getAttribute("conversationUs
         </br>
         <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
     </form>
-    <% } %>
-
-    <% if (request.getAttribute("user") != null && !(conversationUsers.contains(request.getSession().getAttribute("user"))) { %>
+    <% } else if (user != null && !(conversationUsers.contains(user))) { %>
+    <p> Join the conversation to send a message! </p>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
             <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
-
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>

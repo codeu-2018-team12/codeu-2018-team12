@@ -145,39 +145,31 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.conversationUsers.add(user);
+      conversation.getConversationUsers().add(user);
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.conversationUsers.remove(user);
+      conversation.getConversationUsers().remove(user);
     }
 
-    if (!conversation.conversationUsers.contains(user)) {
-      // user has not joined conversation, don't let them add a message
-      response.sendRedirect("/chat/" + conversationTitle);
-      request.setAttribute("error", "Join the conversation to add a message!");
-      request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+    if (button == null && conversation.getConversationUsers().contains(user)) {
+      String messageContent = request.getParameter("message");
 
-      return;
+      // this removes any HTML from the message content
+      String cleanedMessageContent =
+          Jsoup.clean(
+              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+      String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+
+      Message message =
+          new Message(
+              UUID.randomUUID(),
+              conversation.getId(),
+              user.getId(),
+              finalMessageContent,
+              Instant.now());
+      messageStore.addMessage(message);
     }
-
-    String messageContent = request.getParameter("message");
-
-    // this removes any HTML from the message content
-    String cleanedMessageContent =
-        Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
-    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
-
-    Message message =
-        new Message(
-            UUID.randomUUID(),
-            conversation.getId(),
-            user.getId(),
-            finalMessageContent,
-            Instant.now());
-
-    messageStore.addMessage(message);
-
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }

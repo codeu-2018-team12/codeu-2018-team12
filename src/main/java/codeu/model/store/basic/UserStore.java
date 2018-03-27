@@ -17,8 +17,10 @@ package codeu.model.store.basic;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -64,9 +66,17 @@ public class UserStore {
     users = new ArrayList<>();
   }
 
-  /** Load a set of randomly-generated Message objects. */
-  public void loadTestData() {
-    users.addAll(DefaultDataStore.getInstance().getAllUsers());
+  /** Load a set of randomly-generated Users objects. */
+  public boolean loadTestData() {
+    boolean loaded = false;
+    try {
+      users.addAll(DefaultDataStore.getInstance().getAllUsers());
+      loaded = true;
+    } catch (Exception e) {
+      loaded = false;
+      System.err.println("ERROR: Unable to establish initial store (users).");
+    }
+    return loaded;
   }
 
   /**
@@ -82,6 +92,30 @@ public class UserStore {
       }
     }
     return null;
+  }
+
+  /**
+   * Finds all User objects whose username contains the given string
+   *
+   * @return the list of user objects.
+   */
+  public List<User> searchUsers(String search) {
+    Comparator<User> userComparator =
+        new Comparator<User>() {
+          public int compare(User u1, User u2) {
+            return StringUtils.getLevenshteinDistance(search, u1.getName())
+                - StringUtils.getLevenshteinDistance(search, u2.getName());
+          }
+        };
+
+    ArrayList<User> result = new ArrayList<User>();
+    for (User user : users) {
+      if (user.getName().contains(search)) {
+        result.add(user);
+      }
+    }
+    result.sort(userComparator);
+    return result;
   }
 
   /**
@@ -120,5 +154,10 @@ public class UserStore {
    */
   public void setUsers(List<User> users) {
     this.users = users;
+  }
+
+  /** @return the list of all user objects stored in the datastore. */
+  public List<User> getUsers() {
+    return users;
   }
 }

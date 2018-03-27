@@ -50,6 +50,10 @@ h1 {
   color: #757575;
 }
 
+#title {
+  text-align: center
+}
+
 img {
     margin: 0 auto;
     width: 40%;
