@@ -53,7 +53,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
     <div id="activity">
       <ul>
         <%
-          for ( Activity activity : activities) {
+          for (Activity activity : activities) {
             String type = activity.getActivityType();
             Instant creationTime = activity.getCreationTime();
             LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
