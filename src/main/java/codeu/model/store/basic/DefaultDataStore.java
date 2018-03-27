@@ -115,6 +115,7 @@ public class DefaultDataStore {
               UUID.randomUUID(),
               getRandomElement(randomUsernames),
               BCrypt.hashpw("password", BCrypt.gensalt()),
+              "this is a test biography",
               Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(user);
       users.add(user);

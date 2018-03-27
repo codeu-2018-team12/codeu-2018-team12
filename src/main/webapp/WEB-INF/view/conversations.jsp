@@ -24,6 +24,7 @@
   <title>Conversations</title>
   <link rel="stylesheet" href="/css/main.css">
   <jsp:include page="./navbar.jsp" />
+
 </head>
 <body>
   <div id="container">

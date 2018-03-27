@@ -44,7 +44,8 @@ public class SearchServletTest {
   @Test
   public void testDoGet() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("search")).thenReturn("te");
-    User testUser = new User(UUID.randomUUID(), "test_user", "password", Instant.now());
+    User testUser =
+        new User(UUID.randomUUID(), "test_user", "password", "test biography", Instant.now());
 
     ArrayList<User> users = new ArrayList<User>();
     users.add(testUser);
