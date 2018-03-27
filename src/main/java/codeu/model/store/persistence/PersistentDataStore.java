@@ -65,7 +65,7 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         String userName = (String) entity.getProperty("username");
         String password = (String) entity.getProperty("password");
-        String biography = (String) entity.getProperty("biography");  //I'm not sure what this Entity business is, hope this works?
+        String biography = (String) entity.getProperty("biography");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());

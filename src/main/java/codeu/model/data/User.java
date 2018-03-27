@@ -60,7 +60,7 @@ public class User {
     return biography;
   }
 
-  public void changeBio(String newBio) {
+  public void setBio(String newBio) {
     biography = newBio;
   }
 
