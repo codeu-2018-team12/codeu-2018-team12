@@ -1,9 +1,7 @@
 package codeu.controller;
 
-import codeu.model.data.Message;
-import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
-import codeu.model.store.basic.UserStore;
+import codeu.model.data.Activity;
+import codeu.model.store.basic.ActivityStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -25,9 +23,7 @@ public class ActivityServletTest {
   private HttpServletRequest mockRequest;
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
-  private ConversationStore mockConversationStore;
-  private MessageStore mockMessageStore;
-  private UserStore mockUserStore;
+  private ActivityStore mockActivityStore;
 
   @Before
   public void setup() {
@@ -42,40 +38,37 @@ public class ActivityServletTest {
     Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp"))
         .thenReturn(mockRequestDispatcher);
 
-    mockMessageStore = Mockito.mock(MessageStore.class);
-    activityServlet.setMessageStore(mockMessageStore);
-
-    mockUserStore = Mockito.mock(UserStore.class);
-    activityServlet.setUserStore(mockUserStore);
-
-    mockConversationStore = Mockito.mock(ConversationStore.class);
-    activityServlet.setConversationStore(mockConversationStore);
+    mockActivityStore = Mockito.mock(ActivityStore.class);
+    activityServlet.setActivityStore(mockActivityStore);
   }
 
   @Test
   public void testDoGet() throws IOException, ServletException {
 
-    List<Message> sampleMessages = new ArrayList<>();
-    sampleMessages.add(
-        new Message(
+    List<Activity> sampleActivities = new ArrayList<>();
+    sampleActivities.add(
+        new Activity(
             UUID.randomUUID(),
             UUID.randomUUID(),
             UUID.randomUUID(),
-            "test message 1",
-            Instant.ofEpochMilli(2000)));
-    sampleMessages.add(
-        new Message(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            "test message 2",
-            Instant.ofEpochMilli(1000)));
+            Instant.ofEpochMilli(2000),
+            "joinedApp",
+            "testMessage"));
 
-    Mockito.when(mockMessageStore.getAllMessages()).thenReturn(sampleMessages);
+    sampleActivities.add(
+        new Activity(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            Instant.ofEpochMilli(1000),
+            "createdConvo",
+            "testMessage"));
+
+    Mockito.when(mockActivityStore.getAllActivities()).thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockRequest).setAttribute("messages", sampleMessages);
+    Mockito.verify(mockRequest).setAttribute("activities", sampleActivities);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }
