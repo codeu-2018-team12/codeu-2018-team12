@@ -57,7 +57,7 @@ public class ProfileServletTest {
   public void testDoGet() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
 
-    User testUser = new User(UUID.randomUUID(), "test_user", "password", Instant.now());
+    User testUser = new User(UUID.randomUUID(), "test_user", "password", null, Instant.now());
     Mockito.when(mockUserStore.getUser("test_user")).thenReturn(testUser);
 
     List<Message> fakeMessageList = new ArrayList<>();
