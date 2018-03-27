@@ -13,27 +13,18 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+
+<%@ page import="codeu.model.data.User" %>
+
+
+<%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
 
 <!DOCTYPE html>
 <html>
 <head>
  <link rel="stylesheet" href="/css/main.css">
-  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if(request.getSession().getAttribute("user") != null){ %>  
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-     <a href="/activityFeed">Activity Feed</a>
-     <a href="/conversations">Conversations</a>
-      <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>  
-     <a href="<%=profileaddress %>">Your Profile</a> 
-     <a href="/logout">Logout</a>
-   <% } else{ %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
- </nav>
+ <jsp:include page="/WEB-INF/view/navbar.jsp" />
 </head>
 
 

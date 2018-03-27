@@ -25,12 +25,12 @@ import java.util.UUID;
  * created by a User and contain Messages.
  */
 public class Conversation {
-  public final UUID id;
-  public final UUID owner;
-  public final Instant creation;
-  public final String title;
-  public UserStore userStore = UserStore.getInstance();
-  public List<User> conversationUsers = new ArrayList<>();
+  private final UUID id;
+  private final UUID owner;
+  private final Instant creation;
+  private final String title;
+  private UserStore userStore = UserStore.getInstance();
+  private List<User> conversationUsers = new ArrayList<>();
 
   /**
    * Constructs a new Conversation.
