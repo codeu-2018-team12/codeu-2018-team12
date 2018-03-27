@@ -14,9 +14,11 @@
 
 package codeu.controller;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -45,6 +47,9 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Users. */
+  private ActivityStore activityStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -52,6 +57,7 @@ public class ChatServlet extends HttpServlet {
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setActivityStore(ActivityStore.getInstance());
   }
 
   /**
@@ -76,6 +82,14 @@ public class ChatServlet extends HttpServlet {
    */
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  /**
+   * Sets the ActivityStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
+   */
+  void setActivityStore(ActivityStore activityStore) {
+    this.activityStore = activityStore;
   }
 
   /**
@@ -169,6 +183,31 @@ public class ChatServlet extends HttpServlet {
               finalMessageContent,
               Instant.now());
       messageStore.addMessage(message);
+
+      String activityMessage =
+          "<a href=\"/profile/"
+              + username
+              + "\">"
+              + username
+              + "</a>"
+              + " sent to "
+              + "<a href=\"/chat/"
+              + conversationTitle
+              + "\">"
+              + conversationTitle
+              + "</a>"
+              + ": "
+              + finalMessageContent;
+
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
