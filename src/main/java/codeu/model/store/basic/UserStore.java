@@ -92,7 +92,6 @@ public class UserStore {
    * @return the list of user objects.
    */
   public List<User> searchUsers(String search) {
-
     Comparator<User> userComparator =
         new Comparator<User>() {
           public int compare(User u1, User u2) {
