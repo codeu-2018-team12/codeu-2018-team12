@@ -15,6 +15,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -131,6 +132,11 @@ public class ConversationStore {
       }
     }
     return null;
+  }
+
+  /** This method updates the exisiting list of users in a conversation **/
+  public void updateConversationUsers(Conversation conversation) {
+    persistentStorageAgent.update(conversation);
   }
 
   /** Sets the List of Conversations stored by this ConversationStore. */

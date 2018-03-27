@@ -72,4 +72,35 @@ public class Conversation {
   public List<User> getConversationUsers() {
     return conversationUsers;
   }
+
+  /**
+   * Returns the set of users in this Conversation as a list of strings indicating the UUID of each
+   * user. For use in persistentDataStore
+   */
+  public List<String> getConversationUsersAsString() {
+    List<String> ids = new ArrayList<>();
+    for (User user : conversationUsers) {
+        ids.add(user.getId().toString());
+    }
+    return ids;
+  }
+  /** Adds a user to a conversation */
+  public void addUser(User user) {
+    conversationUsers.add(user);
+  }
+
+  /** Removes a user from a conversation */
+  public void removeUser(User user) {
+    conversationUsers.remove(user);
+  }
+
+  /** Updates the list of users from a list of user Ids */
+  public void setUsers(List<String> users) {
+      List<User> newUsers = new ArrayList<>();
+      for (String userId : users) {
+        UUID id = UUID.fromString(userId);
+        newUsers.add(userStore.getUser(id));
+      }
+      conversationUsers = newUsers;
+    }
 }
