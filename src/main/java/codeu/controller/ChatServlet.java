@@ -168,7 +168,7 @@ public class ChatServlet extends HttpServlet {
               user.getId(),
               conversation.getId(),
               Instant.now(),
-              "messageSent",
+              "joinedConvo",
               activityMessage);
       activityStore.addActivity(activity);
     }
@@ -183,7 +183,7 @@ public class ChatServlet extends HttpServlet {
               user.getId(),
               conversation.getId(),
               Instant.now(),
-              "messageSent",
+              "leftConvo",
               activityMessage);
       activityStore.addActivity(activity);
     }
