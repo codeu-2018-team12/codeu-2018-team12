@@ -207,7 +207,7 @@ public class ChatServlet extends HttpServlet {
       messageStore.addMessage(message);
 
       String activityMessage =
-          " sent to "
+          " sent a message in "
               + "<a href=\"/chat/"
               + conversationTitle
               + "\">"
