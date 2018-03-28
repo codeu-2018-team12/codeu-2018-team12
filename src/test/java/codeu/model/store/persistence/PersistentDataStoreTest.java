@@ -326,8 +326,7 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateEntityUser()
-      throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateEntityUser() throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
