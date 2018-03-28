@@ -19,13 +19,13 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
-import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -233,14 +233,13 @@ public class PersistentDataStore {
   }
 
   /** Updates a User object in the Datstore service */
-  public void updateEntity(User user){
-      Query query = new Query("chat-users").
-              setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-      PreparedQuery preparedQuery = datastore.prepare(query);
-      Entity resultEntity = preparedQuery.asSingleEntity();
-
-      resultEntity.setProperty("biography", user.getBio());
-      datastore.put(resultEntity);
-    }
+  public void updateEntity(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    resultEntity.setProperty("biography", user.getBio());
+    datastore.put(resultEntity);
   }
-
+}
