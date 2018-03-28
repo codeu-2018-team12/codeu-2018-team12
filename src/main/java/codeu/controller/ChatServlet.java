@@ -185,12 +185,7 @@ public class ChatServlet extends HttpServlet {
       messageStore.addMessage(message);
 
       String activityMessage =
-          "<a href=\"/profile/"
-              + username
-              + "\">"
-              + username
-              + "</a>"
-              + " sent to "
+          " sent to "
               + "<a href=\"/chat/"
               + conversationTitle
               + "\">"
