@@ -343,6 +343,7 @@ public class ChatServletTest {
     chatServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
+
     Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
     Mockito.verify(mockActivityStore).addActivity(activity);
     Assert.assertEquals("Test message.", messageArgumentCaptor.getValue().getContent());

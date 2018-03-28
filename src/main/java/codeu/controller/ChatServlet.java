@@ -160,10 +160,32 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       conversation.getConversationUsers().add(user);
+      String activityMessage =
+          " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
 
     if ("leaveButton".equals(button)) {
       conversation.getConversationUsers().remove(user);
+      String activityMessage =
+          " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
 
     if (button == null && conversation.getConversationUsers().contains(user)) {
