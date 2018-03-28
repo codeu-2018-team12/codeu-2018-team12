@@ -118,4 +118,7 @@ public class PersistentStorageAgent {
   public void writeThrough(Activity activity) {
     persistentDataStore.writeThrough(activity);
   }
+
+  /** Updates a conversation in the Datastore service */
+  public void update(User user) { persistentDataStore.updateEntity(user); }
 }

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
+import com.google.appengine.api.datastore.Query.FilterOperator;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -229,4 +231,16 @@ public class PersistentDataStore {
 
     datastore.put(activityEntity);
   }
-}
+
+  /** Updates a User object in the Datstore service */
+  public void updateEntity(User user){
+      Query query = new Query("chat-users").
+              setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+      PreparedQuery preparedQuery = datastore.prepare(query);
+      Entity resultEntity = preparedQuery.asSingleEntity();
+
+      resultEntity.setProperty("biography", user.getBio());
+      datastore.put(resultEntity);
+    }
+  }
+

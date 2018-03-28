@@ -14,6 +14,8 @@
 
 package codeu.model.data;
 
+import codeu.model.store.persistence.PersistentStorageAgent;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -62,6 +64,7 @@ public class User {
 
   public void setBio(String newBio) {
     biography = newBio;
+    PersistentStorageAgent.getInstance().update(this);
   }
 
   /** Returns the creation time of this User. */
