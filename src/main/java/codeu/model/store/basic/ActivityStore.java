@@ -91,8 +91,10 @@ public class ActivityStore {
   }
 
   /** Access the current set of activities known to the application. */
-  public List<Activity> getAllActivities() {
-    activities.sort(activityComparator);
+  public List<Activity> getAllActivities(boolean sort) {
+    if (sort) {
+      activities.sort(activityComparator);
+    }
     return activities;
   }
 
