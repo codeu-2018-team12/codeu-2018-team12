@@ -91,7 +91,7 @@ public class PersistentStorageAgentTest {
 
   @Test
   public void testUpdateUser() {
-    User user = new User(UUID.randomUUID(), "test_username", "password", null, Instant.now());
+    User user = new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
     persistentStorageAgent.updateEntity(user);
     Mockito.verify(mockPersistentDataStore).updateEntity(user);
   }
