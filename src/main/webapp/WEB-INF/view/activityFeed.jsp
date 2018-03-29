@@ -41,8 +41,13 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
     <div id="activity">
       <ul>
         <%
+        User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
           for (Activity activity : activities) {
             String type = activity.getActivityType();
+            String message = activity.getActivityMessage();
+            UUID userID = activity.getUserId();
+            User userObject = UserStore.getInstance().getUser(userID);
+            String username = userObject.getName();
             Instant creationTime = activity.getCreationTime();
             LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
@@ -50,8 +55,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         %>
         <li>
           <strong><%= time %>:</strong>
-          <% if (type.equals("joinedApp")) %>
-          <%= activity.getActivityMessage() %>
+          <a href="/profile/<%= username %>"><%= username %></a> <%= message %>
         </li>
          <%
           }
