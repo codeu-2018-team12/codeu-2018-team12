@@ -99,7 +99,7 @@ public class UserStore {
    *
    * @return the list of user objects.
    */
-  public List<User> searchUsers(String search) {
+  public List<User> searchUsers(String search, boolean sort) {
     Comparator<User> userComparator =
         new Comparator<User>() {
           public int compare(User u1, User u2) {
@@ -114,7 +114,9 @@ public class UserStore {
         result.add(user);
       }
     }
-    result.sort(userComparator);
+    if (sort) {
+      result.sort(userComparator);
+    }
     return result;
   }
 

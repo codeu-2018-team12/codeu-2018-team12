@@ -50,7 +50,7 @@ public class SearchServletTest {
     ArrayList<User> users = new ArrayList<User>();
     users.add(testUser);
 
-    Mockito.when(mockUserStore.searchUsers("te")).thenReturn(users);
+    Mockito.when(mockUserStore.searchUsers("te", true)).thenReturn(users);
 
     searchServlet.doGet(mockRequest, mockResponse);
 
