@@ -71,7 +71,7 @@ public class ProfileServlet extends HttpServlet {
     User user = userStore.getUser(name);
     List<Message> messages = null;
     if (user != null) {
-      messages = messageStore.getMessagesByAuthor(user.getId());
+      messages = messageStore.getMessagesByAuthor(user.getId(), true);
     }
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);

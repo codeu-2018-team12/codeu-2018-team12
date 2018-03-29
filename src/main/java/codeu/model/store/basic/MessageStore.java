@@ -97,8 +97,10 @@ public class MessageStore {
   }
 
   /** Access the current set of conversations known to the application. */
-  public List<Message> getAllMessages() {
-    messages.sort(msgComparator);
+  public List<Message> getAllMessages(boolean sort) {
+    if (sort) {
+      messages.sort(msgComparator);
+    }
     return messages;
   }
 
@@ -116,7 +118,7 @@ public class MessageStore {
   }
 
   /** Access the current set of Messages within the given Conversation. */
-  public List<Message> getMessagesInConversation(UUID conversationId) {
+  public List<Message> getMessagesInConversation(UUID conversationId, boolean sort) {
 
     List<Message> messagesInConversation = new ArrayList<>();
 
@@ -126,13 +128,15 @@ public class MessageStore {
       }
     }
 
-    messagesInConversation.sort(msgComparator);
+    if (sort) {
+      messagesInConversation.sort(msgComparator);
+    }
 
     return messagesInConversation;
   }
 
   /** Retrieves a list of messages belonging to a user with a specified ID */
-  public List<Message> getMessagesByAuthor(UUID authorId) {
+  public List<Message> getMessagesByAuthor(UUID authorId, boolean sort) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
     for (Message message : messages) {
@@ -141,7 +145,9 @@ public class MessageStore {
       }
     }
 
-    messagesWrittenByAuthor.sort(msgComparator);
+    if (sort) {
+      messagesWrittenByAuthor.sort(msgComparator);
+    }
 
     return messagesWrittenByAuthor;
   }

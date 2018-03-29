@@ -75,7 +75,7 @@ public class ProfileServletTest {
             testUser.getId(),
             "test message 2",
             Instant.ofEpochMilli(1000)));
-    Mockito.when(mockMessageStore.getMessagesByAuthor(testUser.getId()))
+    Mockito.when(mockMessageStore.getMessagesByAuthor(testUser.getId(), true))
         .thenReturn(fakeMessageList);
 
     profileServlet.doGet(mockRequest, mockResponse);
