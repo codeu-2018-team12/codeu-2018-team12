@@ -38,7 +38,7 @@ public class ActivityServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    List<Activity> activities = activityStore.getAllActivities(true);
+    List<Activity> activities = activityStore.getAllActivities_Sorted();
     request.setAttribute("activities", activities);
 
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);

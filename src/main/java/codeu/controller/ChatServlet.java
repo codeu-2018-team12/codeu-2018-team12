@@ -113,7 +113,7 @@ public class ChatServlet extends HttpServlet {
 
     UUID conversationId = conversation.getId();
 
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId, false);
+    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
     List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);

@@ -54,8 +54,7 @@ public class MessageStoreTest {
 
   @Test
   public void testGetMessagesInConversation() {
-    List<Message> resultMessages =
-        messageStore.getMessagesInConversation(CONVERSATION_ID_ONE, false);
+    List<Message> resultMessages = messageStore.getMessagesInConversation(CONVERSATION_ID_ONE);
 
     Assert.assertEquals(2, resultMessages.size());
     assertEquals(MESSAGE_ONE, resultMessages.get(0));
@@ -64,7 +63,7 @@ public class MessageStoreTest {
 
   @Test
   public void getAllMessages() {
-    List<Message> allMessages = messageStore.getAllMessages(false);
+    List<Message> allMessages = messageStore.getAllMessages();
 
     Assert.assertEquals(3, allMessages.size());
     assertEquals(MESSAGE_ONE, allMessages.get(0));
@@ -74,7 +73,7 @@ public class MessageStoreTest {
 
   @Test
   public void testGetMessagesByAuthor() {
-    List<Message> resultMessages = messageStore.getMessagesByAuthor(USER_ID_ONE, true);
+    List<Message> resultMessages = messageStore.getMessagesByAuthor_Sorted(USER_ID_ONE);
 
     Assert.assertEquals(2, resultMessages.size());
     assertEquals(MESSAGE_ONE, resultMessages.get(1));
@@ -93,8 +92,7 @@ public class MessageStoreTest {
             Instant.now());
 
     messageStore.addMessage(inputMessage);
-    Message resultMessage =
-        messageStore.getMessagesInConversation(inputConversationId, true).get(0);
+    Message resultMessage = messageStore.getMessagesInConversation(inputConversationId).get(0);
 
     assertEquals(inputMessage, resultMessage);
     Mockito.verify(mockPersistentStorageAgent).writeThrough(inputMessage);

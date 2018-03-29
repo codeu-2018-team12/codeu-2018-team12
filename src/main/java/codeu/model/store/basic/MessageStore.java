@@ -97,10 +97,16 @@ public class MessageStore {
   }
 
   /** Access the current set of conversations known to the application. */
-  public List<Message> getAllMessages(boolean sort) {
-    if (sort) {
-      messages.sort(msgComparator);
-    }
+  public List<Message> getAllMessages() {
+    return messages;
+  }
+
+  /**
+   * Access the current set of conversations known to the application sorted with newest messages
+   * first.
+   */
+  public List<Message> getAllMessages_Sorted() {
+    messages.sort(msgComparator);
     return messages;
   }
 
@@ -118,7 +124,7 @@ public class MessageStore {
   }
 
   /** Access the current set of Messages within the given Conversation. */
-  public List<Message> getMessagesInConversation(UUID conversationId, boolean sort) {
+  public List<Message> getMessagesInConversation(UUID conversationId) {
 
     List<Message> messagesInConversation = new ArrayList<>();
 
@@ -128,15 +134,30 @@ public class MessageStore {
       }
     }
 
-    if (sort) {
-      messagesInConversation.sort(msgComparator);
+    return messagesInConversation;
+  }
+
+  /**
+   * Access the current set of Messages within the given Conversation sorted with newest messages
+   * first.
+   */
+  public List<Message> getMessagesInConversation_Sorted(UUID conversationId) {
+
+    List<Message> messagesInConversation = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getConversationId().equals(conversationId)) {
+        messagesInConversation.add(message);
+      }
     }
+
+    messagesInConversation.sort(msgComparator);
 
     return messagesInConversation;
   }
 
   /** Retrieves a list of messages belonging to a user with a specified ID */
-  public List<Message> getMessagesByAuthor(UUID authorId, boolean sort) {
+  public List<Message> getMessagesByAuthor(UUID authorId) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
     for (Message message : messages) {
@@ -145,9 +166,23 @@ public class MessageStore {
       }
     }
 
-    if (sort) {
-      messagesWrittenByAuthor.sort(msgComparator);
+    return messagesWrittenByAuthor;
+  }
+
+  /**
+   * Retrieves a list of messages belonging to a user with a specified ID sorted with newest
+   * messages first
+   */
+  public List<Message> getMessagesByAuthor_Sorted(UUID authorId) {
+    List<Message> messagesWrittenByAuthor = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getAuthorId().equals(authorId)) {
+        messagesWrittenByAuthor.add(message);
+      }
     }
+
+    messagesWrittenByAuthor.sort(msgComparator);
 
     return messagesWrittenByAuthor;
   }

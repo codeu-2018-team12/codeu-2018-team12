@@ -64,7 +64,7 @@ public class ActivityServletTest {
             "createdConvo",
             "testMessage"));
 
-    Mockito.when(mockActivityStore.getAllActivities(true)).thenReturn(sampleActivities);
+    Mockito.when(mockActivityStore.getAllActivities_Sorted()).thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);
 

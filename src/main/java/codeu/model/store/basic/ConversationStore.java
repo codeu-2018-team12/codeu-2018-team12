@@ -91,10 +91,16 @@ public class ConversationStore {
   }
 
   /** Access the current set of conversations known to the application. */
-  public List<Conversation> getAllConversations(boolean sort) {
-    if (sort) {
-      conversations.sort(convoComparator);
-    }
+  public List<Conversation> getAllConversations() {
+    return conversations;
+  }
+
+  /**
+   * Access the current set of conversations known to the application with newest conversations
+   * first.
+   */
+  public List<Conversation> getAllConversations_Sorted() {
+    conversations.sort(convoComparator);
     return conversations;
   }
 
