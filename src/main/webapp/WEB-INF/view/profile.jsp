@@ -39,8 +39,8 @@ User user = (User) request.getAttribute("user");
   <div id="container">
   <h2>Biography</h2>
     <% if (user.getBio() != null) { %>
-        <%= user.getBio() %>
-      <% } else {%>
+       <%= user.getBio() %>
+      <%} else {%>
         <p> This biography has not yet been set up! </p>
      <% } %>
  <% if (request.getSession().getAttribute("user") != null){

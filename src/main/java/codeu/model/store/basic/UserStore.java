@@ -114,6 +114,30 @@ public class UserStore {
         result.add(user);
       }
     }
+    return result;
+  }
+
+  /**
+   * Finds all User objects whose username contains the given string
+   *
+   * @return the list of user objects sorted with users whose name is closer to the given string
+   *     first.
+   */
+  public List<User> searchUsersSorted(String search) {
+    Comparator<User> userComparator =
+        new Comparator<User>() {
+          public int compare(User u1, User u2) {
+            return StringUtils.getLevenshteinDistance(search, u1.getName())
+                - StringUtils.getLevenshteinDistance(search, u2.getName());
+          }
+        };
+
+    ArrayList<User> result = new ArrayList<User>();
+    for (User user : users) {
+      if (user.getName().contains(search)) {
+        result.add(user);
+      }
+    }
     result.sort(userComparator);
     return result;
   }

@@ -100,7 +100,7 @@ public class UserStoreTest {
 
   @Test
   public void testSearchUsers() {
-    List<User> results = userStore.searchUsers("test");
+    List<User> results = userStore.searchUsersSorted("test");
     Assert.assertEquals(results.size(), 4);
     assertEquals(results.get(0), USER_FIVE);
     assertEquals(results.get(1), USER_ONE);

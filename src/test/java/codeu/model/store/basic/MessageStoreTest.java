@@ -57,8 +57,8 @@ public class MessageStoreTest {
     List<Message> resultMessages = messageStore.getMessagesInConversation(CONVERSATION_ID_ONE);
 
     Assert.assertEquals(2, resultMessages.size());
-    assertEquals(MESSAGE_ONE, resultMessages.get(1));
-    assertEquals(MESSAGE_TWO, resultMessages.get(0));
+    assertEquals(MESSAGE_ONE, resultMessages.get(0));
+    assertEquals(MESSAGE_TWO, resultMessages.get(1));
   }
 
   @Test
@@ -66,14 +66,14 @@ public class MessageStoreTest {
     List<Message> allMessages = messageStore.getAllMessages();
 
     Assert.assertEquals(3, allMessages.size());
-    assertEquals(MESSAGE_ONE, allMessages.get(2));
+    assertEquals(MESSAGE_ONE, allMessages.get(0));
     assertEquals(MESSAGE_TWO, allMessages.get(1));
-    assertEquals(MESSAGE_THREE, allMessages.get(0));
+    assertEquals(MESSAGE_THREE, allMessages.get(2));
   }
 
   @Test
   public void testGetMessagesByAuthor() {
-    List<Message> resultMessages = messageStore.getMessagesByAuthor(USER_ID_ONE);
+    List<Message> resultMessages = messageStore.getMessagesByAuthorSorted(USER_ID_ONE);
 
     Assert.assertEquals(2, resultMessages.size());
     assertEquals(MESSAGE_ONE, resultMessages.get(1));
