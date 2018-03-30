@@ -41,7 +41,7 @@ public class SearchServlet extends HttpServlet {
     String search = request.getParameter("search");
     List<User> result = new ArrayList<User>();
     if (search != null) {
-      result = userStore.searchUsers(search);
+      result = userStore.searchUsersSorted(search);
     }
     request.setAttribute("users", result);
     request.getRequestDispatcher("/WEB-INF/view/search.jsp").forward(request, response);
