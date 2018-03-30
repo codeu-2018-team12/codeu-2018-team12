@@ -98,6 +98,14 @@ public class MessageStore {
 
   /** Access the current set of conversations known to the application. */
   public List<Message> getAllMessages() {
+    return messages;
+  }
+
+  /**
+   * Access the current set of conversations known to the application sorted with newest messages
+   * first.
+   */
+  public List<Message> getAllMessagesSorted() {
     messages.sort(msgComparator);
     return messages;
   }
@@ -126,6 +134,23 @@ public class MessageStore {
       }
     }
 
+    return messagesInConversation;
+  }
+
+  /**
+   * Access the current set of Messages within the given Conversation sorted with newest messages
+   * first.
+   */
+  public List<Message> getMessagesInConversationSorted(UUID conversationId) {
+
+    List<Message> messagesInConversation = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getConversationId().equals(conversationId)) {
+        messagesInConversation.add(message);
+      }
+    }
+
     messagesInConversation.sort(msgComparator);
 
     return messagesInConversation;
@@ -133,6 +158,22 @@ public class MessageStore {
 
   /** Retrieves a list of messages belonging to a user with a specified ID */
   public List<Message> getMessagesByAuthor(UUID authorId) {
+    List<Message> messagesWrittenByAuthor = new ArrayList<>();
+
+    for (Message message : messages) {
+      if (message.getAuthorId().equals(authorId)) {
+        messagesWrittenByAuthor.add(message);
+      }
+    }
+
+    return messagesWrittenByAuthor;
+  }
+
+  /**
+   * Retrieves a list of messages belonging to a user with a specified ID sorted with newest
+   * messages first
+   */
+  public List<Message> getMessagesByAuthorSorted(UUID authorId) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
     for (Message message : messages) {

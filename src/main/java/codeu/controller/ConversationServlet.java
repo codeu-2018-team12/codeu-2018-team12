@@ -84,7 +84,7 @@ public class ConversationServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    List<Conversation> conversations = conversationStore.getAllConversations();
+    List<Conversation> conversations = conversationStore.getAllConversationsSorted();
     request.setAttribute("conversations", conversations);
     request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
   }
@@ -115,7 +115,7 @@ public class ConversationServlet extends HttpServlet {
 
     String conversationTitle = request.getParameter("conversationTitle");
     if (conversationTitle.isEmpty()) {
-      List<Conversation> conversations = conversationStore.getAllConversations();
+      List<Conversation> conversations = conversationStore.getAllConversationsSorted();
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "Please specify a name for this chat.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
