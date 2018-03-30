@@ -31,7 +31,7 @@ public class Conversation {
   private final String title;
   private UserStore userStore = UserStore.getInstance();
   private List<User> conversationUsers = new ArrayList<>();
-
+  private boolean isPublic = true;
   /**
    * Constructs a new Conversation.
    *
@@ -71,5 +71,20 @@ public class Conversation {
   /** Returns the set of users in this Conversation. */
   public List<User> getConversationUsers() {
     return conversationUsers;
+  }
+
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+
+  public void setIsPublic(boolean isPublic) {
+    this.isPublic = isPublic;
+  }
+
+  public boolean hasPermission(User user) {
+    if (isPublic) {
+      return true;
+    }
+    return conversationUsers.contains(user);
   }
 }

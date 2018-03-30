@@ -15,6 +15,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -102,6 +103,27 @@ public class ConversationStore {
   public List<Conversation> getAllConversationsSorted() {
     conversations.sort(convoComparator);
     return conversations;
+  }
+
+  public List<Conversation> getAllPermittedConversations(User user) {
+    ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.hasPermission(user)) {
+        permittedConversations.add(convo);
+      }
+    }
+    return permittedConversations;
+  }
+
+  public List<Conversation> getAllPermittedConversationsSorted(User user) {
+    ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.hasPermission(user)) {
+        permittedConversations.add(convo);
+      }
+    }
+    permittedConversations.sort(convoComparator);
+    return permittedConversations;
   }
 
   /** Add a new conversation to the current set of conversations known to the application. */
