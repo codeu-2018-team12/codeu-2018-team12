@@ -75,7 +75,7 @@ public class ConversationServletTest {
     List<Conversation> fakeConversationList = new ArrayList<>();
     fakeConversationList.add(
         new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
-    Mockito.when(mockConversationStore.getAllConversations_Sorted())
+    Mockito.when(mockConversationStore.getAllConversationsSorted())
         .thenReturn(fakeConversationList);
 
     conversationServlet.doGet(mockRequest, mockResponse);

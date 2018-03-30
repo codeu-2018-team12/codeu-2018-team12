@@ -96,7 +96,7 @@ public class ActivityStore {
   }
 
   /** Access the current set of activities known to the application sorted with newest first. */
-  public List<Activity> getAllActivities_Sorted() {
+  public List<Activity> getAllActivitiesSorted() {
     activities.sort(activityComparator);
     return activities;
   }

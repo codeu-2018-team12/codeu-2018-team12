@@ -105,7 +105,7 @@ public class MessageStore {
    * Access the current set of conversations known to the application sorted with newest messages
    * first.
    */
-  public List<Message> getAllMessages_Sorted() {
+  public List<Message> getAllMessagesSorted() {
     messages.sort(msgComparator);
     return messages;
   }
@@ -141,7 +141,7 @@ public class MessageStore {
    * Access the current set of Messages within the given Conversation sorted with newest messages
    * first.
    */
-  public List<Message> getMessagesInConversation_Sorted(UUID conversationId) {
+  public List<Message> getMessagesInConversationSorted(UUID conversationId) {
 
     List<Message> messagesInConversation = new ArrayList<>();
 
@@ -173,7 +173,7 @@ public class MessageStore {
    * Retrieves a list of messages belonging to a user with a specified ID sorted with newest
    * messages first
    */
-  public List<Message> getMessagesByAuthor_Sorted(UUID authorId) {
+  public List<Message> getMessagesByAuthorSorted(UUID authorId) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
     for (Message message : messages) {

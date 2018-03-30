@@ -123,7 +123,7 @@ public class UserStore {
    * @return the list of user objects sorted with users whose name is closer to the given string
    *     first.
    */
-  public List<User> searchUsers_Sorted(String search) {
+  public List<User> searchUsersSorted(String search) {
     Comparator<User> userComparator =
         new Comparator<User>() {
           public int compare(User u1, User u2) {
