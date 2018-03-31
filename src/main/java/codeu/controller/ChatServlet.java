@@ -146,13 +146,10 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       conversation.addUser(user);
-      conversationStore.updateConversationUsers(conversation);
-
     }
 
     if ("leaveButton".equals(button)) {
       conversation.removeUser(user);
-      conversationStore.updateConversationUsers(conversation);
     }
 
     if (button == null && conversation.getConversationUsers().contains(user)) {
