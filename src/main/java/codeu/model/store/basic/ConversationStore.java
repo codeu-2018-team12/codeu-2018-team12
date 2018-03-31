@@ -134,11 +134,6 @@ public class ConversationStore {
     return null;
   }
 
-  /** This method updates the exisiting list of users in a conversation **/
-  public void updateConversationUsers(Conversation conversation) {
-    persistentStorageAgent.update(conversation);
-  }
-
   /** Sets the List of Conversations stored by this ConversationStore. */
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;
