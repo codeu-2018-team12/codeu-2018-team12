@@ -53,7 +53,7 @@ public class PersistentStorageAgentTest {
 
   @Test
   public void testWriteThroughUser() {
-    User user = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    User user = new User(UUID.randomUUID(), "test_username", "password", null, Instant.now());
     persistentStorageAgent.writeThrough(user);
     Mockito.verify(mockPersistentDataStore).writeThrough(user);
   }
@@ -87,5 +87,12 @@ public class PersistentStorageAgentTest {
             "sampleMessage");
     persistentStorageAgent.writeThrough(activity);
     Mockito.verify(mockPersistentDataStore).writeThrough(activity);
+  }
+
+  @Test
+  public void testUpdateUser() {
+    User user = new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
+    persistentStorageAgent.updateEntity(user);
+    Mockito.verify(mockPersistentDataStore).updateEntity(user);
   }
 }

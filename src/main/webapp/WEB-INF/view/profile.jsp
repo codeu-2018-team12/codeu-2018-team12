@@ -3,8 +3,10 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.ConversationStore" %>
+<%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="java.time.*" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="codeu.model.store.basic.UserStore" %>
 <%
 List<Message> messages = (List<Message>) request.getAttribute("messages");
 User user = (User) request.getAttribute("user");
@@ -16,36 +18,44 @@ User user = (User) request.getAttribute("user");
   <% if (user != null) {%>
     <title><%= user.getName() %></title>
     <link rel="stylesheet" href="/css/main.css" type="text/css">
-    <nav>
-     <a id="navTitle" href="/">CodeU Chat App</a>
-     <% if (request.getSession().getAttribute("user") != null) { %>
-       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-       <a href="/activityFeed">Activity Feed</a>
-       <a href="/conversations">Conversations</a>
-       <a href="/logout">Logout</a>
-     <% } else { %>
-       <a href="/login">Login</a>
-       <a href="/register">Register</a>
-     <% } %>
-     <a href="/about.jsp">About</a>
-   </nav>
-   <style>
-     #messages {
-       background-color: white;
-       height: 500px;
-       overflow-y: scroll
-     }
-   </style>
+    <jsp:include page="./navbar.jsp" />
+    <style>
+      #messages {
+        background-color: white;
+        height: 500px;
+        overflow-y: scroll
+      }
+    </style>
 
-   <script>
-     // scroll the chat div to the bottom
-     function scrollChat() {
+    <script>
+      // scroll the chat div to the bottom
+      function scrollChat() {
        var msgDiv = document.getElementById('messages');
-     };
-   </script>
+      };
+    </script>
   </head>
   <body onload="scrollChat()">
-  <h1 align ="center"><%= user.getName() %>'s Profile</h1>
+  <h1 id="title"><%= user.getName() %>'s Profile</h1>
+  <div id="container">
+  <h2>Biography</h2>
+    <% if (user.getBio() != null) { %>
+       <%= user.getBio() %>
+      <%} else {%>
+        <p> This biography has not yet been set up! </p>
+     <% } %>
+ <% if (request.getSession().getAttribute("user") != null){
+        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+     <p> You can change your biography below: </p>
+     <form action='' user method="POST">
+       <label for="newBio">New Bio: </label>
+       <input type="text" name="newBio" id="newBio">
+       <button type="submit">Submit</button> 
+  </form>
+<% } } %>
+    <br>
+    <br>
+  
+  </div>
   <div id="container">
    <h2>Sent Messages</h2>
    <div id="messages">
@@ -71,23 +81,14 @@ User user = (User) request.getAttribute("user");
    <%
      }
    %>
-     </ul>
+ </ul>
    </div>
   </div>
 <% } else { %>
   <title>Profile Not Found</title>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if (request.getSession().getAttribute("user") != null) { %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-   <% } else { %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
-  </nav>
-  <h1 align="center">Profile Not Found</h1>
+  <jsp:include page="./navbar.jsp" />
+  <h1 id="title">Profile Not Found</h1>
 <% } %>
 </body>
 </html>

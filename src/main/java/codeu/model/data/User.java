@@ -14,6 +14,7 @@
 
 package codeu.model.data;
 
+import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ public class User {
   private final UUID id;
   private final String name;
   private final String hashedPassword;
+  private String biography;
   private final Instant creation;
 
   /**
@@ -32,10 +34,11 @@ public class User {
    * @param hashedPassword the hashed password of this User
    * @param creation the creation time of this User
    */
-  public User(UUID id, String name, String hashedPassword, Instant creation) {
+  public User(UUID id, String name, String hashedPassword, String biography, Instant creation) {
     this.id = id;
     this.name = name;
     this.hashedPassword = hashedPassword;
+    this.biography = biography;
     this.creation = creation;
   }
 
@@ -52,6 +55,15 @@ public class User {
   /** Returns the hashedPassword of this User. */
   public String getPassword() {
     return hashedPassword;
+  }
+
+  public String getBio() {
+    return biography;
+  }
+
+  public void setBio(String newBio) {
+    biography = newBio;
+    PersistentStorageAgent.getInstance().updateEntity(this);
   }
 
   /** Returns the creation time of this User. */

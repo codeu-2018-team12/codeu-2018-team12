@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.data.User" %>
 <html>
 <head>
   <title>Register</title>
@@ -11,27 +13,15 @@
   </style>
 </head>
 <body>
- <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if(request.getSession().getAttribute("user") != null){ %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-     <a href="/activityFeed">Activity Feed</a>
-     <a href="/conversations">Conversations</a>
-     <a href="/logout">Logout</a>
-   <% } else{ %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
- </nav>
+<jsp:include page="./navbar.jsp" />
   <div id="container">
-  	<h1>Register</h1>
+    <h1>Register</h1>
 
     <% if(request.getAttribute("error") != null){ %>
        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-  	<form action="/register" method="POST">
+    <form action="/register" method="POST">
       <label for="username">Username: </label>
       <input type="text" name="username" id="username">
       <br/>
@@ -43,7 +33,7 @@
       <br/>
       <br/><br/>
       <button type="submit">Submit</button>
-   	</form>
+    </form>
   </div>
 </body>
 </html>

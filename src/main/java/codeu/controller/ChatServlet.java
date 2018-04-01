@@ -14,9 +14,11 @@
 
 package codeu.controller;
 
+import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -45,6 +47,9 @@ public class ChatServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  /** Store class that gives access to Users. */
+  private ActivityStore activityStore;
+
   /** Set up state for handling chat requests. */
   @Override
   public void init() throws ServletException {
@@ -52,6 +57,7 @@ public class ChatServlet extends HttpServlet {
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setActivityStore(ActivityStore.getInstance());
   }
 
   /**
@@ -76,6 +82,14 @@ public class ChatServlet extends HttpServlet {
    */
   void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  /**
+   * Sets the ActivityStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
+   */
+  void setActivityStore(ActivityStore activityStore) {
+    this.activityStore = activityStore;
   }
 
   /**
@@ -146,10 +160,32 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       conversation.addUser(user);
+      String activityMessage =
+          " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "joinedConvo",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
 
     if ("leaveButton".equals(button)) {
       conversation.removeUser(user);
+      String activityMessage =
+          " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "leftConvo",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
 
     if (button == null && conversation.getConversationUsers().contains(user)) {
@@ -169,6 +205,26 @@ public class ChatServlet extends HttpServlet {
               finalMessageContent,
               Instant.now());
       messageStore.addMessage(message);
+
+      String activityMessage =
+          " sent a message in "
+              + "<a href=\"/chat/"
+              + conversationTitle
+              + "\">"
+              + conversationTitle
+              + "</a>"
+              + ": "
+              + finalMessageContent;
+
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage);
+      activityStore.addActivity(activity);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);

@@ -19,19 +19,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 <head>
   <title>Activity</title>
   <link rel="stylesheet" href="/css/main.css">
-   <nav>
-     <a id="navTitle" href="/">CodeU Chat App</a>
-     <% if(request.getSession().getAttribute("user") != null){ %>
-       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-       <a href="/activityFeed">Activity Feed</a>
-       <a href="/conversations">Conversations</a>
-       <a href="/logout">Logout</a>
-     <% } else{ %>
-       <a href="/login">Login</a>
-       <a href="/register">Register</a>
-     <% } %>
-     <a href="/about.jsp">About</a>
-   </nav>
+  <jsp:include page="./navbar.jsp" />
   <style>
     #activity {
       background-color: white;
@@ -48,13 +36,18 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 </head>
 <body onload="scrollBox()">
   <div id="container">
-  	<h1>Activity</h1>
+  	<h1 id="title">Activity</h1>
   	<p>Here&#39s everything that happened on the site so far!</p>
     <div id="activity">
       <ul>
         <%
-          for ( Activity activity : activities) {
+        User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
+          for (Activity activity : activities) {
             String type = activity.getActivityType();
+            String message = activity.getActivityMessage();
+            UUID userID = activity.getUserId();
+            User userObject = UserStore.getInstance().getUser(userID);
+            String username = userObject.getName();
             Instant creationTime = activity.getCreationTime();
             LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
@@ -62,8 +55,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         %>
         <li>
           <strong><%= time %>:</strong>
-          <% if (type.equals("joinedApp")) %>
-          <%= activity.getActivityMessage() %>
+          <a href="/profile/<%= username %>"><%= username %></a> <%= message %>
         </li>
          <%
           }

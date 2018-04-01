@@ -5,6 +5,8 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,9 +32,13 @@ public class ProfileServletTest {
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
+  private User mockUser;
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   @Before
   public void setup() {
+    helper.setUp();
     profileServlet = new ProfileServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
@@ -53,11 +60,16 @@ public class ProfileServletTest {
     profileServlet.setUserStore(mockUserStore);
   }
 
+  @After
+  public void tearDown() {
+    helper.tearDown();
+  }
+
   @Test
   public void testDoGet() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
 
-    User testUser = new User(UUID.randomUUID(), "test_user", "password", Instant.now());
+    User testUser = new User(UUID.randomUUID(), "test_user", "password", null, Instant.now());
     Mockito.when(mockUserStore.getUser("test_user")).thenReturn(testUser);
 
     List<Message> fakeMessageList = new ArrayList<>();
@@ -75,7 +87,7 @@ public class ProfileServletTest {
             testUser.getId(),
             "test message 2",
             Instant.ofEpochMilli(1000)));
-    Mockito.when(mockMessageStore.getMessagesByAuthor(testUser.getId()))
+    Mockito.when(mockMessageStore.getMessagesByAuthorSorted(testUser.getId()))
         .thenReturn(fakeMessageList);
 
     profileServlet.doGet(mockRequest, mockResponse);

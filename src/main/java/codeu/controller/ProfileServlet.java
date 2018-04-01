@@ -71,7 +71,7 @@ public class ProfileServlet extends HttpServlet {
     User user = userStore.getUser(name);
     List<Message> messages = null;
     if (user != null) {
-      messages = messageStore.getMessagesByAuthor(user.getId());
+      messages = messageStore.getMessagesByAuthorSorted(user.getId());
     }
     request.setAttribute("messages", messages);
     request.setAttribute("user", user);
@@ -81,5 +81,11 @@ public class ProfileServlet extends HttpServlet {
   /** This function fires when a user submits the form on the profile page. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {}
+      throws IOException, ServletException {
+    String requestUrl = request.getRequestURI();
+    String name = requestUrl.substring("/profile/".length());
+    User user = userStore.getUser(name);
+    user.setBio(request.getParameter("newBio"));
+    response.sendRedirect(requestUrl);
+  }
 }

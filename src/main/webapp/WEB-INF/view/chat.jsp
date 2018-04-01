@@ -27,19 +27,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <nav>
-   <a id="navTitle" href="/">CodeU Chat App</a>
-   <% if (request.getSession().getAttribute("user") != null) { %>
-     <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
-     <a href="/activityFeed">Activity Feed</a>
-     <a href="/conversations">Conversations</a>
-     <a href="/logout">Logout</a>
-   <% } else { %>
-     <a href="/login">Login</a>
-     <a href="/register">Register</a>
-   <% } %>
-   <a href="/about.jsp">About</a>
- </nav>
+  <jsp:include page="./navbar.jsp" />
 
   <style>
     #chat {
@@ -55,6 +43,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
+      chatDiv.scrollTop = chatDiv.scrollHeight;
     };
   </script>
 </head>
@@ -74,7 +63,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         String author = UserStore.getInstance()
           .getUser(message.getAuthorId()).getName();
     %>
-      <li><strong><%= author %>:</strong> <%= message.getContent() %></li>
+      <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
     <%
       }
     %>
