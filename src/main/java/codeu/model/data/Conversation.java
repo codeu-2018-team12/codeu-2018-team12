@@ -78,7 +78,7 @@ public class Conversation {
    * Returns the set of users in this Conversation as a list of strings indicating the UUID of each
    * user. For use in persistentDataStore
    */
-  public List<String> getConversationUsersIdsAsStrings() {
+  public List<String> getUserIdsAsStrings() {
     List<String> ids = new ArrayList<>();
     for (User user : conversationUsers) {
       ids.add(user.getId().toString());
@@ -88,13 +88,13 @@ public class Conversation {
   /** Adds a user to a conversation */
   public void addUser(User user) {
     conversationUsers.add(user);
-    PersistentStorageAgent.getInstance().update(this);
+    PersistentStorageAgent.getInstance().updateEntity(this);
   }
 
   /** Removes a user from a conversation */
   public void removeUser(User user) {
     conversationUsers.remove(user);
-    PersistentStorageAgent.getInstance().update(this);
+    PersistentStorageAgent.getInstance().updateEntity(this);
   }
 
   /** Updates the list of users from a list of user Ids */

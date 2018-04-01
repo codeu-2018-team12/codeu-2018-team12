@@ -19,6 +19,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreServiceConfig;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.time.Instant;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
-import com.google.appengine.api.datastore.DatastoreServiceConfig;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -101,7 +101,6 @@ public class PersistentDataStore {
 
     for (Entity entity : results.asIterable()) {
       try {
-
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
@@ -118,6 +117,7 @@ public class PersistentDataStore {
         throw new PersistentDataStoreException(e);
       }
     }
+
     return conversations;
   }
 
@@ -222,9 +222,7 @@ public class PersistentDataStore {
     conversationEntity.setProperty("owner_uuid", conversation.getOwnerId().toString());
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
-    List<String> ids = new ArrayList<>();
-    ids.add(conversation.getOwnerId().toString());
-    conversationEntity.setProperty("users", ids);
+    conversationEntity.setProperty("users", conversation.getUserIdsAsStrings());
     datastore.put(conversationEntity);
   }
 
@@ -240,7 +238,7 @@ public class PersistentDataStore {
     datastore.put(activityEntity);
   }
 
-  /** Update the users property of the Conversation object in the Datastore service */
+  /** Updates a Conversation object in the Datastore service */
   public void updateEntity(Conversation conversation) {
     Query query =
         new Query("chat-conversations")
@@ -248,7 +246,7 @@ public class PersistentDataStore {
                 new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
-    resultEntity.setProperty("users", conversation.getConversationUsersIdsAsStrings());
+    resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
     datastore.put(resultEntity);
   }
 
