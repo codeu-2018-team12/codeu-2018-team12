@@ -69,10 +69,11 @@ public class PersistentDataStore {
         String password = (String) entity.getProperty("password");
         String biography = (String) entity.getProperty("biography");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        String email = (String) entity.getProperty("email");
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
-        User user = new User(uuid, userName, password, biography, creationTime);
+        User user = new User(uuid, userName, password, biography, creationTime, email);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -201,6 +202,7 @@ public class PersistentDataStore {
     userEntity.setProperty("password", user.getPassword());
     userEntity.setProperty("biography", user.getBio());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
+    userEntity.setProperty("email", user.getEmail());
     datastore.put(userEntity);
   }
 
