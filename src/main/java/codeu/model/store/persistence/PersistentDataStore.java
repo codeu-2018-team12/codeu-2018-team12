@@ -19,6 +19,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreServiceConfig;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.time.Instant;
@@ -30,7 +31,7 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
  * sets the state of the applications's data objects from the current contents of its Datastore. It
- * also performs writes of new of modified objects back to the Datastore.
+ * also performs writes of new or modified objects back to the Datastore.
  */
 public class PersistentDataStore {
 
@@ -42,6 +43,8 @@ public class PersistentDataStore {
    * Datastore service.
    */
   public PersistentDataStore() {
+    System.setProperty(
+        DatastoreServiceConfig.DATASTORE_EMPTY_LIST_SUPPORT, Boolean.TRUE.toString());
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
@@ -101,8 +104,11 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
+        List<String> users = (List<String>) entity.getProperty("users");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
+        datastore.put(entity);
+        conversation.setUsers(users);
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -216,6 +222,7 @@ public class PersistentDataStore {
     conversationEntity.setProperty("owner_uuid", conversation.getOwnerId().toString());
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
+    conversationEntity.setProperty("users", conversation.getUserIdsAsStrings());
     datastore.put(conversationEntity);
   }
 
@@ -228,8 +235,19 @@ public class PersistentDataStore {
     activityEntity.setProperty("creation_time", activity.getCreationTime().toString());
     activityEntity.setProperty("activity_type", activity.getActivityType());
     activityEntity.setProperty("activity_message", activity.getActivityMessage());
-
     datastore.put(activityEntity);
+  }
+
+  /** Updates a Conversation object in the Datastore service */
+  public void updateEntity(Conversation conversation) {
+    Query query =
+        new Query("chat-conversations")
+            .setFilter(
+                new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
+    datastore.put(resultEntity);
   }
 
   /** Updates a User object in the Datstore service */
