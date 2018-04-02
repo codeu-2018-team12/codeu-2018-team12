@@ -52,13 +52,15 @@ public class PersistentDataStoreTest {
     String nameOne = "test_username_one";
     String passwordOne = "test_password_one";
     Instant creationOne = Instant.ofEpochMilli(1000);
-    User inputUserOne = new User(idOne, nameOne, passwordOne, null, creationOne);
+    User inputUserOne = new User(idOne, nameOne, passwordOne,
+            null, creationOne, "codeUChatTestEmail@gmail.com");
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
     String passwordTwo = "test_password_two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
-    User inputUserTwo = new User(idTwo, nameTwo, passwordTwo, null, creationTwo);
+    User inputUserTwo = new User(idTwo, nameTwo, passwordTwo,
+            null, creationTwo, "codeUChatTestEmail@gmail.com");
 
     // save
     persistentDataStore.writeThrough(inputUserOne);
@@ -88,14 +90,16 @@ public class PersistentDataStoreTest {
     String passwordOne = "test_password_one";
     String hashedPasswordOne = BCrypt.hashpw(passwordOne, BCrypt.gensalt());
     Instant creationOne = Instant.ofEpochMilli(1000);
-    User inputUserOne = new User(idOne, nameOne, hashedPasswordOne, null, creationOne);
+    User inputUserOne = new User(idOne, nameOne, hashedPasswordOne,
+            null, creationOne, "codeUChatTestEmail@gmail.com");
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
     String passwordTwo = "test_password_two";
     String hashedPasswordTwo = BCrypt.hashpw(passwordTwo, BCrypt.gensalt());
     Instant creationTwo = Instant.ofEpochMilli(2000);
-    User inputUserTwo = new User(idTwo, nameTwo, hashedPasswordTwo, null, creationTwo);
+    User inputUserTwo = new User(idTwo, nameTwo, hashedPasswordTwo,
+            null, creationTwo, "codeUChatTestEmail@gmail.com");
 
     // save
     persistentDataStore.writeThrough(inputUserOne);
@@ -127,7 +131,8 @@ public class PersistentDataStoreTest {
             "test_username_one",
             "password one",
             "test biography",
-            Instant.ofEpochMilli(1000));
+            Instant.ofEpochMilli(1000),
+            "codeUChatTestEmail@gmail.com");
     UUID ownerOneUUID = ownerOne.getId();
     UserStore.getInstance().addUser(ownerOne);
     String titleOne = "Test_Title";
@@ -145,7 +150,8 @@ public class PersistentDataStoreTest {
             "test_username_one",
             "password one",
             "test biography",
-            Instant.ofEpochMilli(1000));
+            Instant.ofEpochMilli(1000),
+            "codeUChatTestEmail@gmail.com");
     UUID ownerTwoUUID = ownerOne.getId();
     UserStore.getInstance().addUser(ownerTwo);
     String titleTwo = "Test_Title_Two";

@@ -142,7 +142,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
@@ -160,7 +161,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -187,7 +189,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -216,7 +219,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -236,7 +240,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -263,7 +268,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
+        new User(UUID.randomUUID(), "test_username",
+                "password", "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -290,7 +296,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
@@ -317,7 +324,8 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "testbiography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "testbiography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =

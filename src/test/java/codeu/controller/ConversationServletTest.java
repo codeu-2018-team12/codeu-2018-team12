@@ -113,7 +113,8 @@ public class ConversationServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     conversationServlet.doPost(mockRequest, mockResponse);
@@ -130,7 +131,8 @@ public class ConversationServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     conversationServlet.doPost(mockRequest, mockResponse);
@@ -147,7 +149,8 @@ public class ConversationServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(true);
@@ -165,7 +168,8 @@ public class ConversationServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(false);
@@ -186,7 +190,8 @@ public class ConversationServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password", "test biography", Instant.now());
+        new User(UUID.randomUUID(), "test_username", "password",
+                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(false);

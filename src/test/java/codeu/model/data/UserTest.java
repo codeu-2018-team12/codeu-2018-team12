@@ -27,9 +27,10 @@ public class UserTest {
     String name = "test_username";
     String password = "password";
     String biography = "test biography right here";
+    String email = "codeUChatTestEmail@gmail.com";
     Instant creation = Instant.now();
 
-    User user = new User(id, name, password, biography, creation);
+    User user = new User(id, name, password, biography, creation, email);
 
     Assert.assertEquals(id, user.getId());
     Assert.assertEquals(name, user.getName());

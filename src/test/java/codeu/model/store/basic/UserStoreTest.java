@@ -18,22 +18,35 @@ public class UserStoreTest {
 
   private final User USER_ONE =
       new User(
-          UUID.randomUUID(), "test_username_one", "password one", null, Instant.ofEpochMilli(1000));
+          UUID.randomUUID(),
+          "test_username_one",
+          "password one",
+          null,
+          Instant.ofEpochMilli(1000),
+          "codeUChatTestEmail@gmail.com");
   private final User USER_TWO =
       new User(
-          UUID.randomUUID(), "test_username_two", "password two", null, Instant.ofEpochMilli(2000));
+          UUID.randomUUID(),
+          "test_username_two",
+          "password two",
+          null,
+          Instant.ofEpochMilli(2000),
+          "codeUChatTestEmail@gmail.com");
   private final User USER_THREE =
       new User(
           UUID.randomUUID(),
           "test_username_three",
           "password three",
           null,
-          Instant.ofEpochMilli(3000));
+          Instant.ofEpochMilli(3000),
+          "codeUChatTestEmail@gmail.com");
   private final User USER_FOUR =
       new User(
-          UUID.randomUUID(), "username_four", "password four", null, Instant.ofEpochMilli(4000));
+          UUID.randomUUID(), "username_four", "password four",
+              null, Instant.ofEpochMilli(4000), "codeUChatTestEmail@gmail.com");
   private final User USER_FIVE =
-      new User(UUID.randomUUID(), "test_user", "password five", null, Instant.ofEpochMilli(4000));
+      new User(UUID.randomUUID(), "test_user", "password five",
+              null, Instant.ofEpochMilli(4000), "codeUChatTestEmail@gmail.com");
 
   @Before
   public void setup() {
@@ -79,7 +92,8 @@ public class UserStoreTest {
 
   @Test
   public void testAddUser() {
-    User inputUser = new User(UUID.randomUUID(), "test_username", "password", null, Instant.now());
+    User inputUser = new User(UUID.randomUUID(), "test_username", "password",
+            null, Instant.now(), "codeUChatTestEmail@gmail.com");
 
     userStore.addUser(inputUser);
     User resultUser = userStore.getUser("test_username");
