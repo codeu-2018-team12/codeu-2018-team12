@@ -133,7 +133,7 @@ public class PersistentDataStoreTest {
     String titleOne = "Test_Title";
     Instant creationOne = Instant.ofEpochMilli(1000);
     Conversation inputConversationOne =
-        new Conversation(idOne, ownerOneUUID, titleOne, creationOne);
+        new Conversation(idOne, ownerOneUUID, titleOne, creationOne, true);
 
     // save
     ConversationStore.getInstance().addConversation(inputConversationOne);
@@ -151,7 +151,7 @@ public class PersistentDataStoreTest {
     String titleTwo = "Test_Title_Two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
     Conversation inputConversationTwo =
-        new Conversation(idTwo, ownerTwoUUID, titleTwo, creationTwo);
+        new Conversation(idTwo, ownerTwoUUID, titleTwo, creationTwo, false);
 
     // save
     ConversationStore.getInstance().addConversation(inputConversationTwo);
@@ -313,6 +313,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", UUID.randomUUID().toString());
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(true));
     ds.put(testEntity);
 
     Entity testEntity1 = new Entity("chat-conversations");
@@ -320,6 +321,7 @@ public class PersistentDataStoreTest {
     testEntity1.setProperty("owner_uuid", UUID.randomUUID().toString());
     testEntity1.setProperty("title", "test title");
     testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(false));
     ds.put(testEntity1);
     assertEquals(2, ds.prepare(new Query("chat-conversations")).countEntities(withLimit(10)));
   }
@@ -359,6 +361,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", ownerId);
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(false));
     List<String> ids = new ArrayList<>();
     ids.add(ownerId);
     testEntity.setProperty("users", ids);
@@ -392,6 +395,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", ownerId);
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(true));
     List<String> ids = new ArrayList<>();
     ids.add(ownerId);
     testEntity.setProperty("users", ids);

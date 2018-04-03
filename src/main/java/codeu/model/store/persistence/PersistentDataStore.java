@@ -106,7 +106,9 @@ public class PersistentDataStore {
         String title = (String) entity.getProperty("title");
         List<String> users = (List<String>) entity.getProperty("users");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
+        boolean isPublic = ((String) entity.getProperty("isPublic")).equals("true");
+        Conversation conversation =
+            new Conversation(uuid, ownerUuid, title, creationTime, isPublic);
         datastore.put(entity);
         conversation.setUsers(users);
         conversations.add(conversation);
@@ -223,6 +225,7 @@ public class PersistentDataStore {
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     conversationEntity.setProperty("users", conversation.getUserIdsAsStrings());
+    conversationEntity.setProperty("isPublic", Boolean.toString(conversation.getIsPublic()));
     datastore.put(conversationEntity);
   }
 

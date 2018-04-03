@@ -49,6 +49,24 @@ public class Conversation {
     this.conversationUsers.add(userStore.getUser(owner));
   }
 
+  /**
+   * Constructs a new Conversation.
+   *
+   * @param id the ID of this Conversation
+   * @param owner the ID of the User who created this Conversation
+   * @param title the title of this Conversation
+   * @param creation the creation time of this Conversation
+   * @param isPublic whether this Conversation is public
+   */
+  public Conversation(UUID id, UUID owner, String title, Instant creation, boolean isPublic) {
+    this.id = id;
+    this.owner = owner;
+    this.creation = creation;
+    this.title = title;
+    this.isPublic = isPublic;
+    this.conversationUsers.add(userStore.getUser(owner));
+  }
+
   /** Returns the ID of this Conversation. */
   public UUID getId() {
     return id;
