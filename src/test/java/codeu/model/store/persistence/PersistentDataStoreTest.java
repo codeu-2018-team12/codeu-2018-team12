@@ -376,6 +376,7 @@ public class PersistentDataStoreTest {
     PreparedQuery preparedTestQuery = ds.prepare(testQuery);
     Entity retrievedEntity = preparedTestQuery.asSingleEntity();
 
+    @SuppressWarnings("unchecked")
     List<String> users = (List<String>) retrievedEntity.getProperty("users");
     users.add(UUID.randomUUID().toString());
     retrievedEntity.setProperty("users", users);
@@ -383,6 +384,7 @@ public class PersistentDataStoreTest {
 
     Key entityKey = retrievedEntity.getKey();
     Entity retrievedEntityAfter = ds.get(entityKey);
+    @SuppressWarnings("unchecked")
     List<String> updatedUsers = (List<String>) retrievedEntityAfter.getProperty("users");
     assertEquals(updatedUsers, users);
   }

@@ -16,7 +16,6 @@ package codeu.controller;
 
 import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
-import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
@@ -34,6 +33,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
+import javax.mail.Multipart;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -113,7 +126,8 @@ public class ChatServlet extends HttpServlet {
 
     UUID conversationId = conversation.getId();
 
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    List<codeu.model.data.Message> messages =
+        messageStore.getMessagesInConversation(conversationId);
     List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
@@ -177,6 +191,7 @@ public class ChatServlet extends HttpServlet {
       conversation.removeUser(user);
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+
       Activity activity =
           new Activity(
               UUID.randomUUID(),
@@ -197,8 +212,8 @@ public class ChatServlet extends HttpServlet {
               messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
-      Message message =
-          new Message(
+      codeu.model.data.Message message =
+          new codeu.model.data.Message(
               UUID.randomUUID(),
               conversation.getId(),
               user.getId(),
@@ -225,8 +240,44 @@ public class ChatServlet extends HttpServlet {
               "messageSent",
               activityMessage);
       activityStore.addActivity(activity);
+
+      sendEmailNotification(cleanedMessageContent, user, conversation);
     }
+
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
+  }
+
+  private void sendEmailNotification(String cleanedMessage, User user, Conversation conversation) {
+
+    Properties props = new Properties();
+    Session session = Session.getDefaultInstance(props, null);
+
+    List<User> conversationUsers = conversation.getConversationUsers();
+
+    for (User convoUser : conversationUsers) {
+      if (convoUser != user) {
+        String msgBody = user.getName() + " sent a message in " + conversation.getTitle() +
+                " on " + conversation.getCreationTime()  + " while you were away. \n \n " +
+                "Please log in to view this message.";
+        try {
+          Message msg = new MimeMessage(session);
+          msg.setFrom(
+              new InternetAddress(
+                  "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
+          msg.addRecipient(
+              Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
+          msg.setSubject(user.getName() + " has sent you a message");
+          msg.setText(msgBody);
+          Transport.send(msg);
+        } catch (AddressException e) {
+          System.err.println("Invalid email address formatting. Email not sent.");
+        } catch (MessagingException e) {
+          System.err.println("An error has occured with this message. Email not sent.");
+        } catch (UnsupportedEncodingException e) {
+          System.err.println("This character encoding is not supported. Email not sent");
+        }
+      }
+    }
   }
 }
