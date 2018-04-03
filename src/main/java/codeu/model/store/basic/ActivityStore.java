@@ -15,6 +15,8 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
+import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -99,6 +101,31 @@ public class ActivityStore {
   public List<Activity> getAllActivitiesSorted() {
     activities.sort(activityComparator);
     return activities;
+  }
+
+  public List<Activity> getAllPermittedActivities(User user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
+    for (Activity act : activities) {
+      Conversation convo =
+          ConversationStore.getInstance().getConversationWithId(act.getConversationId());
+      if (convo.hasPermission(user)) {
+        permittedActivities.add(act);
+      }
+    }
+    return permittedActivities;
+  }
+
+  public List<Activity> getAllPermittedActivitiesSorted(User user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
+    for (Activity act : activities) {
+      Conversation convo =
+          ConversationStore.getInstance().getConversationWithId(act.getConversationId());
+      if (convo.hasPermission(user)) {
+        permittedActivities.add(act);
+      }
+    }
+    permittedActivities.sort(activityComparator);
+    return permittedActivities;
   }
 
   /** Add a new activity to the current set of activities known to the application. */

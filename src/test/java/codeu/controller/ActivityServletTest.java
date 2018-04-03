@@ -1,7 +1,9 @@
 package codeu.controller;
 
 import codeu.model.data.Activity;
+import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
+import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class ActivityServletTest {
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
   private ActivityStore mockActivityStore;
+  private UserStore mockUserStore;
 
   @Before
   public void setup() {
@@ -39,6 +42,8 @@ public class ActivityServletTest {
         .thenReturn(mockRequestDispatcher);
 
     mockActivityStore = Mockito.mock(ActivityStore.class);
+    mockUserStore = Mockito.mock(UserStore.class);
+    activityServlet.setUserStore(mockUserStore);
     activityServlet.setActivityStore(mockActivityStore);
   }
 
@@ -63,8 +68,11 @@ public class ActivityServletTest {
             Instant.ofEpochMilli(1000),
             "createdConvo",
             "testMessage"));
-
-    Mockito.when(mockActivityStore.getAllActivitiesSorted()).thenReturn(sampleActivities);
+    Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
+    User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now());
+    Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
+    Mockito.when(mockActivityStore.getAllPermittedActivitiesSorted(testUser))
+        .thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);
 
