@@ -1,6 +1,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -16,17 +17,38 @@ public class ConversationStoreTest {
   private ConversationStore conversationStore;
   private PersistentStorageAgent mockPersistentStorageAgent;
 
-  private final Conversation CONVERSATION_ONE =
+  private final User USER_ONE =
+      new User(UUID.randomUUID(), "user_one", null, null, Instant.ofEpochMilli(1000));
+  private final User USER_TWO =
+      new User(UUID.randomUUID(), "user_two", null, null, Instant.ofEpochMilli(2000));
+
+  private Conversation CONVERSATION_ONE =
+      CONVERSATION_ONE =
+          new Conversation(
+              UUID.randomUUID(),
+              UUID.randomUUID(),
+              "conversation_one",
+              Instant.ofEpochMilli(1000),
+              true);
+  private final Conversation CONVERSATION_TWO =
       new Conversation(
-          UUID.randomUUID(), UUID.randomUUID(), "conversation_one", Instant.ofEpochMilli(1000));
+          UUID.randomUUID(),
+          USER_TWO.getId(),
+          "conversation_two",
+          Instant.ofEpochMilli(2000),
+          false);
 
   @Before
   public void setup() {
     mockPersistentStorageAgent = Mockito.mock(PersistentStorageAgent.class);
     conversationStore = ConversationStore.getTestInstance(mockPersistentStorageAgent);
+    final List<User> userList = new ArrayList<>();
+    userList.add(USER_TWO);
+    CONVERSATION_TWO.setConversationUsers(userList);
 
     final List<Conversation> conversationList = new ArrayList<>();
     conversationList.add(CONVERSATION_ONE);
+    conversationList.add(CONVERSATION_TWO);
     conversationStore.setConversations(conversationList);
   }
 
@@ -58,6 +80,23 @@ public class ConversationStoreTest {
     Conversation resultConversation = conversationStore.getConversationWithId(UUID.randomUUID());
 
     Assert.assertNull(resultConversation);
+  }
+
+  @Test
+  public void testGetAllPermittedConversationsSorted_Permited() {
+    List<Conversation> permittedConversations =
+        conversationStore.getAllPermittedConversationsSorted(USER_TWO);
+    Assert.assertEquals(2, permittedConversations.size());
+    assertEquals(CONVERSATION_TWO, permittedConversations.get(0));
+    assertEquals(CONVERSATION_ONE, permittedConversations.get(1));
+  }
+
+  @Test
+  public void testGetAllPermittedConversationsSorted_NotPermited() {
+    List<Conversation> permittedConversations =
+        conversationStore.getAllPermittedConversationsSorted(USER_ONE);
+    Assert.assertEquals(1, permittedConversations.size());
+    assertEquals(CONVERSATION_ONE, permittedConversations.get(0));
   }
 
   @Test

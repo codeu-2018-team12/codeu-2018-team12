@@ -14,9 +14,7 @@
 
 package codeu.model.data;
 
-import codeu.model.store.basic.UserStore;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,14 +30,9 @@ public class ConversationTest {
 
     Conversation conversation = new Conversation(id, owner, title, creation);
 
-    UserStore userStore = UserStore.getInstance();
-    User ownerUser = userStore.getUser(owner);
-    List<User> conversationUsers = conversation.getConversationUsers();
-
     Assert.assertEquals(id, conversation.getId());
     Assert.assertEquals(owner, conversation.getOwnerId());
     Assert.assertEquals(title, conversation.getTitle());
     Assert.assertEquals(creation, conversation.getCreationTime());
-    Assert.assertTrue(conversationUsers.contains(ownerUser));
   }
 }

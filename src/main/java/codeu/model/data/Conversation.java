@@ -46,7 +46,9 @@ public class Conversation {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.conversationUsers.add(userStore.getUser(owner));
+    if (userStore.getUser(owner) != null) {
+      this.conversationUsers.add(userStore.getUser(owner));
+    }
   }
 
   /**
@@ -90,6 +92,10 @@ public class Conversation {
   /** Returns the set of users in this Conversation. */
   public List<User> getConversationUsers() {
     return conversationUsers;
+  }
+
+  public void setConversationUsers(List<User> users) {
+    conversationUsers = users;
   }
 
   /**
@@ -137,6 +143,11 @@ public class Conversation {
     if (isPublic) {
       return true;
     }
-    return conversationUsers.contains(user);
+    for (User user1 : conversationUsers) {
+      if (user.getId().equals(user1.getId())) {
+        return true;
+      }
+    }
+    return false;
   }
 }
