@@ -32,7 +32,7 @@ public class Conversation {
   private final String title;
   private UserStore userStore = UserStore.getInstance();
   private List<User> conversationUsers = new ArrayList<>();
-
+  private boolean isPublic = true;
   /**
    * Constructs a new Conversation.
    *
@@ -105,5 +105,20 @@ public class Conversation {
       newUsers.add(userStore.getUser(id));
     }
     conversationUsers = newUsers;
+  }
+
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+
+  public void setIsPublic(boolean isPublic) {
+    this.isPublic = isPublic;
+  }
+
+  public boolean hasPermission(User user) {
+    if (isPublic) {
+      return true;
+    }
+    return conversationUsers.contains(user);
   }
 }
