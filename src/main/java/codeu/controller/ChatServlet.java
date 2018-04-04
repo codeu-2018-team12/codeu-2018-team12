@@ -17,6 +17,7 @@ package codeu.controller;
 import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
+import codeu.model.data.Message;
 import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
@@ -28,7 +29,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -121,8 +121,7 @@ public class ChatServlet extends HttpServlet {
 
     UUID conversationId = conversation.getId();
 
-    List<codeu.model.data.Message> messages =
-        messageStore.getMessagesInConversation(conversationId);
+    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
     List<User> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
@@ -206,7 +205,7 @@ public class ChatServlet extends HttpServlet {
               messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
-      codeu.model.data.Message message =
+      Message message =
           new codeu.model.data.Message(
               UUID.randomUUID(),
               conversation.getId(),
@@ -267,12 +266,12 @@ public class ChatServlet extends HttpServlet {
           && conversationUser != null
           && !currentSession.isLoggedIn(conversationUser.getName())) {
         try {
-          Message msg = new MimeMessage(session);
+          javax.mail.Message msg = new MimeMessage(session);
           msg.setFrom(
               new InternetAddress(
                   "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
           msg.addRecipient(
-              Message.RecipientType.TO,
+              javax.mail.Message.RecipientType.TO,
               new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
           msg.setSubject(user.getName() + " has sent you a message");
           msg.setText(msgBody);

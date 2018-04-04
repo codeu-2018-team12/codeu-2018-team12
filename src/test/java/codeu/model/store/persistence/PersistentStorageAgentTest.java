@@ -97,15 +97,15 @@ public class PersistentStorageAgentTest {
   }
 
   @Test
-  public void testUpdateEntityConversation() {
+  public void testUpdateEntityConversationUser() {
     Conversation conversation =
         new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
-    persistentStorageAgent.updateEntity(conversation);
-    Mockito.verify(mockPersistentDataStore).updateEntity(conversation);
+    persistentStorageAgent.updateConversationEntityUsers(conversation);
+    Mockito.verify(mockPersistentDataStore).updateConversationEntityUsers(conversation);
   }
 
   @Test
-  public void testUpdateEntityUser() {
+  public void testUpdateEntityUserBiography() {
     User user =
         new User(
             UUID.randomUUID(),
@@ -114,7 +114,21 @@ public class PersistentStorageAgentTest {
             "testbio",
             Instant.now(),
             "codeUChatTestEmail@gmail.com");
-    persistentStorageAgent.updateEntity(user);
-    Mockito.verify(mockPersistentDataStore).updateEntity(user);
+    persistentStorageAgent.updateUserEntityBiopgraphy(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityBiography(user);
+  }
+
+  @Test
+  public void testUpdateEntityUserEmail() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityEmail(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityEmail(user);
   }
 }

@@ -241,8 +241,8 @@ public class PersistentDataStore {
     datastore.put(activityEntity);
   }
 
-  /** Updates a Conversation object in the Datastore service */
-  public void updateEntity(Conversation conversation) {
+  /** Updates the users property of a Conversation object in the Datastore service */
+  public void updateConversationEntityUsers(Conversation conversation) {
     Query query =
         new Query("chat-conversations")
             .setFilter(
@@ -253,14 +253,25 @@ public class PersistentDataStore {
     datastore.put(resultEntity);
   }
 
-  /** Updates a User object in the Datstore service */
-  public void updateEntity(User user) {
+  /** Updates the biography property of a User object in the Datastore service */
+  public void updateUserEntityBiography(User user) {
     Query query =
         new Query("chat-users")
             .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
     resultEntity.setProperty("biography", user.getBio());
+    datastore.put(resultEntity);
+  }
+
+  /** Updates the email property of a User object in the Datastore service */
+  public void updateUserEntityEmail(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    resultEntity.setProperty("email", user.getEmail());
     datastore.put(resultEntity);
   }
 }

@@ -81,14 +81,15 @@ public class User {
     return creation;
   }
 
-  /** Returns the email of this User */
+  /** Sets the email of this user with a provided email */
   public void setEmail(String newEmail) {
     email = newEmail;
+    PersistentStorageAgent.getInstance().updateUserEntityEmail(this);
   }
 
   /** Sets the bio of this user with a provided bio */
   public void setBio(String newBio) {
     biography = newBio;
-    PersistentStorageAgent.getInstance().updateEntity(this);
+    PersistentStorageAgent.getInstance().updateUserEntityBiopgraphy(this);
   }
 }
