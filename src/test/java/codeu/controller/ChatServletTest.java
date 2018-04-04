@@ -32,10 +32,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import codeu.model.store.persistence.PersistentStorageAgent;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class ChatServletTest {
@@ -160,13 +162,16 @@ public class ChatServletTest {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/chat/test_conversation");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
+    UUID userUUID = UUID.randomUUID();
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
+        new User(userUUID, "test_username", "password",
                 "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
+
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+    Mockito.when(mockUserStore.getUser(userUUID)).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+        new Conversation(UUID.randomUUID(), userUUID, "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
         .thenReturn(fakeConversation);
 
@@ -189,26 +194,26 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
-                "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username", "password",
+                    "test biography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     fakeConversation.getConversationUsers().add(fakeUser);
 
     Mockito.when(mockRequest.getParameter("message"))
-        .thenReturn("Contains <b>html</b> and <script>JavaScript</script> content.");
+            .thenReturn("Contains <b>html</b> and <script>JavaScript</script> content.");
 
     chatServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<Message> messageArgumentCaptor = ArgumentCaptor.forClass(Message.class);
     Mockito.verify(mockMessageStore).addMessage(messageArgumentCaptor.capture());
     Assert.assertEquals(
-        "Contains html and  content.", messageArgumentCaptor.getValue().getContent());
+            "Contains html and  content.", messageArgumentCaptor.getValue().getContent());
 
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }
@@ -219,14 +224,14 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
-                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username", "password",
+                    "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     chatServlet.doPost(mockRequest, mockResponse);
 
@@ -240,14 +245,14 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
-                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username", "password",
+                    "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     fakeConversation.getConversationUsers().add(fakeUser);
 
@@ -268,14 +273,14 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username",
-                "password", "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username",
+                    "password", "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     fakeConversation.getConversationUsers().add(fakeUser);
 
@@ -296,14 +301,14 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
-                "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username", "password",
+                    "testbio", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     fakeConversation.getConversationUsers().add(fakeUser);
 
@@ -324,27 +329,27 @@ public class ChatServletTest {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser =
-        new User(UUID.randomUUID(), "test_username", "password",
-                "testbiography", Instant.now(), "codeUChatTestEmail@gmail.com");
+            new User(UUID.randomUUID(), "test_username", "password",
+                    "testbiography", Instant.now(), "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     Conversation fakeConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+            new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
     Mockito.when(mockConversationStore.getConversationWithTitle("test_conversation"))
-        .thenReturn(fakeConversation);
+            .thenReturn(fakeConversation);
 
     fakeConversation.getConversationUsers().add(fakeUser);
 
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     Activity activity =
-        new Activity(
-            UUID.randomUUID(),
-            fakeUser.getId(),
-            fakeConversation.getId(),
-            Instant.now(),
-            "sentMessage",
-            "test_activity_message" + "Test message.");
+            new Activity(
+                    UUID.randomUUID(),
+                    fakeUser.getId(),
+                    fakeConversation.getId(),
+                    Instant.now(),
+                    "sentMessage",
+                    "test_activity_message" + "Test message.");
     mockActivityStore.addActivity(activity);
     Mockito.when(mockActivityStore.getActivityWithId(activity.getId())).thenReturn(activity);
 
@@ -356,10 +361,10 @@ public class ChatServletTest {
     Mockito.verify(mockActivityStore).addActivity(activity);
     Assert.assertEquals("Test message.", messageArgumentCaptor.getValue().getContent());
     Assert.assertTrue(
-        mockActivityStore
-            .getActivityWithId(activity.getId())
-            .getActivityMessage()
-            .contains("Test message."));
+            mockActivityStore
+                    .getActivityWithId(activity.getId())
+                    .getActivityMessage()
+                    .contains("Test message."));
 
     Mockito.verify(mockResponse).sendRedirect("/chat/test_conversation");
   }

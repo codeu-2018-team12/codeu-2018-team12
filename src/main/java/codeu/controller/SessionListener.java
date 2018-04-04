@@ -1,35 +1,44 @@
 package codeu.controller;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
 import java.util.Set;
 import java.util.HashSet;
 
 /**
- * Listener class that fires when a new session is created or destroyed
+ * Listener class that fires when there is a change to an attribute
+ * of a session
  */
-public class SessionListener implements HttpSessionListener {
+public class SessionListener implements HttpSessionAttributeListener {
 
+  private static SessionListener currentSession;
   private Set<String> loggedInUsers = new HashSet<>();
 
-  public Set getOnlineUsers(){
-    return loggedInUsers;
+  public static SessionListener getInstance(){
+    if(currentSession == null){
+      currentSession = new SessionListener();
+    }
+    return currentSession;
   }
 
-  /** Called when a new session is created */
-  @Override
-  public void sessionCreated(HttpSessionEvent event) {
-    HttpSession session = event.getSession();
-    loggedInUsers.add(session.getAttribute("user").toString());
+  public boolean isLoggedIn(String username) {
+    return loggedInUsers.contains(username);
   }
 
-  /** Called when a session is destroyed, i.e. During
-   * a session timeout or a call to session.invalidate()
-   */
+  /** Called when an attribute is added to a session */
   @Override
-  public void sessionDestroyed(HttpSessionEvent event) {
-    HttpSession session = event.getSession();
-    loggedInUsers.remove(session.getAttribute("user").toString());
+  public void attributeAdded (HttpSessionBindingEvent event){
+    loggedInUsers.add(event.getValue().toString());
   }
+
+  /** Called when an attribute is removed from a session */
+  @Override
+  public void attributeRemoved (HttpSessionBindingEvent event){
+    loggedInUsers.remove(event.getValue().toString());
+
+  }
+
+  /** Called when an attribute is replaced in a session */
+  @Override
+  public void attributeReplaced (HttpSessionBindingEvent event){ }
 }

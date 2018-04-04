@@ -33,12 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
-import javax.mail.Multipart;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMultipart;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -241,39 +236,50 @@ public class ChatServlet extends HttpServlet {
               activityMessage);
       activityStore.addActivity(activity);
 
-      sendEmailNotification(cleanedMessageContent, user, conversation);
+      sendEmailNotification(user, conversation);
     }
 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
 
-  private void sendEmailNotification(String cleanedMessage, User user, Conversation conversation) {
+  private void sendEmailNotification(User user, Conversation conversation) {
 
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
 
     List<User> conversationUsers = conversation.getConversationUsers();
 
-    for (User convoUser : conversationUsers) {
-      if (convoUser != user) {
-        String msgBody = user.getName() + " sent a message in " + conversation.getTitle() +
-                " on " + conversation.getCreationTime()  + " while you were away. \n \n " +
-                "Please log in to view this message.";
+    String msgBody =
+        user.getName()
+            + " sent a message in "
+            + conversation.getTitle()
+            + " on "
+            + conversation.getCreationTime()
+            + " while you were away. \n \n "
+            + "Please log in to view this message.";
+
+    SessionListener currentSession = SessionListener.getInstance();
+
+    for (User conversationUser : conversationUsers) {
+      if (conversationUser != user
+          && conversationUser != null
+          && !currentSession.isLoggedIn(conversationUser.getName())) {
         try {
           Message msg = new MimeMessage(session);
           msg.setFrom(
               new InternetAddress(
                   "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
           msg.addRecipient(
-              Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getName()));
+              Message.RecipientType.TO,
+              new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
           msg.setSubject(user.getName() + " has sent you a message");
           msg.setText(msgBody);
           Transport.send(msg);
         } catch (AddressException e) {
           System.err.println("Invalid email address formatting. Email not sent.");
         } catch (MessagingException e) {
-          System.err.println("An error has occured with this message. Email not sent.");
+          System.err.println("An error has occurred with this message. Email not sent.");
         } catch (UnsupportedEncodingException e) {
           System.err.println("This character encoding is not supported. Email not sent");
         }
