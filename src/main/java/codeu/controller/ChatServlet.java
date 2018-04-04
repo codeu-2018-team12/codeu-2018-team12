@@ -234,8 +234,8 @@ public class ChatServlet extends HttpServlet {
               "messageSent",
               activityMessage);
       activityStore.addActivity(activity);
+      sendEmailNotification(user, conversation);
     }
-    sendEmailNotification(user, conversation);
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
