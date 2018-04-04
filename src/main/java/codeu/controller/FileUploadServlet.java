@@ -11,10 +11,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
  * Servlet to handle File upload request from Client
- * @author Javin Paul
+ * @author Javin Paul bc ALISON RIPPED THIS FROM A TUTORIAL :'( :'( :'( 
  */
 public class FileUploadServlet extends HttpServlet {
-    private final String UPLOAD_DIRECTORY = "C:/uploads";
+    private final String UPLOAD_DIRECTORY = "F:/uploads";
   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

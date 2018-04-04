@@ -134,7 +134,18 @@
       <version>6.0.53</version>
       <scope>test</scope>
     </dependency>
->>>>>>> dbb97a025c6877d3be589921b464237623ce047a
+
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
+    </dependency>
 
   </dependencies>
 
