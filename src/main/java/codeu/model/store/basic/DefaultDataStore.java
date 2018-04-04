@@ -117,6 +117,7 @@ public class DefaultDataStore {
               BCrypt.hashpw("password", BCrypt.gensalt()),
               "this is a test biography",
               Instant.now());
+      UserStore.getInstance().addUser(user);
       PersistentStorageAgent.getInstance().writeThrough(user);
       users.add(user);
     }
@@ -138,7 +139,6 @@ public class DefaultDataStore {
       Conversation conversation = getRandomElement(conversations);
       User author = getRandomElement(users);
       String content = getRandomMessageContent();
-
       Message message =
           new Message(
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
