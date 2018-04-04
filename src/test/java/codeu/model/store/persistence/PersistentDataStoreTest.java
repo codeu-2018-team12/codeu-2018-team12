@@ -276,6 +276,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("password", "test password");
     testEntity.setProperty("biography", "test bio");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
     ds.put(testEntity);
 
     Entity testEntity1 = new Entity("chat-users");
@@ -284,6 +285,7 @@ public class PersistentDataStoreTest {
     testEntity1.setProperty("password", "test password1");
     testEntity1.setProperty("biography", "test bio1");
     testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity1.setProperty("email", "testEmail1@gmail.com");
     ds.put(testEntity1);
     assertEquals(2, ds.prepare(new Query("chat-users")).countEntities(withLimit(10)));
   }
@@ -432,6 +434,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("password", "test password");
     testEntity.setProperty("biography", "test bio");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
     ds.put(testEntity);
 
     Query testQuery =

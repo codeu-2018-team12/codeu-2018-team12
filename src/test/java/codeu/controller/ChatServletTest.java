@@ -32,13 +32,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import codeu.model.store.persistence.PersistentStorageAgent;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class ChatServletTest {
 
@@ -51,6 +53,7 @@ public class ChatServletTest {
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
   private ActivityStore mockActivityStore;
+  private ChatServlet mockChatServlet;
 
   @Before
   public void setup() {
@@ -76,6 +79,8 @@ public class ChatServletTest {
 
     mockActivityStore = Mockito.mock(ActivityStore.class);
     chatServlet.setActivityStore(mockActivityStore);
+
+    mockChatServlet = Mockito.mock(ChatServlet.class);
   }
 
   @Test

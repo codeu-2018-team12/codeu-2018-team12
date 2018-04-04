@@ -235,15 +235,17 @@ public class ChatServlet extends HttpServlet {
               "messageSent",
               activityMessage);
       activityStore.addActivity(activity);
-
-      sendEmailNotification(user, conversation);
     }
-
+    sendEmailNotification(user, conversation);
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
 
-  private void sendEmailNotification(User user, Conversation conversation) {
+  /**
+   * Method to send an email notification to all users in a conversation
+   * who are not logged on other than the message sender
+   */
+  public void sendEmailNotification(User user, Conversation conversation) {
 
     Properties props = new Properties();
     Session session = Session.getDefaultInstance(props, null);
