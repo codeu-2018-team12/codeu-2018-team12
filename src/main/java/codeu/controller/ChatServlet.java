@@ -159,7 +159,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.getConversationUsers().add(user);
+      conversation.addUser(user);
       String activityMessage =
           " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -174,7 +174,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.getConversationUsers().remove(user);
+      conversation.removeUser(user);
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =

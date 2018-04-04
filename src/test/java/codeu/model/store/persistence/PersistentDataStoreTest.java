@@ -1,12 +1,19 @@
 package codeu.model.store.persistence;
 
+import static com.google.appengine.api.datastore.FetchOptions.Builder.withLimit;
+import static org.junit.Assert.assertEquals;
+
 import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
+import codeu.model.store.basic.ConversationStore;
+import codeu.model.store.basic.UserStore;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.junit.After;
@@ -24,6 +31,7 @@ import org.mindrot.jbcrypt.*;
 public class PersistentDataStoreTest {
 
   private PersistentDataStore persistentDataStore;
+  private DatastoreService datastore;
   private final LocalServiceTestHelper appEngineTestHelper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
@@ -113,20 +121,40 @@ public class PersistentDataStoreTest {
   @Test
   public void testSaveAndLoadConversations() throws PersistentDataStoreException {
     UUID idOne = UUID.randomUUID();
-    UUID ownerOne = UUID.randomUUID();
+    User ownerOne =
+        new User(
+            UUID.randomUUID(),
+            "test_username_one",
+            "password one",
+            "test biography",
+            Instant.ofEpochMilli(1000));
+    UUID ownerOneUUID = ownerOne.getId();
+    UserStore.getInstance().addUser(ownerOne);
     String titleOne = "Test_Title";
     Instant creationOne = Instant.ofEpochMilli(1000);
-    Conversation inputConversationOne = new Conversation(idOne, ownerOne, titleOne, creationOne);
-
-    UUID idTwo = UUID.randomUUID();
-    UUID ownerTwo = UUID.randomUUID();
-    String titleTwo = "Test_Title_Two";
-    Instant creationTwo = Instant.ofEpochMilli(2000);
-    Conversation inputConversationTwo = new Conversation(idTwo, ownerTwo, titleTwo, creationTwo);
+    Conversation inputConversationOne =
+        new Conversation(idOne, ownerOneUUID, titleOne, creationOne);
 
     // save
-    persistentDataStore.writeThrough(inputConversationOne);
-    persistentDataStore.writeThrough(inputConversationTwo);
+    ConversationStore.getInstance().addConversation(inputConversationOne);
+
+    UUID idTwo = UUID.randomUUID();
+    User ownerTwo =
+        new User(
+            UUID.randomUUID(),
+            "test_username_one",
+            "password one",
+            "test biography",
+            Instant.ofEpochMilli(1000));
+    UUID ownerTwoUUID = ownerOne.getId();
+    UserStore.getInstance().addUser(ownerTwo);
+    String titleTwo = "Test_Title_Two";
+    Instant creationTwo = Instant.ofEpochMilli(2000);
+    Conversation inputConversationTwo =
+        new Conversation(idTwo, ownerTwoUUID, titleTwo, creationTwo);
+
+    // save
+    ConversationStore.getInstance().addConversation(inputConversationTwo);
 
     // load
     List<Conversation> resultConversations = persistentDataStore.loadConversations();
@@ -134,13 +162,13 @@ public class PersistentDataStoreTest {
     // confirm that what we saved matches what we loaded
     Conversation resultConversationOne = resultConversations.get(0);
     Assert.assertEquals(idOne, resultConversationOne.getId());
-    Assert.assertEquals(ownerOne, resultConversationOne.getOwnerId());
+    Assert.assertEquals(ownerOneUUID, resultConversationOne.getOwnerId());
     Assert.assertEquals(titleOne, resultConversationOne.getTitle());
     Assert.assertEquals(creationOne, resultConversationOne.getCreationTime());
 
     Conversation resultConversationTwo = resultConversations.get(1);
     Assert.assertEquals(idTwo, resultConversationTwo.getId());
-    Assert.assertEquals(ownerTwo, resultConversationTwo.getOwnerId());
+    Assert.assertEquals(ownerTwoUUID, resultConversationTwo.getOwnerId());
     Assert.assertEquals(titleTwo, resultConversationTwo.getTitle());
     Assert.assertEquals(creationTwo, resultConversationTwo.getCreationTime());
   }
@@ -230,5 +258,186 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(creationTwo, resultActivityTwo.getCreationTime());
     Assert.assertEquals(messageTypeTwo, resultActivityTwo.getActivityType());
     Assert.assertEquals(messageTwo, resultActivityTwo.getActivityMessage());
+  }
+
+  @Test
+  public void testWriteThroughUser() {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    assertEquals(0, ds.prepare(new Query("chat-users")).countEntities(withLimit(10)));
+    Entity testEntity = new Entity("chat-users");
+    testEntity.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("username", "test username");
+    testEntity.setProperty("password", "test password");
+    testEntity.setProperty("biography", "test bio");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity);
+
+    Entity testEntity1 = new Entity("chat-users");
+    testEntity1.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("username", "test username1");
+    testEntity1.setProperty("password", "test password1");
+    testEntity1.setProperty("biography", "test bio1");
+    testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity1);
+    assertEquals(2, ds.prepare(new Query("chat-users")).countEntities(withLimit(10)));
+  }
+
+  @Test
+  public void testWriteThroughMessage() {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    assertEquals(0, ds.prepare(new Query("chat-messages")).countEntities(withLimit(10)));
+    Entity testEntity = new Entity("chat-messages");
+    testEntity.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("conv_uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("author_uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("content", "test message");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity);
+
+    Entity testEntity1 = new Entity("chat-messages");
+    testEntity1.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("conv_uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("author_uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("content", "test message1");
+    testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity1);
+    assertEquals(2, ds.prepare(new Query("chat-messages")).countEntities(withLimit(10)));
+  }
+
+  @Test
+  public void testWriteThroughConversation() {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    assertEquals(0, ds.prepare(new Query("chat-conversations")).countEntities(withLimit(10)));
+    Entity testEntity = new Entity("chat-conversations");
+    testEntity.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("owner_uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("title", "test title");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity);
+
+    Entity testEntity1 = new Entity("chat-conversations");
+    testEntity1.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("owner_uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("title", "test title");
+    testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity1);
+    assertEquals(2, ds.prepare(new Query("chat-conversations")).countEntities(withLimit(10)));
+  }
+
+  @Test
+  public void testWriteThroughActivity() {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    assertEquals(0, ds.prepare(new Query("chat-activities")).countEntities(withLimit(10)));
+    Entity testEntity = new Entity("chat-activities");
+    testEntity.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity.setProperty("member_id", UUID.randomUUID().toString());
+    testEntity.setProperty("conversation_id", UUID.randomUUID().toString());
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("activity_type", "test type");
+    testEntity.setProperty("activity_message", "test message");
+    ds.put(testEntity);
+
+    Entity testEntity1 = new Entity("chat-activities");
+    testEntity1.setProperty("uuid", UUID.randomUUID().toString());
+    testEntity1.setProperty("member_id", UUID.randomUUID().toString());
+    testEntity1.setProperty("conversation_id", UUID.randomUUID().toString());
+    testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity1.setProperty("activity_type", "test type1");
+    testEntity1.setProperty("activity_message", "test message1");
+    ds.put(testEntity1);
+    assertEquals(2, ds.prepare(new Query("chat-activities")).countEntities(withLimit(10)));
+  }
+
+  @Test
+  public void testUpdateEntityConversationAdd()
+      throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-conversations");
+    String testUUID = UUID.randomUUID().toString();
+    testEntity.setProperty("uuid", testUUID);
+    String ownerId = UUID.randomUUID().toString();
+    testEntity.setProperty("owner_uuid", ownerId);
+    testEntity.setProperty("title", "test title");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    List<String> ids = new ArrayList<>();
+    ids.add(ownerId);
+    testEntity.setProperty("users", ids);
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-conversations")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity retrievedEntity = preparedTestQuery.asSingleEntity();
+
+    List<String> users = (List<String>) retrievedEntity.getProperty("users");
+    users.add(UUID.randomUUID().toString());
+    retrievedEntity.setProperty("users", users);
+    ds.put(retrievedEntity);
+
+    Key entityKey = retrievedEntity.getKey();
+    Entity retrievedEntityAfter = ds.get(entityKey);
+    List<String> updatedUsers = (List<String>) retrievedEntityAfter.getProperty("users");
+    assertEquals(updatedUsers, users);
+  }
+
+  @Test
+  public void testUpdateEntityConversationRemove()
+      throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-conversations");
+    String testUUID = UUID.randomUUID().toString();
+    testEntity.setProperty("uuid", testUUID);
+    String ownerId = UUID.randomUUID().toString();
+    testEntity.setProperty("owner_uuid", ownerId);
+    testEntity.setProperty("title", "test title");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    List<String> ids = new ArrayList<>();
+    ids.add(ownerId);
+    testEntity.setProperty("users", ids);
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-conversations")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity retrievedEntity = preparedTestQuery.asSingleEntity();
+
+    List<String> users = (List<String>) retrievedEntity.getProperty("users");
+    users.remove(users.get(0));
+    retrievedEntity.setProperty("users", users);
+    ds.put(retrievedEntity);
+
+    Key entityKey = retrievedEntity.getKey();
+    Entity retrievedEntityAfter = ds.get(entityKey);
+    List<String> updatedUsers = (List<String>) retrievedEntityAfter.getProperty("users");
+    assertEquals(updatedUsers, users);
+  }
+
+  @Test
+  public void testUpdateEntityUser() throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-users");
+    String testUUID = UUID.randomUUID().toString();
+    testEntity.setProperty("uuid", testUUID);
+    testEntity.setProperty("username", "test username");
+    testEntity.setProperty("password", "test password");
+    testEntity.setProperty("biography", "test bio");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-users")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity testResultEntity = preparedTestQuery.asSingleEntity();
+    String updatedBio = "updated bio";
+    testResultEntity.setProperty("biography", updatedBio);
+    ds.put(testResultEntity);
+
+    Key entityKey = testResultEntity.getKey();
+    Entity retrievedEntity = ds.get(entityKey);
+    String biography = (String) retrievedEntity.getProperty("biography");
+    assertEquals(updatedBio, biography);
   }
 }

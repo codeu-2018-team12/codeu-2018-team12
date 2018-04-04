@@ -3,7 +3,7 @@ package codeu.controller;
 import codeu.model.data.Activity;
 import codeu.model.store.basic.ActivityStore;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -38,13 +38,18 @@ public class ActivityServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
-    List<Activity> activities = activityStore.getAllActivities();
+    List<Activity> activities = activityStore.getAllActivitiesSorted();
     request.setAttribute("activities", activities);
-
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {}
+      throws IOException, ServletException {
+    String button = request.getParameter("button");
+
+    if ("personalizeActivities".equals(button)) {
+      response.sendRedirect("/personalActivityFeed");
+    }
+  }
 }

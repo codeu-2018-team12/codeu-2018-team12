@@ -116,4 +116,14 @@
     <url-pattern>/search</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <servlet-class>codeu.controller.PersonalActivityServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <url-pattern>/personalActivityFeed</url-pattern>
+  </servlet-mapping>
+
 </web-app>
