@@ -36,7 +36,13 @@ public class User {
    * @param creation the creation time of this User
    * @param email the email of this user
    */
-  public User(UUID id, String name, String hashedPassword, String biography, Instant creation, String email) {
+  public User(
+      UUID id,
+      String name,
+      String hashedPassword,
+      String biography,
+      Instant creation,
+      String email) {
     this.id = id;
     this.name = name;
     this.hashedPassword = hashedPassword;
@@ -61,10 +67,14 @@ public class User {
   }
 
   /** Returns the bio of this User */
-  public String getBio() { return biography; }
+  public String getBio() {
+    return biography;
+  }
 
   /** Returns the email of this User */
-  public String getEmail() { return email; }
+  public String getEmail() {
+    return email;
+  }
 
   /** Returns the creation time of this User. */
   public Instant getCreationTime() {
@@ -72,7 +82,9 @@ public class User {
   }
 
   /** Returns the email of this User */
-  public void setEmail(String newEmail) { email = newEmail; }
+  public void setEmail(String newEmail) {
+    email = newEmail;
+  }
 
   /** Sets the bio of this user with a provided bio */
   public void setBio(String newBio) {

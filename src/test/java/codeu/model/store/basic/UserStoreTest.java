@@ -42,11 +42,20 @@ public class UserStoreTest {
           "codeUChatTestEmail@gmail.com");
   private final User USER_FOUR =
       new User(
-          UUID.randomUUID(), "username_four", "password four",
-              null, Instant.ofEpochMilli(4000), "codeUChatTestEmail@gmail.com");
+          UUID.randomUUID(),
+          "username_four",
+          "password four",
+          null,
+          Instant.ofEpochMilli(4000),
+          "codeUChatTestEmail@gmail.com");
   private final User USER_FIVE =
-      new User(UUID.randomUUID(), "test_user", "password five",
-              null, Instant.ofEpochMilli(4000), "codeUChatTestEmail@gmail.com");
+      new User(
+          UUID.randomUUID(),
+          "test_user",
+          "password five",
+          null,
+          Instant.ofEpochMilli(4000),
+          "codeUChatTestEmail@gmail.com");
 
   @Before
   public void setup() {
@@ -92,8 +101,14 @@ public class UserStoreTest {
 
   @Test
   public void testAddUser() {
-    User inputUser = new User(UUID.randomUUID(), "test_username", "password",
-            null, Instant.now(), "codeUChatTestEmail@gmail.com");
+    User inputUser =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            null,
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
 
     userStore.addUser(inputUser);
     User resultUser = userStore.getUser("test_username");

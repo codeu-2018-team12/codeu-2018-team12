@@ -23,18 +23,11 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.utils.TextFormatter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.List;
-import java.util.UUID;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document.OutputSettings;
-import org.jsoup.safety.Whitelist;
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
+import java.util.UUID;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -42,6 +35,13 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document.OutputSettings;
+import org.jsoup.safety.Whitelist;
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -186,7 +186,6 @@ public class ChatServlet extends HttpServlet {
       conversation.removeUser(user);
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-
       Activity activity =
           new Activity(
               UUID.randomUUID(),
@@ -242,8 +241,8 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * Method to send an email notification to all users in a conversation
-   * who are not logged on other than the message sender
+   * Method to send an email notification to all users in a conversation who are not logged on other
+   * than the message sender
    */
   public void sendEmailNotification(User user, Conversation conversation) {
 
