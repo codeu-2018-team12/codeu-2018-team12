@@ -116,4 +116,8 @@
     <url-pattern>/search</url-pattern>
   </servlet-mapping>
 
+  <listener>
+    <listener-class>com.controller.SessionTracker</listener-class>
+  </listener>
+
 </web-app>
