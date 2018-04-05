@@ -3,7 +3,7 @@ package codeu.controller;
 import codeu.model.data.Activity;
 import codeu.model.store.basic.ActivityStore;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
