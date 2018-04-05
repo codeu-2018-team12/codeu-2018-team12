@@ -15,7 +15,6 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Conversation;
-import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -105,7 +104,28 @@ public class ConversationStore {
     return conversations;
   }
 
-  public List<Conversation> getAllPermittedConversations(User user) {
+  public List<Conversation> getAllPublicConversations() {
+    ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getIsPublic()) {
+        publicConversations.add(convo);
+      }
+    }
+    return publicConversations;
+  }
+
+  public List<Conversation> getAllPublicConversationsSorted() {
+    ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getIsPublic()) {
+        publicConversations.add(convo);
+      }
+    }
+    publicConversations.sort(convoComparator);
+    return publicConversations;
+  }
+
+  public List<Conversation> getAllPermittedConversations(UUID user) {
     ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
       if (convo.hasPermission(user)) {
@@ -115,7 +135,7 @@ public class ConversationStore {
     return permittedConversations;
   }
 
-  public List<Conversation> getAllPermittedConversationsSorted(User user) {
+  public List<Conversation> getAllPermittedConversationsSorted(UUID user) {
     ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
       if (convo.hasPermission(user)) {

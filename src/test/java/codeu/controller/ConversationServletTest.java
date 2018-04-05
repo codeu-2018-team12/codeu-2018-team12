@@ -78,7 +78,7 @@ public class ConversationServletTest {
     Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
     User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now());
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
-    Mockito.when(mockConversationStore.getAllPermittedConversationsSorted(testUser))
+    Mockito.when(mockConversationStore.getAllPermittedConversationsSorted(testUser.getId()))
         .thenReturn(fakeConversationList);
 
     conversationServlet.doGet(mockRequest, mockResponse);

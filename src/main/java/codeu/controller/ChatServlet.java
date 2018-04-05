@@ -114,7 +114,7 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
-    List<User> conversationUsers = conversation.getConversationUsers();
+    List<UUID> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
@@ -159,7 +159,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      conversation.addUser(user);
+      conversation.addUser(user.getId());
       String activityMessage =
           " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -174,7 +174,7 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.removeUser(user);
+      conversation.removeUser(user.getId());
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -188,7 +188,7 @@ public class ChatServlet extends HttpServlet {
       activityStore.addActivity(activity);
     }
 
-    if (button == null && conversation.getConversationUsers().contains(user)) {
+    if (button == null && conversation.getConversationUsers().contains(user.getId())) {
       String messageContent = request.getParameter("message");
 
       // this removes any HTML from the message content

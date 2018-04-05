@@ -104,9 +104,15 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
-        List<String> users = (List<String>) entity.getProperty("users");
+        List<String> users =
+            entity.getProperty("users") == null
+                ? new ArrayList<String>()
+                : (List<String>) entity.getProperty("users");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        boolean isPublic = ((String) entity.getProperty("isPublic")).equals("true");
+        boolean isPublic =
+            entity.getProperty("isPublic") == null
+                ? true
+                : ((String) entity.getProperty("isPublic")).equals("true");
         Conversation conversation =
             new Conversation(uuid, ownerUuid, title, creationTime, isPublic);
         datastore.put(entity);

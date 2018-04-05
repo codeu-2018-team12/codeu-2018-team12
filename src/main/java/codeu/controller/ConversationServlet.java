@@ -86,7 +86,9 @@ public class ConversationServlet extends HttpServlet {
       throws IOException, ServletException {
     User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
     List<Conversation> conversations =
-        conversationStore.getAllPermittedConversationsSorted(loggedInUser);
+        loggedInUser == null
+            ? conversationStore.getAllPublicConversationsSorted()
+            : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
     request.setAttribute("conversations", conversations);
     request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
   }
@@ -117,10 +119,9 @@ public class ConversationServlet extends HttpServlet {
 
     String conversationTitle = request.getParameter("conversationTitle");
     if (conversationTitle.isEmpty()) {
-      User loggedInUser =
-          UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
+      User loggedInUser = userStore.getUser(username);
       List<Conversation> conversations =
-          conversationStore.getAllPermittedConversationsSorted(loggedInUser);
+          conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "Please specify a name for this chat.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);

@@ -31,7 +31,7 @@ public class Conversation {
   private final Instant creation;
   private final String title;
   private UserStore userStore = UserStore.getInstance();
-  private List<User> conversationUsers = new ArrayList<>();
+  private List<UUID> conversationUsers = new ArrayList<>();
   private boolean isPublic = true;
   /**
    * Constructs a new Conversation.
@@ -46,9 +46,7 @@ public class Conversation {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    if (userStore.getUser(owner) != null) {
-      this.conversationUsers.add(userStore.getUser(owner));
-    }
+    this.conversationUsers.add(owner);
   }
 
   /**
@@ -66,7 +64,7 @@ public class Conversation {
     this.creation = creation;
     this.title = title;
     this.isPublic = isPublic;
-    this.conversationUsers.add(userStore.getUser(owner));
+    this.conversationUsers.add(owner);
   }
 
   /** Returns the ID of this Conversation. */
@@ -90,12 +88,8 @@ public class Conversation {
   }
 
   /** Returns the set of users in this Conversation. */
-  public List<User> getConversationUsers() {
+  public List<UUID> getConversationUsers() {
     return conversationUsers;
-  }
-
-  public void setConversationUsers(List<User> users) {
-    conversationUsers = users;
   }
 
   /**
@@ -104,29 +98,29 @@ public class Conversation {
    */
   public List<String> getUserIdsAsStrings() {
     List<String> ids = new ArrayList<>();
-    for (User user : conversationUsers) {
-      ids.add(user.getId().toString());
+    for (UUID user : conversationUsers) {
+      ids.add(user.toString());
     }
     return ids;
   }
   /** Adds a user to a conversation */
-  public void addUser(User user) {
+  public void addUser(UUID user) {
     conversationUsers.add(user);
     PersistentStorageAgent.getInstance().updateEntity(this);
   }
 
   /** Removes a user from a conversation */
-  public void removeUser(User user) {
+  public void removeUser(UUID user) {
     conversationUsers.remove(user);
     PersistentStorageAgent.getInstance().updateEntity(this);
   }
 
   /** Updates the list of users from a list of user Ids */
   public void setUsers(List<String> users) {
-    List<User> newUsers = new ArrayList<>();
+    List<UUID> newUsers = new ArrayList<>();
     for (String userId : users) {
       UUID id = UUID.fromString(userId);
-      newUsers.add(userStore.getUser(id));
+      newUsers.add(id);
     }
     conversationUsers = newUsers;
   }
@@ -139,12 +133,12 @@ public class Conversation {
     this.isPublic = isPublic;
   }
 
-  public boolean hasPermission(User user) {
+  public boolean hasPermission(UUID user) {
     if (isPublic) {
       return true;
     }
-    for (User user1 : conversationUsers) {
-      if (user.getId().equals(user1.getId())) {
+    for (UUID user1 : conversationUsers) {
+      if (user.equals(user1)) {
         return true;
       }
     }
