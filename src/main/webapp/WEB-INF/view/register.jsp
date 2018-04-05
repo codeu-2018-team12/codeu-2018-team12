@@ -31,6 +31,8 @@
       <label for="confirmPassword">Confirm Password: </label>
       <input type="password" name="confirmPassword" id="confirmPassword">
       <br/>
+      <label for="email">Email: </label>
+      <input type="text" name="email" id="email">
       <br/><br/>
       <button type="submit">Submit</button>
     </form>

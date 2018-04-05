@@ -88,13 +88,13 @@ public class Conversation {
   /** Adds a user to a conversation */
   public void addUser(User user) {
     conversationUsers.add(user);
-    PersistentStorageAgent.getInstance().updateEntity(this);
+    PersistentStorageAgent.getInstance().updateConversationEntityUsers(this);
   }
 
   /** Removes a user from a conversation */
   public void removeUser(User user) {
     conversationUsers.remove(user);
-    PersistentStorageAgent.getInstance().updateEntity(this);
+    PersistentStorageAgent.getInstance().updateConversationEntityUsers(this);
   }
 
   /** Updates the list of users from a list of user Ids */

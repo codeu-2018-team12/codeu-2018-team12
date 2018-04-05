@@ -52,13 +52,15 @@ public class PersistentDataStoreTest {
     String nameOne = "test_username_one";
     String passwordOne = "test_password_one";
     Instant creationOne = Instant.ofEpochMilli(1000);
-    User inputUserOne = new User(idOne, nameOne, passwordOne, null, creationOne);
+    User inputUserOne =
+        new User(idOne, nameOne, passwordOne, null, creationOne, "codeUChatTestEmail@gmail.com");
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
     String passwordTwo = "test_password_two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
-    User inputUserTwo = new User(idTwo, nameTwo, passwordTwo, null, creationTwo);
+    User inputUserTwo =
+        new User(idTwo, nameTwo, passwordTwo, null, creationTwo, "codeUChatTestEmail@gmail.com");
 
     // save
     persistentDataStore.writeThrough(inputUserOne);
@@ -88,14 +90,18 @@ public class PersistentDataStoreTest {
     String passwordOne = "test_password_one";
     String hashedPasswordOne = BCrypt.hashpw(passwordOne, BCrypt.gensalt());
     Instant creationOne = Instant.ofEpochMilli(1000);
-    User inputUserOne = new User(idOne, nameOne, hashedPasswordOne, null, creationOne);
+    User inputUserOne =
+        new User(
+            idOne, nameOne, hashedPasswordOne, null, creationOne, "codeUChatTestEmail@gmail.com");
 
     UUID idTwo = UUID.randomUUID();
     String nameTwo = "test_username_two";
     String passwordTwo = "test_password_two";
     String hashedPasswordTwo = BCrypt.hashpw(passwordTwo, BCrypt.gensalt());
     Instant creationTwo = Instant.ofEpochMilli(2000);
-    User inputUserTwo = new User(idTwo, nameTwo, hashedPasswordTwo, null, creationTwo);
+    User inputUserTwo =
+        new User(
+            idTwo, nameTwo, hashedPasswordTwo, null, creationTwo, "codeUChatTestEmail@gmail.com");
 
     // save
     persistentDataStore.writeThrough(inputUserOne);
@@ -127,7 +133,8 @@ public class PersistentDataStoreTest {
             "test_username_one",
             "password one",
             "test biography",
-            Instant.ofEpochMilli(1000));
+            Instant.ofEpochMilli(1000),
+            "codeUChatTestEmail@gmail.com");
     UUID ownerOneUUID = ownerOne.getId();
     UserStore.getInstance().addUser(ownerOne);
     String titleOne = "Test_Title";
@@ -145,7 +152,8 @@ public class PersistentDataStoreTest {
             "test_username_one",
             "password one",
             "test biography",
-            Instant.ofEpochMilli(1000));
+            Instant.ofEpochMilli(1000),
+            "codeUChatTestEmail@gmail.com");
     UUID ownerTwoUUID = ownerOne.getId();
     UserStore.getInstance().addUser(ownerTwo);
     String titleTwo = "Test_Title_Two";
@@ -270,6 +278,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("password", "test password");
     testEntity.setProperty("biography", "test bio");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
     ds.put(testEntity);
 
     Entity testEntity1 = new Entity("chat-users");
@@ -278,6 +287,7 @@ public class PersistentDataStoreTest {
     testEntity1.setProperty("password", "test password1");
     testEntity1.setProperty("biography", "test bio1");
     testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity1.setProperty("email", "testEmail1@gmail.com");
     ds.put(testEntity1);
     assertEquals(2, ds.prepare(new Query("chat-users")).countEntities(withLimit(10)));
   }
@@ -370,6 +380,7 @@ public class PersistentDataStoreTest {
     PreparedQuery preparedTestQuery = ds.prepare(testQuery);
     Entity retrievedEntity = preparedTestQuery.asSingleEntity();
 
+    @SuppressWarnings("unchecked")
     List<String> users = (List<String>) retrievedEntity.getProperty("users");
     users.add(UUID.randomUUID().toString());
     retrievedEntity.setProperty("users", users);
@@ -377,6 +388,7 @@ public class PersistentDataStoreTest {
 
     Key entityKey = retrievedEntity.getKey();
     Entity retrievedEntityAfter = ds.get(entityKey);
+    @SuppressWarnings("unchecked")
     List<String> updatedUsers = (List<String>) retrievedEntityAfter.getProperty("users");
     assertEquals(updatedUsers, users);
   }
@@ -424,6 +436,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("password", "test password");
     testEntity.setProperty("biography", "test bio");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
     ds.put(testEntity);
 
     Query testQuery =
