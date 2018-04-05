@@ -68,7 +68,13 @@ public class PersonalActivityServletTest {
     UUID fakeConversationID = UUID.randomUUID();
 
     User fakeUser =
-        new User(fakeUserID, "test_username", "password", "test biography", Instant.now(), "test@gmail.com");
+        new User(
+            fakeUserID,
+            "test_username",
+            "password",
+            "test biography",
+            Instant.now(),
+            "test@gmail.com");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     List<Activity> sampleActivities = new ArrayList<>();
