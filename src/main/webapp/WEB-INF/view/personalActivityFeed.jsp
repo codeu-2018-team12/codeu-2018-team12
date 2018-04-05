@@ -17,7 +17,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Activity</title>
+  <title>Personalized Activities</title>
   <link rel="stylesheet" href="/css/main.css">
   <jsp:include page="./navbar.jsp" />
   <style>
@@ -36,8 +36,8 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 </head>
 <body onload="scrollBox()">
   <div id="container">
-  	<h1 id="title">Activity</h1>
-  	<p>Here&#39s everything that happened on the site so far!</p>
+  	<h1 id="title">Personalized Activities</h1>
+  	<p>Here&#39s everything that has happened that pertains to you!</p>
     <div id="activity">
       <ul>
         <%
@@ -61,12 +61,6 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
           }
          %>
       </ul>
-    </div>
-    <div id="personalizeActivities">
-      <p>Want to see activities that pertain to you and the conversations you have joined?<p>
-      <form id="personalizeForm" action="/activityFeed" method="POST">
-        <button type="submit" name="button" value="personalizeActivities">Personalize Activity Feed</button>
-      </form>
     </div>
   </div>
 </body>
