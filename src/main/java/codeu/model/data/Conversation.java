@@ -137,11 +137,6 @@ public class Conversation {
     if (isPublic) {
       return true;
     }
-    for (UUID user1 : conversationUsers) {
-      if (user.equals(user1)) {
-        return true;
-      }
-    }
-    return false;
+    return conversationUsers.contains(user);
   }
 }

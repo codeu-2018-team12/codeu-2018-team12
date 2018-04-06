@@ -15,7 +15,6 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
-import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -102,31 +101,25 @@ public class ActivityStore {
     return activities;
   }
 
-  public List<Activity> getAllPermittedActivities(User user) {
-    /*ArrayList<Activity> permittedActivities = new ArrayList();
+  public List<Activity> getAllPermittedActivities(UUID user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
     for (Activity act : activities) {
-      Conversation convo =
-          ConversationStore.getInstance().getConversationWithId(act.getConversationId());
-      if (convo.hasPermission(user)) {
+      if (act.hasPermission(user)) {
         permittedActivities.add(act);
       }
     }
-    return permittedActivities;*/
-    return new ArrayList<Activity>();
+    return permittedActivities;
   }
 
-  public List<Activity> getAllPermittedActivitiesSorted(User user) {
-    /*ArrayList<Activity> permittedActivities = new ArrayList();
+  public List<Activity> getAllPermittedActivitiesSorted(UUID user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
     for (Activity act : activities) {
-      Conversation convo =
-          ConversationStore.getInstance().getConversationWithId(act.getConversationId());
-      if (convo.hasPermission(user)) {
+      if (act.hasPermission(user)) {
         permittedActivities.add(act);
       }
     }
     permittedActivities.sort(activityComparator);
-    return permittedActivities;*/
-    return new ArrayList<Activity>();
+    return permittedActivities;
   }
 
   /** Access a current subset of activities known to the application sorted with newest first. */

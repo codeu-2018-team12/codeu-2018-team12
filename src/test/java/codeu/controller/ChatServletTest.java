@@ -387,7 +387,9 @@ public class ChatServletTest {
             fakeConversation.getId(),
             Instant.now(),
             "sentMessage",
-            "test_activity_message" + "Test message.");
+            "test_activity_message" + "Test message.",
+            fakeConversation.getConversationUsers(),
+            fakeConversation.getIsPublic());
     mockActivityStore.addActivity(activity);
     Mockito.when(mockActivityStore.getActivityWithId(activity.getId())).thenReturn(activity);
 

@@ -160,7 +160,9 @@ public class ConversationServlet extends HttpServlet {
             conversation.getId(),
             Instant.now(),
             "createdConvo",
-            activityMessage);
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
     activityStore.addActivity(activity);
 
     response.sendRedirect("/chat/" + conversationTitle);

@@ -177,7 +177,9 @@ public class ChatServlet extends HttpServlet {
               conversation.getId(),
               Instant.now(),
               "joinedConvo",
-              activityMessage);
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
       activityStore.addActivity(activity);
     }
 
@@ -192,7 +194,9 @@ public class ChatServlet extends HttpServlet {
               conversation.getId(),
               Instant.now(),
               "leftConvo",
-              activityMessage);
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
       activityStore.addActivity(activity);
     }
 
@@ -231,7 +235,9 @@ public class ChatServlet extends HttpServlet {
               conversation.getId(),
               Instant.now(),
               "messageSent",
-              activityMessage);
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
       activityStore.addActivity(activity);
       sendEmailNotification(user, conversation);
     }

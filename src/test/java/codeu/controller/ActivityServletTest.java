@@ -58,7 +58,9 @@ public class ActivityServletTest {
             UUID.randomUUID(),
             Instant.ofEpochMilli(2000),
             "joinedApp",
-            "testMessage"));
+            "testMessage",
+            new ArrayList<UUID>(),
+            true));
 
     sampleActivities.add(
         new Activity(
@@ -67,11 +69,13 @@ public class ActivityServletTest {
             UUID.randomUUID(),
             Instant.ofEpochMilli(1000),
             "createdConvo",
-            "testMessage"));
+            "testMessage",
+            new ArrayList<UUID>(),
+            true));
     Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
     User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now(), null);
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
-    Mockito.when(mockActivityStore.getAllPermittedActivitiesSorted(testUser))
+    Mockito.when(mockActivityStore.getAllPermittedActivitiesSorted(testUser.getId()))
         .thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);

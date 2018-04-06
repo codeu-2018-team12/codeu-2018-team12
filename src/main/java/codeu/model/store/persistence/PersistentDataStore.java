@@ -186,10 +186,28 @@ public class PersistentDataStore {
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String activityType = (String) entity.getProperty("activity_type");
         String activityMessage = (String) entity.getProperty("activity_message");
-
+        List<String> strings =
+            entity.getProperty("users") == null
+                ? new ArrayList<String>()
+                : (List<String>) entity.getProperty("users");
+        List<UUID> users = new ArrayList<UUID>();
+        for (String str : strings) {
+          users.add(UUID.fromString(str));
+        }
+        boolean isPublic =
+            entity.getProperty("isPublic") == null
+                ? true
+                : ((String) entity.getProperty("isPublic")).equals("true");
         Activity activity =
             new Activity(
-                uuid, memberId, conversationId, creationTime, activityType, activityMessage);
+                uuid,
+                memberId,
+                conversationId,
+                creationTime,
+                activityType,
+                activityMessage,
+                users,
+                isPublic);
         activities.add(activity);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -246,6 +264,8 @@ public class PersistentDataStore {
     activityEntity.setProperty("creation_time", activity.getCreationTime().toString());
     activityEntity.setProperty("activity_type", activity.getActivityType());
     activityEntity.setProperty("activity_message", activity.getActivityMessage());
+    activityEntity.setProperty("users", activity.getUserIdsAsStrings());
+    activityEntity.setProperty("isPublic", Boolean.toString(activity.getIsPublic()));
     datastore.put(activityEntity);
   }
 

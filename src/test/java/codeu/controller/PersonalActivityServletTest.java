@@ -85,7 +85,9 @@ public class PersonalActivityServletTest {
             fakeConversationID,
             Instant.ofEpochMilli(2000),
             "joinedApp",
-            "testMessage"));
+            "testMessage",
+            new ArrayList<UUID>(),
+            true));
 
     sampleActivities.add(
         new Activity(
@@ -94,7 +96,9 @@ public class PersonalActivityServletTest {
             fakeConversationID,
             Instant.ofEpochMilli(1000),
             "createdConvo",
-            "testMessage"));
+            "testMessage",
+            new ArrayList<UUID>(),
+            true));
 
     List<Activity> sortedSampleActivities =
         mockActivityStore.getActivtiyListSorted(sampleActivities);

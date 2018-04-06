@@ -15,6 +15,7 @@
 package codeu.model.data;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,13 +31,18 @@ public class ActivityTest {
     Instant creation = Instant.now();
     String activityType = "messageSent";
     String message = "testMessage";
+    ArrayList<UUID> users = new ArrayList<UUID>();
+    users.add(userId);
 
-    Activity activity = new Activity(id, userId, conversationId, creation, activityType, message);
+    Activity activity =
+        new Activity(id, userId, conversationId, creation, activityType, message, users, false);
 
     Assert.assertEquals(id, activity.getId());
     Assert.assertEquals(userId, activity.getUserId());
     Assert.assertEquals(conversationId, activity.getConversationId());
     Assert.assertEquals(creation, activity.getCreationTime());
     Assert.assertEquals(activityType, activity.getActivityType());
+    Assert.assertEquals(users, activity.getUsers());
+    Assert.assertFalse(activity.getIsPublic());
   }
 }

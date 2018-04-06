@@ -23,7 +23,9 @@ public class ActivityStoreTest {
           UUID.randomUUID(),
           Instant.ofEpochMilli(1000),
           "leftConvo",
-          "test_message");
+          "test_message",
+          new ArrayList<UUID>(),
+          true);
 
   @Before
   public void setup() {
@@ -61,7 +63,9 @@ public class ActivityStoreTest {
             UUID.randomUUID(),
             Instant.now(),
             "joinedConvo",
-            "testMessage");
+            "testMessage",
+            new ArrayList<UUID>(),
+            true);
 
     activityStore.addActivity(inputActivity);
     Activity resultActivity = activityStore.getActivityWithId(activtiyId);
