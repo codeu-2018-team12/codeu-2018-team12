@@ -4,6 +4,7 @@ import codeu.model.data.Activity;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.junit.Assert;
@@ -16,7 +17,22 @@ public class ActivityStoreTest {
   private ActivityStore activityStore;
   private PersistentStorageAgent mockPersistentStorageAgent;
 
+  private final UUID USER_ONE = UUID.randomUUID();
+  private final UUID USER_TWO = UUID.randomUUID();
+
+  private List<UUID> users = Arrays.asList(USER_ONE);
+
   private final Activity ACTIVITY_ONE =
+      new Activity(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          Instant.ofEpochMilli(2000),
+          "leftConvo",
+          "test_message",
+          users,
+          false);
+  private final Activity ACTIVITY_TWO =
       new Activity(
           UUID.randomUUID(),
           UUID.randomUUID(),
@@ -34,6 +50,7 @@ public class ActivityStoreTest {
 
     final List<Activity> activityList = new ArrayList<>();
     activityList.add(ACTIVITY_ONE);
+    activityList.add(ACTIVITY_TWO);
     activityStore.setActivities(activityList);
   }
 
@@ -42,6 +59,21 @@ public class ActivityStoreTest {
     Activity resultActivity = activityStore.getActivityWithId(ACTIVITY_ONE.getId());
 
     assertEquals(ACTIVITY_ONE, resultActivity);
+  }
+
+  @Test
+  public void testGetAllPermittedActivitesSorted_Permited() {
+    List<Activity> permittedActivities = activityStore.getAllPermittedActivitiesSorted(USER_ONE);
+    Assert.assertEquals(permittedActivities.size(), 2);
+    assertEquals(permittedActivities.get(0), ACTIVITY_ONE);
+    assertEquals(permittedActivities.get(1), ACTIVITY_TWO);
+  }
+
+  @Test
+  public void testGetAllPermittedActivitesSorted_NotPermited() {
+    List<Activity> permittedActivities = activityStore.getAllPermittedActivitiesSorted(USER_TWO);
+    Assert.assertEquals(permittedActivities.size(), 1);
+    assertEquals(permittedActivities.get(0), ACTIVITY_TWO);
   }
 
   @Test
