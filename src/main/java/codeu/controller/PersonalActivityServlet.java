@@ -102,7 +102,7 @@ public class PersonalActivityServlet extends HttpServlet {
     tailoredActivities.addAll(hashSet);
 
     // sort the activities
-    List<Activity> personalizedActivities = activityStore.getActivtiyListSorted(tailoredActivities);
+    List<Activity> personalizedActivities = activityStore.getActivityListSorted(tailoredActivities);
 
     request.setAttribute("activities", personalizedActivities);
     request

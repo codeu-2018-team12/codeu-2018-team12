@@ -122,8 +122,29 @@ public class ActivityStore {
     return permittedActivities;
   }
 
+  public List<Activity> getAllPublicActivities() {
+    ArrayList<Activity> publicActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.getIsPublic()) {
+        publicActivities.add(act);
+      }
+    }
+    return publicActivities;
+  }
+
+  public List<Activity> getAllPublicActivitiesSorted() {
+    ArrayList<Activity> publicActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.getIsPublic()) {
+        publicActivities.add(act);
+      }
+    }
+    publicActivities.sort(activityComparator);
+    return publicActivities;
+  }
+
   /** Access a current subset of activities known to the application sorted with newest first. */
-  public List<Activity> getActivtiyListSorted(List<Activity> activityList) {
+  public List<Activity> getActivityListSorted(List<Activity> activityList) {
     activityList.sort(activityComparator);
     return activityList;
   }

@@ -101,7 +101,7 @@ public class PersonalActivityServletTest {
             true));
 
     List<Activity> sortedSampleActivities =
-        mockActivityStore.getActivtiyListSorted(sampleActivities);
+        mockActivityStore.getActivityListSorted(sampleActivities);
     personalActivityServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("activities", sortedSampleActivities);

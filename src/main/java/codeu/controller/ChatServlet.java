@@ -110,11 +110,14 @@ public class ChatServlet extends HttpServlet {
       throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
     String conversationTitle = requestUrl.substring("/chat/".length());
+    User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
 
     Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
-    if (conversation == null) {
-      // couldn't find conversation, redirect to conversation list
-      System.out.println("Conversation was null: " + conversationTitle);
+    if (conversation == null
+        || (!conversation.getIsPublic()
+            && (loggedInUser == null || !conversation.hasPermission(loggedInUser.getId())))) {
+      // couldn't access conversation, redirect to conversation list
+      System.out.println("Could not access: " + conversationTitle);
       response.sendRedirect("/conversations");
       return;
     }

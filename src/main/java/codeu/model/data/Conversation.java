@@ -14,7 +14,6 @@
 
 package codeu.model.data;
 
-import codeu.model.store.basic.UserStore;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ public class Conversation {
   private final UUID owner;
   private final Instant creation;
   private final String title;
-  private UserStore userStore = UserStore.getInstance();
   private List<UUID> conversationUsers = new ArrayList<>();
   private boolean isPublic = true;
   /**
@@ -103,6 +101,7 @@ public class Conversation {
     }
     return ids;
   }
+
   /** Adds a user to a conversation */
   public void addUser(UUID user) {
     conversationUsers.add(user);
