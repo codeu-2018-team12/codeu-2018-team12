@@ -26,6 +26,10 @@
     <listener-class>codeu.controller.ServerStartupListener</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>codeu.controller.SessionListener</listener-class>
+  </listener>
+
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>codeu.controller.LoginServlet</servlet-class>
@@ -114,6 +118,16 @@
   <servlet-mapping>
     <servlet-name>SearchServlet</servlet-name>
     <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <servlet-class>codeu.controller.PersonalActivityServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <url-pattern>/personalActivityFeed</url-pattern>
   </servlet-mapping>
 
 </web-app>

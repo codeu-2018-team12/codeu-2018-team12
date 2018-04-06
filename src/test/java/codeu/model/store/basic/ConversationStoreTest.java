@@ -18,9 +18,9 @@ public class ConversationStoreTest {
   private PersistentStorageAgent mockPersistentStorageAgent;
 
   private final User USER_ONE =
-      new User(UUID.randomUUID(), "user_one", null, null, Instant.ofEpochMilli(1000));
+      new User(UUID.randomUUID(), "user_one", null, null, Instant.ofEpochMilli(1000), null);
   private final User USER_TWO =
-      new User(UUID.randomUUID(), "user_two", null, null, Instant.ofEpochMilli(2000));
+      new User(UUID.randomUUID(), "user_two", null, null, Instant.ofEpochMilli(2000), null);
 
   private Conversation CONVERSATION_ONE =
       CONVERSATION_ONE =

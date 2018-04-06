@@ -53,7 +53,14 @@ public class PersistentStorageAgentTest {
 
   @Test
   public void testWriteThroughUser() {
-    User user = new User(UUID.randomUUID(), "test_username", "password", null, Instant.now());
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            null,
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
     persistentStorageAgent.writeThrough(user);
     Mockito.verify(mockPersistentDataStore).writeThrough(user);
   }
@@ -90,17 +97,38 @@ public class PersistentStorageAgentTest {
   }
 
   @Test
-  public void testUpdateEntityConversation() {
+  public void testUpdateEntityConversationUser() {
     Conversation conversation =
         new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
-    persistentStorageAgent.updateEntity(conversation);
-    Mockito.verify(mockPersistentDataStore).updateEntity(conversation);
+    persistentStorageAgent.updateConversationEntityUsers(conversation);
+    Mockito.verify(mockPersistentDataStore).updateConversationEntityUsers(conversation);
   }
 
   @Test
-  public void testUpdateEntityUser() {
-    User user = new User(UUID.randomUUID(), "test_username", "password", "testbio", Instant.now());
-    persistentStorageAgent.updateEntity(user);
-    Mockito.verify(mockPersistentDataStore).updateEntity(user);
+  public void testUpdateEntityUserBiography() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityBiopgraphy(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityBiography(user);
+  }
+
+  @Test
+  public void testUpdateEntityUserEmail() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityEmail(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityEmail(user);
   }
 }
