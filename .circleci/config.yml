@@ -4,21 +4,16 @@
 #
 version: 2
 jobs:
-  build:
+  build-java8: &build
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
     environment:
       MAVEN_OPTS: -Xmx3200m
-    
+
     steps:
       - checkout
 
@@ -38,6 +33,18 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-        
+
       # run tests!
       - run: mvn integration-test
+
+  build-java9:
+    << : *build
+    docker:
+      - image: circleci/openjdk:9-jdk
+
+workflows:
+  version: 2
+  build_both_versions:
+    jobs:
+      - build-java8
+      - build-java9
