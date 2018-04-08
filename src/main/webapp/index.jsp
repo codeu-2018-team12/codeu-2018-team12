@@ -37,14 +37,7 @@
 
       <h1>CodeU Chat App</h1>
       <img src="/resources/codeU.png">
-      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>
- <div>
-            <h3> Choose File to Upload in Server </h3>
-            <form action="upload" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" />
-                <input type="submit" value="upload" />
-            </form>          
-        </div>
+      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>  
       <ul>
         <li><a href="/login">Login</a> to get started.</li>
         <li>Go to the <a href="/conversations">conversations</a> page to
