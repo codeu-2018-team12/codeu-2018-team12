@@ -22,6 +22,7 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -89,7 +90,15 @@ public class ConversationServlet extends HttpServlet {
         loggedInUser == null
             ? conversationStore.getAllPublicConversationsSorted()
             : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+    List<Conversation> directMessages = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getTitle().startsWith("direct:")) {
+        directMessages.add(convo);
+      }
+    }
+    conversations.removeAll(directMessages);
     request.setAttribute("conversations", conversations);
+    request.setAttribute("directMessages", directMessages);
     request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
   }
 

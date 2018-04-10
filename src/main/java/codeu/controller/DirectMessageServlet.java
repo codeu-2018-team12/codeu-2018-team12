@@ -113,8 +113,8 @@ public class DirectMessageServlet extends HttpServlet {
 
     String convoName =
         loggedInUsername.compareTo(otherUsername) < 0
-            ? loggedInUsername + "-" + otherUsername
-            : otherUsername + "-" + loggedInUsername;
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
     Conversation conversation = conversationStore.getConversationWithTitle(convoName);
 
     if (conversation == null) {
@@ -163,8 +163,8 @@ public class DirectMessageServlet extends HttpServlet {
 
     String convoName =
         loggedInUsername.compareTo(otherUsername) < 0
-            ? loggedInUsername + "-" + otherUsername
-            : otherUsername + "-" + loggedInUsername;
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
 
     Conversation conversation = conversationStore.getConversationWithTitle(convoName);
     if (conversation == null) {
