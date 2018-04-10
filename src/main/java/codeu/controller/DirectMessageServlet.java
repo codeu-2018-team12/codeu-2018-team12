@@ -155,7 +155,7 @@ public class DirectMessageServlet extends HttpServlet {
       return;
     }
 
-    if (otherUser == null) {
+    if (otherUser == null || loggedInUsername.equals(otherUsername)) {
       // TODO: figure out what to do here
       response.sendRedirect("/conversations");
       return;
