@@ -117,7 +117,7 @@ public class PersistentStorageAgentTest {
             "testbio",
             Instant.now(),
             "codeUChatTestEmail@gmail.com");
-    persistentStorageAgent.updateUserEntityBiopgraphy(user);
+    persistentStorageAgent.updateUserEntityBiography(user);
     Mockito.verify(mockPersistentDataStore).updateUserEntityBiography(user);
   }
 

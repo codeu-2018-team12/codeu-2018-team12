@@ -277,8 +277,10 @@ public class PersistentDataStore {
                 new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
-    resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
-    datastore.put(resultEntity);
+    if (resultEntity != null) {
+      resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
+      datastore.put(resultEntity);
+    }
   }
 
   /** Updates the biography property of a User object in the Datastore service */

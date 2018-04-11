@@ -90,6 +90,6 @@ public class User {
   /** Sets the bio of this user with a provided bio */
   public void setBio(String newBio) {
     biography = newBio;
-    PersistentStorageAgent.getInstance().updateUserEntityBiopgraphy(this);
+    PersistentStorageAgent.getInstance().updateUserEntityBiography(this);
   }
 }

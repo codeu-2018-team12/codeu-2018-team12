@@ -100,13 +100,11 @@ public class DirectMessageServlet extends HttpServlet {
     User otherUser = userStore.getUser(otherUsername);
 
     if (loggedInUser == null) {
-      // user was not found, don't let them add a message
       response.sendRedirect("/login");
       return;
     }
 
     if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
-      // TODO: figure out what to do here
       response.sendRedirect("/conversations");
       return;
     }
@@ -121,8 +119,8 @@ public class DirectMessageServlet extends HttpServlet {
       conversation =
           new Conversation(
               UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
-      conversationStore.addConversation(conversation);
       conversation.addUser(otherUser.getId());
+      conversationStore.addConversation(conversation);
     }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
@@ -156,7 +154,6 @@ public class DirectMessageServlet extends HttpServlet {
     }
 
     if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
-      // TODO: figure out what to do here
       response.sendRedirect("/conversations");
       return;
     }
