@@ -1,7 +1,8 @@
 package codeu.controller;
 
-import codeu.model.data.Message;
+import codeu.model.data.Activity;
 import codeu.model.data.User;
+import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
@@ -24,6 +25,8 @@ public class ProfileServlet extends HttpServlet {
   /** Store class that gives access to Users. */
   private UserStore userStore;
 
+  private ActivityStore activityStore;
+
   /** Set up state for handling profile requests. */
   @Override
   public void init() throws ServletException {
@@ -31,6 +34,7 @@ public class ProfileServlet extends HttpServlet {
     setConversationStore(ConversationStore.getInstance());
     setMessageStore(MessageStore.getInstance());
     setUserStore(UserStore.getInstance());
+    setActivityStore(ActivityStore.getInstance());
   }
 
   /**
@@ -57,6 +61,10 @@ public class ProfileServlet extends HttpServlet {
     this.userStore = userStore;
   }
 
+  void setActivityStore(ActivityStore activityStore) {
+    this.activityStore = activityStore;
+  }
+
   /**
    * This function fires when a user navigates to a user's profile page. It gets the username from
    * the URL, finds the corresponding User, and fetches the messages posted by that user. It then
@@ -67,13 +75,17 @@ public class ProfileServlet extends HttpServlet {
       throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
     String name = requestUrl.substring("/profile/".length());
-
+    User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
     User user = userStore.getUser(name);
-    List<Message> messages = null;
+    List<Activity> activities = null;
     if (user != null) {
-      messages = messageStore.getMessagesByAuthorSorted(user.getId());
+      activities =
+          loggedInUser == null
+              ? activityStore.getAllPublicActivitiesWithUserIdSorted(user.getId())
+              : activityStore.getAllPermittedActivitiesWithUserIdSorted(
+                  user.getId(), loggedInUser.getId());
     }
-    request.setAttribute("messages", messages);
+    request.setAttribute("activities", activities);
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }

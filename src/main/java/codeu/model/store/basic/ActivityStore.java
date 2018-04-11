@@ -184,6 +184,48 @@ public class ActivityStore {
     return userActivities;
   }
 
+  public List<Activity> getAllPublicActivitiesWithUserId(UUID user) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.getIsPublic()) {
+        result.add(activity);
+      }
+    }
+    return result;
+  }
+
+  public List<Activity> getAllPublicActivitiesWithUserIdSorted(UUID user) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.getIsPublic()) {
+        result.add(activity);
+      }
+    }
+    result.sort(activityComparator);
+    return result;
+  }
+
+  public List<Activity> getAllPermittedActivitiesWithUserId(UUID user, UUID loggedInUser) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
+        result.add(activity);
+      }
+    }
+    return result;
+  }
+
+  public List<Activity> getAllPermittedActivitiesWithUserIdSorted(UUID user, UUID loggedInUser) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
+        result.add(activity);
+      }
+    }
+    result.sort(activityComparator);
+    return result;
+  }
+
   /** Sets the list of activities stored by this ActivityStore. */
   public void setActivities(List<Activity> activities) {
     this.activities = activities;

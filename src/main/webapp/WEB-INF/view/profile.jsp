@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
-<%@ page import="codeu.model.data.Message" %>
+<%@ page import="codeu.model.data.Activity" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.store.basic.ConversationStore" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
@@ -8,7 +8,7 @@
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
-List<Message> messages = (List<Message>) request.getAttribute("messages");
+List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 User user = (User) request.getAttribute("user");
 %>
 
@@ -20,7 +20,7 @@ User user = (User) request.getAttribute("user");
     <link rel="stylesheet" href="/css/main.css" type="text/css">
     <jsp:include page="./navbar.jsp" />
     <style>
-      #messages {
+      #activities {
         background-color: white;
         height: 500px;
         overflow-y: scroll
@@ -61,31 +61,26 @@ User user = (User) request.getAttribute("user");
     <br>
   </div>
   <div id="container">
-   <h2>Sent Messages</h2>
-   <div id="messages">
+   <h2>Recent Activity</h2>
+   <div id="activities">
      <ul>
-   <%
-     for (Message message : messages) {
-       String conversationTitle = ConversationStore.getInstance()
-              .getConversationWithId(message.getConversationId())
-              .getTitle();
-       Instant instant =  ConversationStore.getInstance()
-              .getConversationWithId(message.getConversationId())
-              .getCreationTime();
-       LocalDateTime ldt =
-              LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-       DateTimeFormatter formatter =
-              DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
-       String time = ldt.format(formatter);
-   %>
-     <li>
-     <strong>At <%= time + " in " + conversationTitle %>:</strong>
-     <%= message.getContent() %>
-    </li>
-   <%
-     }
-   %>
- </ul>
+       <%
+         for (Activity activity : activities) {
+           String type = activity.getActivityType();
+           String message = activity.getActivityMessage();
+           Instant creationTime = activity.getCreationTime();
+           LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+           String time = ldt.format(formatter);
+       %>
+       <li>
+         <strong><%= time %>:</strong>
+         <%= user.getName() %> <%= message %>
+       </li>
+        <%
+         }
+        %>
+     </ul>
    </div>
   </div>
 <% } else { %>
