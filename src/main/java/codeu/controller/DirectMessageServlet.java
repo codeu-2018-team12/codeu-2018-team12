@@ -105,7 +105,7 @@ public class DirectMessageServlet extends HttpServlet {
       return;
     }
 
-    if (otherUser == null) {
+    if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
       // TODO: figure out what to do here
       response.sendRedirect("/conversations");
       return;
@@ -155,7 +155,7 @@ public class DirectMessageServlet extends HttpServlet {
       return;
     }
 
-    if (otherUser == null || loggedInUsername.equals(otherUsername)) {
+    if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
       // TODO: figure out what to do here
       response.sendRedirect("/conversations");
       return;
@@ -191,7 +191,8 @@ public class DirectMessageServlet extends HttpServlet {
               Instant.now());
       messageStore.addMessage(message);
 
-      String activityMessage = " sent you a direct message: " + finalMessageContent;
+      String activityMessage =
+          " sent a direct message to " + otherUser.getName() + ": " + finalMessageContent;
 
       Activity activity =
           new Activity(

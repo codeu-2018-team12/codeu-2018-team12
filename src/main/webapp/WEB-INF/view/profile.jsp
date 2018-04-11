@@ -49,12 +49,16 @@ User user = (User) request.getAttribute("user");
      <form action='' user method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
-       <button type="submit">Submit</button> 
-  </form>
-<% } } %>
+       <button type="submit">Submit</button>
+     </form>
+<% } else{ %>
+      <form action="/direct/<%= user.getName() %>">
+       <input type="submit" value="Send <%= user.getName() %> a direct message" />
+      </form>
+  <% }
+  } %>
     <br>
     <br>
-  
   </div>
   <div id="container">
    <h2>Sent Messages</h2>
