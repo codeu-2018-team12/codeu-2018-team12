@@ -42,6 +42,13 @@ public class ProfileIntegrationTest {
 
   @Test
   public void testGetProfile_NoUser() throws IOException, SAXException {
+    // HttpUnit 1.7.2 (the latest version) requires servlets 2.4, which
+    // requires Jasper 6, which does not support Java 9.
+    if (System.getProperty("java.version").startsWith("9.")) {
+      System.err.println("Skipping integration test due to Java 9.");
+      return;
+    }
+
     WebRequest request = new GetMethodWebRequest("http://dummy/profile/dummy_user");
     WebResponse response = servletClient.getResponse(request);
 

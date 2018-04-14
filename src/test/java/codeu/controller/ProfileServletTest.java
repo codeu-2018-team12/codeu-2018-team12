@@ -32,7 +32,6 @@ public class ProfileServletTest {
   private ConversationStore mockConversationStore;
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
-  private User mockUser;
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
@@ -69,7 +68,14 @@ public class ProfileServletTest {
   public void testDoGet() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
 
-    User testUser = new User(UUID.randomUUID(), "test_user", "password", null, Instant.now());
+    User testUser =
+        new User(
+            UUID.randomUUID(),
+            "test_user",
+            "password",
+            null,
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_user")).thenReturn(testUser);
 
     List<Message> fakeMessageList = new ArrayList<>();

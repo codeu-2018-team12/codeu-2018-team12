@@ -25,6 +25,7 @@ public class User {
   private final String hashedPassword;
   private String biography;
   private final Instant creation;
+  private String email;
 
   /**
    * Constructs a new User.
@@ -33,13 +34,21 @@ public class User {
    * @param name the username of this User
    * @param hashedPassword the hashed password of this User
    * @param creation the creation time of this User
+   * @param email the email of this user
    */
-  public User(UUID id, String name, String hashedPassword, String biography, Instant creation) {
+  public User(
+      UUID id,
+      String name,
+      String hashedPassword,
+      String biography,
+      Instant creation,
+      String email) {
     this.id = id;
     this.name = name;
     this.hashedPassword = hashedPassword;
     this.biography = biography;
     this.creation = creation;
+    this.email = email;
   }
 
   /** Returns the ID of this User. */
@@ -57,17 +66,30 @@ public class User {
     return hashedPassword;
   }
 
+  /** Returns the bio of this User */
   public String getBio() {
     return biography;
   }
 
-  public void setBio(String newBio) {
-    biography = newBio;
-    PersistentStorageAgent.getInstance().updateEntity(this);
+  /** Returns the email of this User */
+  public String getEmail() {
+    return email;
   }
 
   /** Returns the creation time of this User. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  /** Sets the email of this user with a provided email */
+  public void setEmail(String newEmail) {
+    email = newEmail;
+    PersistentStorageAgent.getInstance().updateUserEntityEmail(this);
+  }
+
+  /** Sets the bio of this user with a provided bio */
+  public void setBio(String newBio) {
+    biography = newBio;
+    PersistentStorageAgent.getInstance().updateUserEntityBiopgraphy(this);
   }
 }

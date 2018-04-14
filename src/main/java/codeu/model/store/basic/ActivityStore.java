@@ -101,6 +101,12 @@ public class ActivityStore {
     return activities;
   }
 
+  /** Access a current subset of activities known to the application sorted with newest first. */
+  public List<Activity> getActivtiyListSorted(List<Activity> activityList) {
+    activityList.sort(activityComparator);
+    return activityList;
+  }
+
   /** Add a new activity to the current set of activities known to the application. */
   public void addActivity(Activity activity) {
     activities.add(activity);
@@ -115,6 +121,25 @@ public class ActivityStore {
       }
     }
     return null;
+  }
+
+  public Activity getActivityWithConversationID(UUID conversationID) {
+    for (Activity activity : activities) {
+      if (activity.getConversationId().equals(conversationID)) {
+        return activity;
+      }
+    }
+    return null;
+  }
+
+  public List<Activity> getActivitiesWithUserID(UUID userID) {
+    ArrayList<Activity> userActivities = new ArrayList<>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(userID)) {
+        userActivities.add(activity);
+      }
+    }
+    return userActivities;
   }
 
   /** Sets the list of activities stored by this ActivityStore. */

@@ -40,11 +40,16 @@ public class ActivityServlet extends HttpServlet {
 
     List<Activity> activities = activityStore.getAllActivitiesSorted();
     request.setAttribute("activities", activities);
-
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException, ServletException {}
+      throws IOException, ServletException {
+    String button = request.getParameter("button");
+
+    if ("personalizeActivities".equals(button)) {
+      response.sendRedirect("/personalActivityFeed");
+    }
+  }
 }

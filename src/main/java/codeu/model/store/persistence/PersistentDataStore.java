@@ -69,10 +69,11 @@ public class PersistentDataStore {
         String password = (String) entity.getProperty("password");
         String biography = (String) entity.getProperty("biography");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        String email = (String) entity.getProperty("email");
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
-        User user = new User(uuid, userName, password, biography, creationTime);
+        User user = new User(uuid, userName, password, biography, creationTime, email);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -104,6 +105,7 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
+        @SuppressWarnings("unchecked")
         List<String> users = (List<String>) entity.getProperty("users");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
@@ -201,6 +203,7 @@ public class PersistentDataStore {
     userEntity.setProperty("password", user.getPassword());
     userEntity.setProperty("biography", user.getBio());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
+    userEntity.setProperty("email", user.getEmail());
     datastore.put(userEntity);
   }
 
@@ -238,8 +241,8 @@ public class PersistentDataStore {
     datastore.put(activityEntity);
   }
 
-  /** Updates a Conversation object in the Datastore service */
-  public void updateEntity(Conversation conversation) {
+  /** Updates the users property of a Conversation object in the Datastore service */
+  public void updateConversationEntityUsers(Conversation conversation) {
     Query query =
         new Query("chat-conversations")
             .setFilter(
@@ -250,14 +253,25 @@ public class PersistentDataStore {
     datastore.put(resultEntity);
   }
 
-  /** Updates a User object in the Datstore service */
-  public void updateEntity(User user) {
+  /** Updates the biography property of a User object in the Datastore service */
+  public void updateUserEntityBiography(User user) {
     Query query =
         new Query("chat-users")
             .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
     resultEntity.setProperty("biography", user.getBio());
+    datastore.put(resultEntity);
+  }
+
+  /** Updates the email property of a User object in the Datastore service */
+  public void updateUserEntityEmail(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    resultEntity.setProperty("email", user.getEmail());
     datastore.put(resultEntity);
   }
 }

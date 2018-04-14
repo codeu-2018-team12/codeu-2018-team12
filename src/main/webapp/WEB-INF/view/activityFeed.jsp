@@ -62,6 +62,12 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
          %>
       </ul>
     </div>
+    <div id="personalizeActivities">
+      <p>Want to see activities that pertain to you and the conversations you have joined?<p>
+      <form id="personalizeForm" action="/activityFeed" method="POST">
+        <button type="submit" name="button" value="personalizeActivities">Personalize Activity Feed</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>

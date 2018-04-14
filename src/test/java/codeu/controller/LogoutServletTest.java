@@ -29,7 +29,7 @@ public class LogoutServletTest {
 
     logoutServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockSession).setAttribute("user", null);
+    Mockito.verify(mockSession).invalidate();
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
 }

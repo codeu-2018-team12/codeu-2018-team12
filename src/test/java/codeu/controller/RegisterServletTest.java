@@ -56,6 +56,7 @@ public class RegisterServletTest {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
     Mockito.when(mockRequest.getParameter("password")).thenReturn("test password");
     Mockito.when(mockRequest.getParameter("confirmPassword")).thenReturn("test password");
+    Mockito.when(mockRequest.getParameter("email")).thenReturn("testEmail");
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(false);
@@ -127,6 +128,18 @@ public class RegisterServletTest {
 
     Mockito.verify(mockRequest)
         .setAttribute("error", "Please enter a password that is at least 8 characters.");
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
+  @Test
+  public void testDoPost_EmptyEmail() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
+    Mockito.when(mockRequest.getParameter("password")).thenReturn("password");
+    Mockito.when(mockRequest.getParameter("email")).thenReturn("");
+
+    registerServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockRequest).setAttribute("error", "Please enter a confirmation password.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 

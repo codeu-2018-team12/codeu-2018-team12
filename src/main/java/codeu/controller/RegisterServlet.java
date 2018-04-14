@@ -62,6 +62,7 @@ public class RegisterServlet extends HttpServlet {
 
     String username = request.getParameter("username");
     String password = request.getParameter("password");
+    String email = request.getParameter("email");
     String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
     String confirmPassword = request.getParameter("confirmPassword");
 
@@ -95,7 +96,13 @@ public class RegisterServlet extends HttpServlet {
       return;
     }
 
-    User user = new User(UUID.randomUUID(), username, passwordHash, null, Instant.now());
+    if (email.equals("")) {
+      request.setAttribute("error", "Please enter an email.");
+      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
+      return;
+    }
+
+    User user = new User(UUID.randomUUID(), username, passwordHash, null, Instant.now(), email);
     userStore.addUser(user);
 
     String message =
