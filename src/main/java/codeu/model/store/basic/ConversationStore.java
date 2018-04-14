@@ -104,6 +104,48 @@ public class ConversationStore {
     return conversations;
   }
 
+  public List<Conversation> getAllPublicConversations() {
+    ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getIsPublic()) {
+        publicConversations.add(convo);
+      }
+    }
+    return publicConversations;
+  }
+
+  public List<Conversation> getAllPublicConversationsSorted() {
+    ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getIsPublic()) {
+        publicConversations.add(convo);
+      }
+    }
+    publicConversations.sort(convoComparator);
+    return publicConversations;
+  }
+
+  public List<Conversation> getAllPermittedConversations(UUID user) {
+    ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.hasPermission(user)) {
+        permittedConversations.add(convo);
+      }
+    }
+    return permittedConversations;
+  }
+
+  public List<Conversation> getAllPermittedConversationsSorted(UUID user) {
+    ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.hasPermission(user)) {
+        permittedConversations.add(convo);
+      }
+    }
+    permittedConversations.sort(convoComparator);
+    return permittedConversations;
+  }
+
   /** Add a new conversation to the current set of conversations known to the application. */
   public void addConversation(Conversation conversation) {
     conversations.add(conversation);

@@ -71,6 +71,10 @@ public class PersonalActivityServlet extends HttpServlet {
       throws IOException, ServletException {
 
     String username = (String) request.getSession().getAttribute("user");
+    if (username == null) {
+      response.sendRedirect("/activityFeed");
+      return;
+    }
     User user = userStore.getUser(username);
     UUID userID = user.getId();
     List<Conversation> conversations = conversationStore.getAllConversationsSorted();
@@ -79,12 +83,10 @@ public class PersonalActivityServlet extends HttpServlet {
 
     // retrieve activities for the conversations a user has joined
     for (Conversation conversation : conversations) {
-      List<User> conversationUsers = conversation.getConversationUsers();
-      for (User conversationUser : conversationUsers) {
-        if (conversationUser.equals(user)) {
-          conversationActivities.add(
-              activityStore.getActivityWithConversationID(conversation.getId()));
-        }
+      List<UUID> conversationUsers = conversation.getConversationUsers();
+      if (conversationUsers.contains(user.getId())) {
+        conversationActivities.add(
+            activityStore.getActivityWithConversationID(conversation.getId()));
       }
     }
     tailoredActivities.addAll(conversationActivities);
@@ -100,7 +102,7 @@ public class PersonalActivityServlet extends HttpServlet {
     tailoredActivities.addAll(hashSet);
 
     // sort the activities
-    List<Activity> personalizedActivities = activityStore.getActivtiyListSorted(tailoredActivities);
+    List<Activity> personalizedActivities = activityStore.getActivityListSorted(tailoredActivities);
 
     request.setAttribute("activities", personalizedActivities);
     request

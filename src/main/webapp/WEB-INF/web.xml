@@ -81,6 +81,16 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>DirectMessageServlet</servlet-name>
+    <servlet-class>codeu.controller.DirectMessageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DirectMessageServlet</servlet-name>
+    <url-pattern>/direct/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>TestDataServlet</servlet-name>
     <servlet-class>codeu.controller.TestDataServlet</servlet-class>
   </servlet>

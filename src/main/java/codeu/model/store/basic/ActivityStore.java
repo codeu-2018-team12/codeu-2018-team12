@@ -101,8 +101,50 @@ public class ActivityStore {
     return activities;
   }
 
+  public List<Activity> getAllPermittedActivities(UUID user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.hasPermission(user)) {
+        permittedActivities.add(act);
+      }
+    }
+    return permittedActivities;
+  }
+
+  public List<Activity> getAllPermittedActivitiesSorted(UUID user) {
+    ArrayList<Activity> permittedActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.hasPermission(user)) {
+        permittedActivities.add(act);
+      }
+    }
+    permittedActivities.sort(activityComparator);
+    return permittedActivities;
+  }
+
+  public List<Activity> getAllPublicActivities() {
+    ArrayList<Activity> publicActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.getIsPublic()) {
+        publicActivities.add(act);
+      }
+    }
+    return publicActivities;
+  }
+
+  public List<Activity> getAllPublicActivitiesSorted() {
+    ArrayList<Activity> publicActivities = new ArrayList();
+    for (Activity act : activities) {
+      if (act.getIsPublic()) {
+        publicActivities.add(act);
+      }
+    }
+    publicActivities.sort(activityComparator);
+    return publicActivities;
+  }
+
   /** Access a current subset of activities known to the application sorted with newest first. */
-  public List<Activity> getActivtiyListSorted(List<Activity> activityList) {
+  public List<Activity> getActivityListSorted(List<Activity> activityList) {
     activityList.sort(activityComparator);
     return activityList;
   }
@@ -140,6 +182,48 @@ public class ActivityStore {
       }
     }
     return userActivities;
+  }
+
+  public List<Activity> getAllPublicActivitiesWithUserId(UUID user) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.getIsPublic()) {
+        result.add(activity);
+      }
+    }
+    return result;
+  }
+
+  public List<Activity> getAllPublicActivitiesWithUserIdSorted(UUID user) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.getIsPublic()) {
+        result.add(activity);
+      }
+    }
+    result.sort(activityComparator);
+    return result;
+  }
+
+  public List<Activity> getAllPermittedActivitiesWithUserId(UUID user, UUID loggedInUser) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
+        result.add(activity);
+      }
+    }
+    return result;
+  }
+
+  public List<Activity> getAllPermittedActivitiesWithUserIdSorted(UUID user, UUID loggedInUser) {
+    ArrayList<Activity> result = new ArrayList<Activity>();
+    for (Activity activity : activities) {
+      if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
+        result.add(activity);
+      }
+    }
+    result.sort(activityComparator);
+    return result;
   }
 
   /** Sets the list of activities stored by this ActivityStore. */
