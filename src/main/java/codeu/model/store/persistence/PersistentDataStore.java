@@ -105,10 +105,17 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
-        @SuppressWarnings("unchecked")
-        List<String> users = (List<String>) entity.getProperty("users");
+        List<String> users =
+            entity.getProperty("users") == null
+                ? new ArrayList<String>()
+                : (List<String>) entity.getProperty("users");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
+        boolean isPublic =
+            entity.getProperty("isPublic") == null
+                ? true
+                : ((String) entity.getProperty("isPublic")).equals("true");
+        Conversation conversation =
+            new Conversation(uuid, ownerUuid, title, creationTime, isPublic);
         datastore.put(entity);
         conversation.setUsers(users);
         conversations.add(conversation);
@@ -179,10 +186,28 @@ public class PersistentDataStore {
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String activityType = (String) entity.getProperty("activity_type");
         String activityMessage = (String) entity.getProperty("activity_message");
-
+        List<String> strings =
+            entity.getProperty("users") == null
+                ? new ArrayList<String>()
+                : (List<String>) entity.getProperty("users");
+        List<UUID> users = new ArrayList<UUID>();
+        for (String str : strings) {
+          users.add(UUID.fromString(str));
+        }
+        boolean isPublic =
+            entity.getProperty("isPublic") == null
+                ? true
+                : ((String) entity.getProperty("isPublic")).equals("true");
         Activity activity =
             new Activity(
-                uuid, memberId, conversationId, creationTime, activityType, activityMessage);
+                uuid,
+                memberId,
+                conversationId,
+                creationTime,
+                activityType,
+                activityMessage,
+                users,
+                isPublic);
         activities.add(activity);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -226,6 +251,7 @@ public class PersistentDataStore {
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     conversationEntity.setProperty("users", conversation.getUserIdsAsStrings());
+    conversationEntity.setProperty("isPublic", Boolean.toString(conversation.getIsPublic()));
     datastore.put(conversationEntity);
   }
 
@@ -238,6 +264,8 @@ public class PersistentDataStore {
     activityEntity.setProperty("creation_time", activity.getCreationTime().toString());
     activityEntity.setProperty("activity_type", activity.getActivityType());
     activityEntity.setProperty("activity_message", activity.getActivityMessage());
+    activityEntity.setProperty("users", activity.getUserIdsAsStrings());
+    activityEntity.setProperty("isPublic", Boolean.toString(activity.getIsPublic()));
     datastore.put(activityEntity);
   }
 
@@ -249,8 +277,10 @@ public class PersistentDataStore {
                 new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
-    resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
-    datastore.put(resultEntity);
+    if (resultEntity != null) {
+      resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
+      datastore.put(resultEntity);
+    }
   }
 
   /** Updates the biography property of a User object in the Datastore service */

@@ -125,7 +125,7 @@ public class PersistentStorageAgent {
   }
 
   /** Updates a User object in the Datastore service */
-  public void updateUserEntityBiopgraphy(User user) {
+  public void updateUserEntityBiography(User user) {
     persistentDataStore.updateUserEntityBiography(user);
   }
 

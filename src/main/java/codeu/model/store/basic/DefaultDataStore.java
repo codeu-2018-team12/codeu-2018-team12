@@ -191,7 +191,9 @@ public class DefaultDataStore {
               conversationId,
               Instant.now(),
               activityType,
-              activityMessage);
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
       PersistentStorageAgent.getInstance().writeThrough(activity);
       activities.add(activity);
     }

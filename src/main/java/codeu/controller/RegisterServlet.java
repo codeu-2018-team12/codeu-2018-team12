@@ -6,6 +6,7 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -105,15 +106,21 @@ public class RegisterServlet extends HttpServlet {
     User user = new User(UUID.randomUUID(), username, passwordHash, null, Instant.now(), email);
     userStore.addUser(user);
 
-    String message =
-        "<a href=\"/profile/" + username + "\">" + username + "</a>" + " created an account!";
+    String message = "created an account!";
     UUID userId = user.getId();
 
     UUID conversationId = new UUID(0L, 0L);
 
     Activity activity =
         new Activity(
-            UUID.randomUUID(), userId, conversationId, Instant.now(), "joinedApp", message);
+            UUID.randomUUID(),
+            userId,
+            conversationId,
+            Instant.now(),
+            "joinedApp",
+            message,
+            new ArrayList<UUID>(),
+            true);
     activityStore.addActivity(activity);
 
     response.sendRedirect("/login");

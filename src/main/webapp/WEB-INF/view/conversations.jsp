@@ -14,6 +14,7 @@
   limitations under the License.
 --%>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
@@ -52,6 +53,7 @@
     <%
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
+    List<Conversation> directMessages = (List<Conversation>) request.getAttribute("directMessages");
     if(conversations == null || conversations.isEmpty()){
     %>
       <p>Create a conversation to get started.</p>
@@ -73,6 +75,31 @@
     }
     %>
     <hr/>
+    <% if(!directMessages.isEmpty()){
+    %>
+      <h1>Direct Messages</h1>
+      <ul class="mdl-list">
+      <%
+      for(Conversation conversation : directMessages){
+        User otherUser = null;
+        User loggedInUser = UserStore.getInstance()
+          .getUser((String) request.getSession().getAttribute("user"));
+        for(UUID id : conversation.getConversationUsers()){
+          if(!id.equals(loggedInUser.getId())){
+            otherUser = UserStore.getInstance().getUser(id);
+            break;
+          }
+        }
+      %>
+      <li><a href="/direct/<%= otherUser.getName() %>">
+        <%= otherUser.getName() %></a></li>
+      <%
+      }
+      %>
+      </ul>
+    <%
+    }
+  %>
   </div>
 </body>
 </html>

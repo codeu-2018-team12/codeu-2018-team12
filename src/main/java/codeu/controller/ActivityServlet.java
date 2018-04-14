@@ -1,7 +1,9 @@
 package codeu.controller;
 
 import codeu.model.data.Activity;
+import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
+import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -15,11 +17,14 @@ public class ActivityServlet extends HttpServlet {
   /** Store class that gives access to activities. */
   private ActivityStore activityStore;
 
+  private UserStore userStore;
+
   /** Set up state for handling activity-related requests */
   @Override
   public void init() throws ServletException {
     super.init();
     setActivityStore(ActivityStore.getInstance());
+    setUserStore(UserStore.getInstance());
   }
 
   /**
@@ -30,6 +35,10 @@ public class ActivityServlet extends HttpServlet {
     this.activityStore = activityStore;
   }
 
+  void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
   /**
    * This function fires when a user navigates to the activity feed page. It gets a list of all
    * current messages and forwards them to activityFeed.jsp.
@@ -37,8 +46,11 @@ public class ActivityServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-
-    List<Activity> activities = activityStore.getAllActivitiesSorted();
+    User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
+    List<Activity> activities =
+        loggedInUser == null
+            ? activityStore.getAllPublicActivities()
+            : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
     request.setAttribute("activities", activities);
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }

@@ -1,16 +1,15 @@
 package codeu.controller;
 
-import codeu.model.data.Message;
+import codeu.model.data.Activity;
 import codeu.model.data.User;
+import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
-import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,7 +29,7 @@ public class ProfileServletTest {
   private HttpServletResponse mockResponse;
   private RequestDispatcher mockRequestDispatcher;
   private ConversationStore mockConversationStore;
-  private MessageStore mockMessageStore;
+  private ActivityStore mockActivityStore;
   private UserStore mockUserStore;
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -52,8 +51,8 @@ public class ProfileServletTest {
     mockConversationStore = Mockito.mock(ConversationStore.class);
     profileServlet.setConversationStore(mockConversationStore);
 
-    mockMessageStore = Mockito.mock(MessageStore.class);
-    profileServlet.setMessageStore(mockMessageStore);
+    mockActivityStore = Mockito.mock(ActivityStore.class);
+    profileServlet.setActivityStore(mockActivityStore);
 
     mockUserStore = Mockito.mock(UserStore.class);
     profileServlet.setUserStore(mockUserStore);
@@ -67,7 +66,10 @@ public class ProfileServletTest {
   @Test
   public void testDoGet() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
-
+    Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
+    User testloggedInUser =
+        new User(UUID.randomUUID(), "testuser", null, null, Instant.now(), null);
+    Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testloggedInUser);
     User testUser =
         new User(
             UUID.randomUUID(),
@@ -77,29 +79,38 @@ public class ProfileServletTest {
             Instant.now(),
             "codeUChatTestEmail@gmail.com");
     Mockito.when(mockUserStore.getUser("test_user")).thenReturn(testUser);
-
-    List<Message> fakeMessageList = new ArrayList<>();
-    fakeMessageList.add(
-        new Message(
-            UUID.randomUUID(),
+    ArrayList<Activity> activities = new ArrayList<Activity>();
+    Activity activityOne =
+        new Activity(
             UUID.randomUUID(),
             testUser.getId(),
-            "test message 1",
-            Instant.ofEpochMilli(2000)));
-    fakeMessageList.add(
-        new Message(
             UUID.randomUUID(),
+            Instant.ofEpochMilli(2000),
+            "leftConvo",
+            "test_message",
+            new ArrayList<UUID>(),
+            false);
+    Activity activityTwo =
+        new Activity(
             UUID.randomUUID(),
             testUser.getId(),
-            "test message 2",
-            Instant.ofEpochMilli(1000)));
-    Mockito.when(mockMessageStore.getMessagesByAuthorSorted(testUser.getId()))
-        .thenReturn(fakeMessageList);
+            UUID.randomUUID(),
+            Instant.ofEpochMilli(1000),
+            "leftConvo",
+            "test_message",
+            new ArrayList<UUID>(),
+            true);
+    activities.add(activityOne);
+    activities.add(activityTwo);
+    Mockito.when(
+            mockActivityStore.getAllPermittedActivitiesWithUserIdSorted(
+                testUser.getId(), testloggedInUser.getId()))
+        .thenReturn(activities);
 
     profileServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("user", testUser);
-    Mockito.verify(mockRequest).setAttribute("messages", fakeMessageList);
+    Mockito.verify(mockRequest).setAttribute("activities", activities);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
@@ -112,7 +123,7 @@ public class ProfileServletTest {
     profileServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("user", null);
-    Mockito.verify(mockRequest).setAttribute("messages", null);
+    Mockito.verify(mockRequest).setAttribute("activities", null);
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 }

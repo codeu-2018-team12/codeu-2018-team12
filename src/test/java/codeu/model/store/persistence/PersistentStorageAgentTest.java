@@ -5,6 +5,7 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
@@ -91,7 +92,9 @@ public class PersistentStorageAgentTest {
             UUID.randomUUID(),
             Instant.now(),
             "messageSent",
-            "sampleMessage");
+            "sampleMessage",
+            new ArrayList<UUID>(),
+            true);
     persistentStorageAgent.writeThrough(activity);
     Mockito.verify(mockPersistentDataStore).writeThrough(activity);
   }
@@ -114,7 +117,7 @@ public class PersistentStorageAgentTest {
             "testbio",
             Instant.now(),
             "codeUChatTestEmail@gmail.com");
-    persistentStorageAgent.updateUserEntityBiopgraphy(user);
+    persistentStorageAgent.updateUserEntityBiography(user);
     Mockito.verify(mockPersistentDataStore).updateUserEntityBiography(user);
   }
 
