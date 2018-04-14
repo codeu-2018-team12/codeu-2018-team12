@@ -131,25 +131,6 @@
   </servlet-mapping>
 
   <servlet>
-<<<<<<< HEAD
-    <servlet-name>Upload</servlet-name>
-    <servlet-class>Upload</servlet-class>
-  </servlet>
-  
-  <servlet>
-    <servlet-name>Serve</servlet-name>
-    <servlet-class>Serve</servlet-class>
-  </servlet>
- 
-  <servlet-mapping>
-    <servlet-name>Upload</servlet-name>
-    <url-pattern>/upload</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>Serve</servlet-name>
-    <url-pattern>/serve</url-pattern>
-=======
     <servlet-name>PersonalActivityServlet</servlet-name>
     <servlet-class>codeu.controller.PersonalActivityServlet</servlet-class>
   </servlet>
@@ -157,7 +138,6 @@
   <servlet-mapping>
     <servlet-name>PersonalActivityServlet</servlet-name>
     <url-pattern>/personalActivityFeed</url-pattern>
->>>>>>> c2b14fba963a88521fc1e76a026e943d97c72e84
   </servlet-mapping>
 
 </web-app>
