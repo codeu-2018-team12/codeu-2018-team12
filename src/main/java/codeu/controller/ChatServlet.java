@@ -328,7 +328,7 @@ public class ChatServlet extends HttpServlet {
 
   // ensures that only users that have just 1 conversation shared are removed from conversation
   // friends
-  public int conversationsShared(UUID u1, UUID u2) {
+  private int conversationsShared(UUID u1, UUID u2) {
     int count = 0;
     List<Conversation> conversations = conversationStore.getAllConversations();
     for (Conversation c : conversations) {

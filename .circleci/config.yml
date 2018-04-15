@@ -4,21 +4,16 @@
 #
 version: 2
 jobs:
-  build:
+  build-java8: &build
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
 
     working_directory: ~/repo
 
     environment:
       MAVEN_OPTS: -Xmx3200m
-    
+
     steps:
       - checkout
 
@@ -38,6 +33,41 @@ jobs:
           paths:
             - ~/.m2
           key: v1-dependencies-{{ checksum "pom.xml" }}
-        
+
       # run tests!
       - run: mvn integration-test
+
+  build-java9:
+    << : *build
+    docker:
+      - image: circleci/openjdk:9-jdk
+
+  deploy:
+    << : *build
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - deploy-dependencies-{{ checksum "pom.xml" }}
+          # fallback to using the latest cache if no exact match is found
+          - deploy-dependencies-
+
+      - run: sed -Ei "s:<version>.*</version>:<version>$(git rev-parse --abbrev-ref HEAD)</version>:" src/main/webapp/WEB-INF/appengine-web.xml
+      - run: cat src/main/webapp/WEB-INF/appengine-web.xml
+      - run: echo "${APPCFG_OAUTH_TOKENS}" > ~/.appcfg_oauth2_tokens_java
+      - run: mvn appengine:update
+      - run: mvn dependency:go-offline
+      - run: 'curl "https://api.github.com/repos/codeu-2018-team12/codeu-2018-team12/statuses/$(git rev-parse HEAD)?access_token=${GITHUB_ACCESS_TOKEN}" -X POST --data ''{"state": "success", "target_url": "https://''"$(git rev-parse --abbrev-ref HEAD)"''-dot-chatu-196017.appspot.com", "description": "Click Details to see a test instance:", "context": "App Engine Demo"}'' '
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: deploy-dependencies-{{ checksum "pom.xml" }}
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build-java8
+      - build-java9
+      - deploy
