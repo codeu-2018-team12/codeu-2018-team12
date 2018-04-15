@@ -15,10 +15,13 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -141,6 +144,41 @@ public class ActivityStore {
     }
     publicActivities.sort(activityComparator);
     return publicActivities;
+  }
+
+  /**
+   * Access list of activities with respect to user privacy settings
+   *
+   * @param currentUser the current logged in user
+   * @param activities1 the list of from which to activities to pull
+   * @return list of activities
+   */
+  public List<Activity> getActivitiesPerPrivacy(User currentUser, List<Activity> activities1) {
+    UserStore userstore = UserStore.getInstance();
+    List<Activity> activitiesPerPrivacy = new ArrayList<>();
+    for (Activity a : activities1) {
+      for (UUID u : a.getUsers()) {
+        User user = userstore.getUser(u);
+        if (currentUser.getConversationFriends().contains(u)
+            && (user.getActivityFeedPrivacy().equals("someContent"))) {
+          activitiesPerPrivacy.add(a);
+        } else if (user.getActivityFeedPrivacy().equals("allContent")) {
+          activitiesPerPrivacy.add(a);
+        }
+        if (currentUser.getActivityFeedPrivacy().equals("noContent")) {
+          if (a.getUserId().equals(currentUser.getId())) {
+            activitiesPerPrivacy.add(a);
+          }
+        }
+      }
+    }
+    // remove any duplicates
+    Set<Activity> hashSet = new HashSet<>(activitiesPerPrivacy);
+    activitiesPerPrivacy.clear();
+    activitiesPerPrivacy.addAll(hashSet);
+
+    activitiesPerPrivacy.sort(activityComparator);
+    return activitiesPerPrivacy;
   }
 
   /** Access a current subset of activities known to the application sorted with newest first. */

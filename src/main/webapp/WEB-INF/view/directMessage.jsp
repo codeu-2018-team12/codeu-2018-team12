@@ -8,7 +8,7 @@
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
-User loggedInUser = (User) request.getAttribute("loggdInUser");
+User loggedInUser = (User) request.getAttribute("loggedInUser");
 User otherUser = (User) request.getAttribute("otherUser");
 %>
 

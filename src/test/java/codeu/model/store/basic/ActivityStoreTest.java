@@ -114,4 +114,7 @@ public class ActivityStoreTest {
     Assert.assertEquals(expectedActivity.getActivityType(), actualActivity.getActivityType());
     Assert.assertEquals(expectedActivity.getActivityMessage(), actualActivity.getActivityMessage());
   }
+
+  @Test
+  public void testGetActivitiesPerPrivacy() {}
 }

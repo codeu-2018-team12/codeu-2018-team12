@@ -190,7 +190,6 @@ public class DirectMessageServlet extends HttpServlet {
 
       String activityMessage =
           " sent a direct message to " + otherUser.getName() + ": " + finalMessageContent;
-
       Activity activity =
           new Activity(
               UUID.randomUUID(),
@@ -221,10 +220,11 @@ public class DirectMessageServlet extends HttpServlet {
 
     String msgBody =
         user.getName()
-            + " sent you a direct message on "
+            + " sent a message in "
+            + conversation.getTitle()
+            + " on "
             + conversation.getCreationTime()
-            + " while you were away. \n \n "
-            + "Please log in to view this message.";
+            + " while you were away. \n \n ";
 
     SessionListener currentSession = SessionListener.getInstance();
 
@@ -232,25 +232,32 @@ public class DirectMessageServlet extends HttpServlet {
       User conversationUser = userStore.getUser(conversationUserUUID);
       if (conversationUser != user
           && conversationUser != null
-          && !currentSession.isLoggedIn(conversationUser.getName())) {
-        try {
-          javax.mail.Message msg = new MimeMessage(session);
-          msg.setFrom(
-              new InternetAddress(
-                  "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
-          msg.addRecipient(
-              javax.mail.Message.RecipientType.TO,
-              new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
-          msg.setSubject(user.getName() + " has sent you a message");
-          msg.setText(msgBody);
-          Transport.send(msg);
-        } catch (AddressException e) {
-          System.err.println("Invalid email address formatting. Email not sent.");
-        } catch (MessagingException e) {
-          System.err.println("An error has occurred with this message. Email not sent.");
-        } catch (UnsupportedEncodingException e) {
-          System.err.println("This character encoding is not supported. Email not sent");
+          && !currentSession.isLoggedIn(conversationUser.getName())
+          && conversationUser.getNotificationStatus()) {
+
+        if (user.getNotificationFrequency().equals("everyMessage")) {
+          try {
+            javax.mail.Message msg = new MimeMessage(session);
+            msg.setFrom(
+                new InternetAddress(
+                    "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
+            msg.addRecipient(
+                javax.mail.Message.RecipientType.TO,
+                new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
+            msg.setSubject(user.getName() + " has sent you a message");
+            msgBody += " Please log in to view this message";
+            msg.setText(msgBody);
+            Transport.send(msg);
+          } catch (AddressException e) {
+            System.err.println("Invalid email address formatting. Email not sent.");
+          } catch (MessagingException e) {
+            System.err.println("An error has occurred with this message. Email not sent.");
+          } catch (UnsupportedEncodingException e) {
+            System.err.println("This character encoding is not supported. Email not sent");
+          }
         }
+      } else {
+        user.addNotification(msgBody);
       }
     }
   }

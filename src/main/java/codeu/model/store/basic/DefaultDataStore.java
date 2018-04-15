@@ -18,7 +18,6 @@ import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
-import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -119,7 +118,6 @@ public class DefaultDataStore {
               Instant.now(),
               "codeUChatTest@gmail.com");
       UserStore.getInstance().addUser(user);
-      PersistentStorageAgent.getInstance().writeThrough(user);
       users.add(user);
     }
   }
@@ -130,7 +128,6 @@ public class DefaultDataStore {
       String title = "Conversation_" + i;
       Conversation conversation =
           new Conversation(UUID.randomUUID(), user.getId(), title, Instant.now());
-      PersistentStorageAgent.getInstance().writeThrough(conversation);
       conversations.add(conversation);
     }
   }
@@ -143,7 +140,6 @@ public class DefaultDataStore {
       Message message =
           new Message(
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
-      PersistentStorageAgent.getInstance().writeThrough(message);
       messages.add(message);
     }
   }
@@ -194,7 +190,6 @@ public class DefaultDataStore {
               activityMessage,
               conversation.getConversationUsers(),
               conversation.getIsPublic());
-      PersistentStorageAgent.getInstance().writeThrough(activity);
       activities.add(activity);
     }
   }

@@ -124,13 +124,48 @@ public class PersistentStorageAgent {
     persistentDataStore.updateConversationEntityUsers(conversation);
   }
 
-  /** Updates a User object in the Datastore service */
+  /** Updates the biography of a User object in the Datastore service */
   public void updateUserEntityBiography(User user) {
     persistentDataStore.updateUserEntityBiography(user);
   }
 
-  /** Updates a User object in the Datastore service */
+  /** Updates the email of a User object in the Datastore service */
   public void updateUserEntityEmail(User user) {
     persistentDataStore.updateUserEntityEmail(user);
+  }
+
+  /** Updates the password of a User object in the Datastore service */
+  public void updateUserEntityPassword(User user) {
+    persistentDataStore.updateUserEntityPassword(user);
+  }
+
+  /** Updates the notification status of a User in the Datastore service */
+  public void updateUserEntityNotificationStatus(User user) {
+    persistentDataStore.updateUserEntityNotificationStatus(user);
+  }
+
+  /** Updates the notification frequency of a User in the Datastore service */
+  public void updateUserEntityNotificationFrequency(User user) {
+    persistentDataStore.updateUserEntityNotificationFrequency(user);
+  }
+
+  /** Updates the stored notifications of a User in the Datastore service */
+  public void updateUserEntityStoredNotifications(User user) {
+    persistentDataStore.updateUserEntityStoredNotifications(user);
+  }
+
+  /** Updates the profile privacy of a User in the Datastore service */
+  public void updateUserEntityProfilePrivacy(User user) {
+    persistentDataStore.updateUserEntityProfilePrivacy(user);
+  }
+
+  /** Updates the activity feed privacy of a User in the Datastore service */
+  public void updateUserEntityActivityFeedPrivacy(User user) {
+    persistentDataStore.updateUserEntityActivityFeedPrivacy(user);
+  }
+
+  /** Updates the activity feed privacy of a User in the Datastore service */
+  public void updateUserEntityConversationFriends(User user) {
+    persistentDataStore.updateUserEntityConversationFriends(user);
   }
 }

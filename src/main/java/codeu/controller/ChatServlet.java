@@ -26,6 +26,7 @@ import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -170,7 +171,18 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
+      UUID currUserId = user.getId();
+      // avoid ConcurrentModificationException
+      List<User> addConversationFriends = new ArrayList<>();
+      for (UUID u : conversation.getConversationUsers()) {
+        if (conversationsShared(currUserId, u) < 1)
+          addConversationFriends.add(UserStore.getInstance().getUser(u));
+      }
+      for (User u1 : addConversationFriends) {
+        user.addConversationFriend(u1);
+      }
       conversation.addUser(user.getId());
+
       String activityMessage =
           " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -179,7 +191,7 @@ public class ChatServlet extends HttpServlet {
               user.getId(),
               conversation.getId(),
               Instant.now(),
-              "joinedConvo",
+              "leftConvo",
               activityMessage,
               conversation.getConversationUsers(),
               conversation.getIsPublic());
@@ -187,7 +199,19 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("leaveButton".equals(button)) {
-      conversation.removeUser(user.getId());
+      UUID currUserId = user.getId();
+      // avoid ConcurrentModificationException
+      List<User> removeConversationFriends = new ArrayList<>();
+      for (UUID u : conversation.getConversationUsers()) {
+        if (conversationsShared(currUserId, u) == 1) {
+          removeConversationFriends.add(UserStore.getInstance().getUser(u));
+        }
+        for (User u1 : removeConversationFriends) {
+          user.removeConversationFriend(u1);
+        }
+        conversation.removeUser(user.getId());
+      }
+
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -230,7 +254,6 @@ public class ChatServlet extends HttpServlet {
               + "</a>"
               + ": "
               + finalMessageContent;
-
       Activity activity =
           new Activity(
               UUID.randomUUID(),
@@ -242,6 +265,7 @@ public class ChatServlet extends HttpServlet {
               conversation.getConversationUsers(),
               conversation.getIsPublic());
       activityStore.addActivity(activity);
+
       sendEmailNotification(user, conversation);
     }
     // redirect to a GET request
@@ -265,8 +289,7 @@ public class ChatServlet extends HttpServlet {
             + conversation.getTitle()
             + " on "
             + conversation.getCreationTime()
-            + " while you were away. \n \n "
-            + "Please log in to view this message.";
+            + " while you were away. \n \n ";
 
     SessionListener currentSession = SessionListener.getInstance();
 
@@ -274,26 +297,45 @@ public class ChatServlet extends HttpServlet {
       User conversationUser = userStore.getUser(conversationUserUUID);
       if (conversationUser != user
           && conversationUser != null
-          && !currentSession.isLoggedIn(conversationUser.getName())) {
-        try {
-          javax.mail.Message msg = new MimeMessage(session);
-          msg.setFrom(
-              new InternetAddress(
-                  "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
-          msg.addRecipient(
-              javax.mail.Message.RecipientType.TO,
-              new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
-          msg.setSubject(user.getName() + " has sent you a message");
-          msg.setText(msgBody);
-          Transport.send(msg);
-        } catch (AddressException e) {
-          System.err.println("Invalid email address formatting. Email not sent.");
-        } catch (MessagingException e) {
-          System.err.println("An error has occurred with this message. Email not sent.");
-        } catch (UnsupportedEncodingException e) {
-          System.err.println("This character encoding is not supported. Email not sent");
+          && !currentSession.isLoggedIn(conversationUser.getName())
+          && conversationUser.getNotificationStatus()) {
+        if (user.getNotificationFrequency().equals("everyMessage")) {
+          try {
+            javax.mail.Message msg = new MimeMessage(session);
+            msg.setFrom(
+                new InternetAddress(
+                    "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
+            msg.addRecipient(
+                javax.mail.Message.RecipientType.TO,
+                new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
+            msg.setSubject(user.getName() + " has sent you a message");
+            msgBody += " Please log in to view this message";
+            msg.setText(msgBody);
+            Transport.send(msg);
+          } catch (AddressException e) {
+            System.err.println("Invalid email address formatting. Email not sent.");
+          } catch (MessagingException e) {
+            System.err.println("An error has occurred with this message. Email not sent.");
+          } catch (UnsupportedEncodingException e) {
+            System.err.println("This character encoding is not supported. Email not sent");
+          }
         }
+      } else {
+        user.addNotification(msgBody);
       }
     }
+  }
+
+  // ensures that only users that have just 1 conversation shared are removed from conversation
+  // friends
+  private int conversationsShared(UUID u1, UUID u2) {
+    int count = 0;
+    List<Conversation> conversations = conversationStore.getAllConversations();
+    for (Conversation c : conversations) {
+      if (c.getConversationUsers().contains(u1) && c.getConversationUsers().contains(u2)) {
+        count++;
+      }
+    }
+    return count;
   }
 }
