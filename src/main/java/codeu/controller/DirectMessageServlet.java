@@ -201,7 +201,7 @@ public class DirectMessageServlet extends HttpServlet {
               conversation.getConversationUsers(),
               conversation.getIsPublic());
       activityStore.addActivity(activity);
-      //sendEmailNotification(loggedInUser, conversation);
+      sendEmailNotification(loggedInUser, conversation);
     }
     // redirect to a GET request
     response.sendRedirect("/direct/" + otherUser.getName());

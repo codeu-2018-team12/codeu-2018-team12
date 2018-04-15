@@ -1,6 +1,7 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class ActivityStoreTest {
 
   private final UUID USER_ONE = UUID.randomUUID();
   private final UUID USER_TWO = UUID.randomUUID();
+
 
   private List<UUID> users = Arrays.asList(USER_ONE);
 
@@ -113,5 +115,10 @@ public class ActivityStoreTest {
     Assert.assertEquals(expectedActivity.getCreationTime(), actualActivity.getCreationTime());
     Assert.assertEquals(expectedActivity.getActivityType(), actualActivity.getActivityType());
     Assert.assertEquals(expectedActivity.getActivityMessage(), actualActivity.getActivityMessage());
+  }
+
+  @Test
+  public void testGetActivitiesPerPrivacy() {
+
   }
 }
