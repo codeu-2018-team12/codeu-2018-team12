@@ -94,6 +94,11 @@ public class UserStore {
     return null;
   }
 
+  /**
+   * retrieves users with no content activity feed privacy settings
+   *
+   * @return List of users with no content activity feed privacy settings
+   */
   public List<User> getUsersActivityFeedNoContent() {
     // This approach will be pretty slow if we have many users.
     List<User> noContentUsers = new ArrayList<>();
@@ -105,6 +110,11 @@ public class UserStore {
     return noContentUsers;
   }
 
+  /**
+   * retrieves users with some content activity feed privacy settings
+   *
+   * @return List of users with some content activity feed privacy settings
+   */
   public List<User> getUsersActivityFeedSomeContent() {
     // This approach will be pretty slow if we have many users.
     List<User> someContentUsers = new ArrayList<>();
@@ -116,6 +126,11 @@ public class UserStore {
     return someContentUsers;
   }
 
+  /**
+   * retrieves users with no content profile page privacy settings
+   *
+   * @return List of users with no content profile page privacy settings
+   */
   public List<User> getUsersProfileNoContent() {
     // This approach will be pretty slow if we have many users.
     List<User> noContentUsers = new ArrayList<>();
@@ -127,6 +142,11 @@ public class UserStore {
     return noContentUsers;
   }
 
+  /**
+   * retrieves users with some content profile page privacy settings
+   *
+   * @return List of users with some content profile page privacy settings
+   */
   public List<User> getUsersProfileSomeContent() {
     // This approach will be pretty slow if we have many users.
     List<User> someContentUsers = new ArrayList<>();

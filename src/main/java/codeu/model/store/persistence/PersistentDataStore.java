@@ -96,12 +96,20 @@ public class PersistentDataStore {
             ? new LinkedList<String>()
             : (Queue<String>) entity.getProperty("notifications");
         User user = new User(uuid, userName, password, biography, creationTime, email);
-        user.setNotificationFrequency(notificationFrequency);
-        user.setNotificationStatus(notifications);
         user.setNotifications(notificationQueue);
-        user.setProfilePrivacy(profilePrivacy);
-        user.setActivityFeedPrivacy(activityFeedPrivacy);
         user.setConversationFriends(conversationFriends);
+        if (!(activityFeedPrivacy.equals("allContent"))) {
+          user.setActivityFeedPrivacy((activityFeedPrivacy));
+        }
+        if (!(profilePrivacy.equals("allContent"))) {
+          user.setProfilePrivacy((profilePrivacy));
+        }
+        if (!notifications) {
+          user.setNotificationStatus((notifications));
+        }
+        if (!(notificationFrequency.equals("everyMessage"))) {
+          user.setNotificationFrequency((notificationFrequency));
+        }
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -402,7 +410,7 @@ public class PersistentDataStore {
             .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
-    resultEntity.setProperty("activityFeedPrivacy", user.getUserIdsAsStrings());
+    resultEntity.setProperty("activityFeedPrivacy", user.getActivityFeedPrivacy());
     datastore.put(resultEntity);
   }
 
