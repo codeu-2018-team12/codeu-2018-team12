@@ -1,15 +1,11 @@
 package codeu.controller;
 
 import codeu.model.data.Activity;
-import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
-import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,7 +51,8 @@ public class ActivityServlet extends HttpServlet {
         loggedInUser == null
             ? activityStore.getAllPublicActivities()
             : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
-    List<Activity> activities = activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);
+    List<Activity> activities =
+        activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);
     request.setAttribute("activities", activities);
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }

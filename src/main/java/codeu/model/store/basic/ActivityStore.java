@@ -15,11 +15,14 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
-import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -143,7 +146,9 @@ public class ActivityStore {
     return publicActivities;
   }
 
-  /** Access list of activities with respect to user privacy settings
+  /**
+   * Access list of activities with respect to user privacy settings
+   *
    * @param currentUser the current logged in user
    * @param activities1 the list of from which to activities to pull
    * @return list of activities
@@ -151,13 +156,13 @@ public class ActivityStore {
   public List<Activity> getActivitiesPerPrivacy(User currentUser, List<Activity> activities1) {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();
-    for (Activity a: activities1) {
-      for (UUID u: a.getUsers()) {
+    for (Activity a : activities1) {
+      for (UUID u : a.getUsers()) {
         User user = userstore.getUser(u);
-        if (currentUser.getConversationFriends().contains(u) && (user.getActivityFeedPrivacy().equals("someContent"))) {
+        if (currentUser.getConversationFriends().contains(u)
+            && (user.getActivityFeedPrivacy().equals("someContent"))) {
           activitiesPerPrivacy.add(a);
-        }
-        else if (user.getActivityFeedPrivacy().equals("allContent")) {
+        } else if (user.getActivityFeedPrivacy().equals("allContent")) {
           activitiesPerPrivacy.add(a);
         }
         if (currentUser.getActivityFeedPrivacy().equals("noContent")) {
@@ -167,7 +172,7 @@ public class ActivityStore {
         }
       }
     }
-    //remove any duplicates
+    // remove any duplicates
     Set<Activity> hashSet = new HashSet<>(activitiesPerPrivacy);
     activitiesPerPrivacy.clear();
     activitiesPerPrivacy.addAll(hashSet);

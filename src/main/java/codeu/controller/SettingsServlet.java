@@ -86,7 +86,7 @@ public class SettingsServlet extends HttpServlet {
     String notificationFrequency = request.getParameter("notificationFrequency");
     String profilePrivacy = request.getParameter("profilePrivacy");
     String activityFeedPrivacy = request.getParameter("activityFeedPrivacy");
-    String submitSitePrivacy= request.getParameter("submit");
+    String submitSitePrivacy = request.getParameter("submit");
 
     if (email == null && password == null && confirmPassword == null) {
       if (request.getParameter("submitNotification") != null) {
@@ -96,14 +96,16 @@ public class SettingsServlet extends HttpServlet {
             "successNotifications", "You have successfully updated your notification status.");
       }
 
-      if (submitSitePrivacy != null && submitSitePrivacy.equals("submitProfilePrivacy"))  {
+      if (submitSitePrivacy != null && submitSitePrivacy.equals("submitProfilePrivacy")) {
         userStore.getUser(username).setProfilePrivacy(profilePrivacy);
-        request.setAttribute("successPrivacy", "You have successfully updated your profile privacy settings.");
+        request.setAttribute(
+            "successPrivacy", "You have successfully updated your profile privacy settings.");
       }
 
       if (submitSitePrivacy != null && submitSitePrivacy.equals("submitActivityFeedPrivacy")) {
         userStore.getUser(username).setActivityFeedPrivacy(activityFeedPrivacy);
-        request.setAttribute("successPrivacy", "You have successfully updated your activity feed privacy settings.");
+        request.setAttribute(
+            "successPrivacy", "You have successfully updated your activity feed privacy settings.");
       }
     } else {
 

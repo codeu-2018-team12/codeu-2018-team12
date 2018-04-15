@@ -106,9 +106,8 @@ public class ProfileServletTest {
             mockActivityStore.getAllPermittedActivitiesWithUserIdSorted(
                 testUser.getId(), testloggedInUser.getId()))
         .thenReturn(activities);
-    Mockito.when(mockActivityStore.getActivitiesPerPrivacy(testUser,activities))
+    Mockito.when(mockActivityStore.getActivitiesPerPrivacy(testUser, activities))
         .thenReturn(activities);
-
 
     profileServlet.doGet(mockRequest, mockResponse);
 

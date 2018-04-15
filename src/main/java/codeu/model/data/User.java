@@ -14,10 +14,13 @@
 
 package codeu.model.data;
 
-import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.UUID;
 
 /** Class representing a registered user. */
 public class User {
@@ -130,18 +133,22 @@ public class User {
     storedNotifications = newNotifications;
   }
 
-  /**
-   * Returns profile privacy of a user; Either allContent, someContent, or noContent.
-   */
-  public String getProfilePrivacy() { return profilePrivacy; }
+  /** Returns profile privacy of a user; Either allContent, someContent, or noContent. */
+  public String getProfilePrivacy() {
+    return profilePrivacy;
+  }
 
   /*
    * Returns activity feed privacy of a user; Either allContent, someContent, or noContent.
    */
-  public String getActivityFeedPrivacy() { return activityFeedPrivacy; }
+  public String getActivityFeedPrivacy() {
+    return activityFeedPrivacy;
+  }
 
   /** Returns the list of users that are in the same conversations as User */
-  public List<UUID> getConversationFriends() { return conversationFriends; }
+  public List<UUID> getConversationFriends() {
+    return conversationFriends;
+  }
 
   public void setConversationFriends(List<String> users) {
     List<UUID> newUsers = new ArrayList<>();
@@ -216,7 +223,4 @@ public class User {
     conversationFriends.remove(oldConversationFriend.getId());
     PersistentStorageAgent.getInstance().updateUserEntityConversationFriends(this);
   }
-
-
-
 }

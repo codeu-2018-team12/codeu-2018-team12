@@ -23,8 +23,11 @@ import com.google.appengine.api.datastore.DatastoreServiceConfig;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.time.Instant;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
@@ -92,9 +95,10 @@ public class PersistentDataStore {
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
-        Queue<String> notificationQueue = entity.getProperty("notification") == null
-            ? new LinkedList<String>()
-            : (Queue<String>) entity.getProperty("notifications");
+        Queue<String> notificationQueue =
+            entity.getProperty("notification") == null
+                ? new LinkedList<String>()
+                : (Queue<String>) entity.getProperty("notifications");
         User user = new User(uuid, userName, password, biography, creationTime, email);
         user.setNotifications(notificationQueue);
         user.setConversationFriends(conversationFriends);

@@ -195,12 +195,12 @@ public class PersistentStorageAgentTest {
   public void testUpdateEntityProfilePrivacy() {
     User user =
         new User(
-          UUID.randomUUID(),
-          "test_username",
-          "password",
-          "testbio",
-          Instant.now(),
-          "codeUChatTestEmail@gmail.com");
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
     persistentStorageAgent.updateUserEntityProfilePrivacy(user);
     Mockito.verify(mockPersistentDataStore).updateUserEntityProfilePrivacy(user);
   }
@@ -233,5 +233,4 @@ public class PersistentStorageAgentTest {
     persistentStorageAgent.updateUserEntityConversationFriends(user);
     Mockito.verify(mockPersistentDataStore).updateUserEntityConversationFriends(user);
   }
-
 }

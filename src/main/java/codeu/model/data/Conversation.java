@@ -14,7 +14,6 @@
 
 package codeu.model.data;
 
-import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;

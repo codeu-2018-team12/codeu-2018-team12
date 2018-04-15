@@ -190,7 +190,7 @@ public class DirectMessageServlet extends HttpServlet {
 
       String activityMessage =
           " sent a direct message to " + otherUser.getName() + ": " + finalMessageContent;
-        Activity activity =
+      Activity activity =
           new Activity(
               UUID.randomUUID(),
               loggedInUser.getId(),

@@ -172,37 +172,37 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       UUID currUserId = user.getId();
-      //avoid ConcurrentModificationException
+      // avoid ConcurrentModificationException
       List<User> addConversationFriends = new ArrayList<>();
-      for (UUID u: conversation.getConversationUsers()) {
+      for (UUID u : conversation.getConversationUsers()) {
         if (conversationsShared(currUserId, u) < 1)
-        addConversationFriends.add(UserStore.getInstance().getUser(u));
+          addConversationFriends.add(UserStore.getInstance().getUser(u));
       }
       for (User u1 : addConversationFriends) {
         user.addConversationFriend(u1);
       }
       conversation.addUser(user.getId());
 
-        String activityMessage =
-            " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-        Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "leftConvo",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
+      String activityMessage =
+          " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "leftConvo",
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
+      activityStore.addActivity(activity);
     }
 
     if ("leaveButton".equals(button)) {
       UUID currUserId = user.getId();
-      //avoid ConcurrentModificationException
+      // avoid ConcurrentModificationException
       List<User> removeConversationFriends = new ArrayList<>();
-      for (UUID u: conversation.getConversationUsers()) {
+      for (UUID u : conversation.getConversationUsers()) {
         if (conversationsShared(currUserId, u) == 1) {
           removeConversationFriends.add(UserStore.getInstance().getUser(u));
         }
@@ -212,20 +212,19 @@ public class ChatServlet extends HttpServlet {
         conversation.removeUser(user.getId());
       }
 
-        String activityMessage =
-            " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-        Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "leftConvo",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
-
+      String activityMessage =
+          " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "leftConvo",
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
+      activityStore.addActivity(activity);
     }
 
     if (button == null && conversation.getConversationUsers().contains(user.getId())) {
@@ -255,17 +254,17 @@ public class ChatServlet extends HttpServlet {
               + "</a>"
               + ": "
               + finalMessageContent;
-        Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "messageSent",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
+      activityStore.addActivity(activity);
 
       sendEmailNotification(user, conversation);
     }
@@ -327,11 +326,12 @@ public class ChatServlet extends HttpServlet {
     }
   }
 
-  //ensures that only users that have just 1 conversation shared are removed from conversation friends
+  // ensures that only users that have just 1 conversation shared are removed from conversation
+  // friends
   public int conversationsShared(UUID u1, UUID u2) {
     int count = 0;
     List<Conversation> conversations = conversationStore.getAllConversations();
-    for (Conversation c: conversations) {
+    for (Conversation c : conversations) {
       if (c.getConversationUsers().contains(u1) && c.getConversationUsers().contains(u2)) {
         count++;
       }

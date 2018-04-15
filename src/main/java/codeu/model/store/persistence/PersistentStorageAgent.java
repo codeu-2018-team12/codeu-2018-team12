@@ -168,5 +168,4 @@ public class PersistentStorageAgent {
   public void updateUserEntityConversationFriends(User user) {
     persistentDataStore.updateUserEntityConversationFriends(user);
   }
-
 }

@@ -154,24 +154,24 @@ public class ConversationServlet extends HttpServlet {
         new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
 
     conversationStore.addConversation(conversation);
-      String activityMessage =
+    String activityMessage =
         " created a new conversation: "
             + "<a href=\"/chat/"
             + conversationTitle
             + "\">"
             + conversationTitle
             + "</a>.";
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "createdConvo",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "createdConvo",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
+    activityStore.addActivity(activity);
 
     response.sendRedirect("/chat/" + conversationTitle);
   }

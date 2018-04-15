@@ -86,7 +86,6 @@ public class ProfileServlet extends HttpServlet {
               : activityStore.getAllPermittedActivitiesWithUserIdSorted(
                   user.getId(), loggedInUser.getId());
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
-
     }
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);

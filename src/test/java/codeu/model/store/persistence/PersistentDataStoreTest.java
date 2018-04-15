@@ -482,7 +482,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserEntityProfilePrivacy() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityProfilePrivacy()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -511,7 +512,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserEntityActivityFeedPrivacy() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityActivityFeedPrivacy()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -540,7 +542,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserEntityConversationFriends() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityConversationFriends()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -563,7 +566,8 @@ public class PersistentDataStoreTest {
     Entity testResultEntity = preparedTestQuery.asSingleEntity();
 
     @SuppressWarnings("unchecked")
-    List<String> updatedTestConversationFriends = (List<String>) testResultEntity.getProperty("conversationFriends");
+    List<String> updatedTestConversationFriends =
+        (List<String>) testResultEntity.getProperty("conversationFriends");
     updatedTestConversationFriends.add(UUID.randomUUID().toString());
     testResultEntity.setProperty("conversationFriends", updatedTestConversationFriends);
     ds.put(testResultEntity);
@@ -571,12 +575,14 @@ public class PersistentDataStoreTest {
     Key entityKey = testResultEntity.getKey();
     Entity retrievedEntity = ds.get(entityKey);
     @SuppressWarnings("unchecked")
-    List<String> conversationFriends = (List<String>) retrievedEntity.getProperty("conversationFriends");
+    List<String> conversationFriends =
+        (List<String>) retrievedEntity.getProperty("conversationFriends");
     assertEquals(updatedTestConversationFriends, conversationFriends);
   }
 
   @Test
-  public void testUpdateUserEntityStoredNotifications() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityStoredNotifications()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -605,7 +611,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserNotificationFrequency() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserNotificationFrequency()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -635,7 +642,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserEntityEmail() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityEmail()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
@@ -663,7 +671,8 @@ public class PersistentDataStoreTest {
   }
 
   @Test
-  public void testUpdateUserEntityPassword() throws PersistentDataStoreException, EntityNotFoundException {
+  public void testUpdateUserEntityPassword()
+      throws PersistentDataStoreException, EntityNotFoundException {
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
     Entity testEntity = new Entity("chat-users");
     String testUUID = UUID.randomUUID().toString();
