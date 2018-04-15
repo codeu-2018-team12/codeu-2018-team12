@@ -94,6 +94,50 @@ public class UserStore {
     return null;
   }
 
+  public List<User> getUsersActivityFeedNoContent() {
+    // This approach will be pretty slow if we have many users.
+    List<User> noContentUsers = new ArrayList<>();
+    for (User user : users) {
+      if (user.getActivityFeedPrivacy().equals("noContent")) {
+        noContentUsers.add(user);
+      }
+    }
+    return noContentUsers;
+  }
+
+  public List<User> getUsersActivityFeedSomeContent() {
+    // This approach will be pretty slow if we have many users.
+    List<User> someContentUsers = new ArrayList<>();
+    for (User user : users) {
+      if (user.getActivityFeedPrivacy().equals("someContent")) {
+        someContentUsers.add(user);
+      }
+    }
+    return someContentUsers;
+  }
+
+  public List<User> getUsersProfileNoContent() {
+    // This approach will be pretty slow if we have many users.
+    List<User> noContentUsers = new ArrayList<>();
+    for (User user : users) {
+      if (user.getProfilePrivacy().equals("noContent")) {
+        noContentUsers.add(user);
+      }
+    }
+    return noContentUsers;
+  }
+
+  public List<User> getUsersProfileSomeContent() {
+    // This approach will be pretty slow if we have many users.
+    List<User> someContentUsers = new ArrayList<>();
+    for (User user : users) {
+      if (user.getProfilePrivacy().equals("someContent")) {
+        someContentUsers.add(user);
+      }
+    }
+    return someContentUsers;
+  }
+
   /**
    * Finds all User objects whose username contains the given string
    *

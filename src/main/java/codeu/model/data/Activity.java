@@ -15,6 +15,8 @@
 package codeu.model.data;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -28,6 +30,8 @@ public class Activity {
   private final Instant creation;
   private final String activityType;
   private final String activityMessage;
+  private final List<UUID> users;
+  private final boolean isPublic;
 
   /**
    * Constructs a new activity. Invoked when a conversation id is specified
@@ -44,13 +48,17 @@ public class Activity {
       UUID conversationId,
       Instant creation,
       String activityType,
-      String activityMessage) {
+      String activityMessage,
+      List<UUID> users,
+      boolean isPublic) {
     this.id = id;
     this.user = userId;
     this.conversationId = conversationId;
     this.creation = creation;
     this.activityType = activityType;
     this.activityMessage = activityMessage;
+    this.users = users;
+    this.isPublic = isPublic;
   }
 
   /** Returns the ID of this activity */
@@ -61,6 +69,18 @@ public class Activity {
   /** Returns the ID of the user associated with this activity */
   public UUID getUserId() {
     return user;
+  }
+
+  public List<UUID> getUsers() {
+    return users;
+  }
+
+  public List<String> getUserIdsAsStrings() {
+    List<String> ids = new ArrayList<>();
+    for (UUID user : users) {
+      ids.add(user.toString());
+    }
+    return ids;
   }
 
   /**
@@ -86,8 +106,19 @@ public class Activity {
     return activityType;
   }
 
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+
   /** Returns the message of this activity. */
   public String getActivityMessage() {
     return activityMessage;
+  }
+
+  public boolean hasPermission(UUID user) {
+    if (isPublic) {
+      return true;
+    }
+    return users.contains(user);
   }
 }

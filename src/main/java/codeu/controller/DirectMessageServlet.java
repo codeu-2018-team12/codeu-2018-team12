@@ -1,17 +1,3 @@
-// Copyright 2017 Google Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package codeu.controller;
 
 import codeu.model.data.Activity;
@@ -43,8 +29,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
 
-/** Servlet class responsible for the chat page. */
-public class ChatServlet extends HttpServlet {
+/** Servlet class responsible for the direct message page. */
+public class DirectMessageServlet extends HttpServlet {
 
   /** Store class that gives access to Conversations. */
   private ConversationStore conversationStore;
@@ -101,36 +87,49 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * This function fires when a user navigates to the chat page. It gets the conversation title from
-   * the URL, finds the corresponding Conversation, and fetches the messages in that Conversation.
-   * It then forwards to chat.jsp for rendering.
+   * This function fires when a user navigates to the direct message page. It gets the user's name
+   * from the url and then retrieves the direct message between the logged in user and that user.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
-    User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
+    String loggedInUsername = (String) request.getSession().getAttribute("user");
+    String otherUsername = requestUrl.substring("/direct/".length());
+    User loggedInUser = userStore.getUser(loggedInUsername);
+    User otherUser = userStore.getUser(otherUsername);
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
-    if (conversation == null
-        || (!conversation.getIsPublic()
-            && (loggedInUser == null || !conversation.hasPermission(loggedInUser.getId())))) {
-      // couldn't access conversation, redirect to conversation list
-      System.out.println("Could not access: " + conversationTitle);
+    if (loggedInUser == null) {
+      response.sendRedirect("/login");
+      return;
+    }
+
+    if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
       response.sendRedirect("/conversations");
       return;
     }
 
-    UUID conversationId = conversation.getId();
+    String convoName =
+        loggedInUsername.compareTo(otherUsername) < 0
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
+    Conversation conversation = conversationStore.getConversationWithTitle(convoName);
 
-    List<Message> messages = messageStore.getMessagesInConversation(conversationId);
-    List<UUID> conversationUsers = conversation.getConversationUsers();
+    if (conversation == null) {
+      conversation =
+          new Conversation(
+              UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
+      conversation.addUser(otherUser.getId());
+      conversationStore.addConversation(conversation);
+    }
+
+    List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
 
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
-    request.setAttribute("conversationUsers", conversationUsers);
-    request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+    request.setAttribute("loggedInUser", loggedInUser);
+    request.setAttribute("otherUser", otherUser);
+    request.getRequestDispatcher("/WEB-INF/view/directMessage.jsp").forward(request, response);
   }
 
   /**
@@ -142,82 +141,36 @@ public class ChatServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    String requestUrl = request.getRequestURI();
+    String loggedInUsername = (String) request.getSession().getAttribute("user");
+    String otherUsername = requestUrl.substring("/direct/".length());
+    User loggedInUser = userStore.getUser(loggedInUsername);
+    User otherUser = userStore.getUser(otherUsername);
 
-    String button = request.getParameter("button");
-
-    String username = (String) request.getSession().getAttribute("user");
-    if (username == null) {
-      // user is not logged in, don't let them add a message
-      response.sendRedirect("/login");
-      return;
-    }
-
-    User user = userStore.getUser(username);
-    if (user == null) {
+    if (loggedInUser == null) {
       // user was not found, don't let them add a message
       response.sendRedirect("/login");
       return;
     }
 
-    String requestUrl = request.getRequestURI();
-    String conversationTitle = requestUrl.substring("/chat/".length());
+    if (otherUser == null || loggedInUser.getId().equals(otherUser.getId())) {
+      response.sendRedirect("/conversations");
+      return;
+    }
 
-    Conversation conversation = conversationStore.getConversationWithTitle(conversationTitle);
+    String convoName =
+        loggedInUsername.compareTo(otherUsername) < 0
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
+
+    Conversation conversation = conversationStore.getConversationWithTitle(convoName);
     if (conversation == null) {
       // couldn't find conversation, redirect to conversation list
       response.sendRedirect("/conversations");
       return;
     }
 
-    if ("joinButton".equals(button)) {
-      UUID currUserId = user.getId();
-      for (UUID u: conversation.getConversationUsers()) {
-        if (conversationsShared(currUserId, u) < 1)
-        user.addConversationFriend(UserStore.getInstance().getUser(u));
-      }
-      conversation.addUser(user.getId());
-
-        String activityMessage =
-            " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-        Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "leftConvo",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
-    }
-
-    if ("leaveButton".equals(button)) {
-      UUID currUserId = user.getId();
-      for (UUID u: conversation.getConversationUsers()) {
-        if (conversationsShared(currUserId, u) == 1) {
-          user.removeConversationFriend(UserStore.getInstance().getUser(u));
-        }
-        conversation.removeUser(user.getId());
-      }
-
-        String activityMessage =
-            " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-        Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "leftConvo",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
-
-    }
-
-    if (button == null && conversation.getConversationUsers().contains(user.getId())) {
+    if (conversation.getConversationUsers().contains(loggedInUser.getId())) {
       String messageContent = request.getParameter("message");
 
       // this removes any HTML from the message content
@@ -230,36 +183,28 @@ public class ChatServlet extends HttpServlet {
           new codeu.model.data.Message(
               UUID.randomUUID(),
               conversation.getId(),
-              user.getId(),
+              loggedInUser.getId(),
               finalMessageContent,
               Instant.now());
       messageStore.addMessage(message);
 
       String activityMessage =
-          " sent a message in "
-              + "<a href=\"/chat/"
-              + conversationTitle
-              + "\">"
-              + conversationTitle
-              + "</a>"
-              + ": "
-              + finalMessageContent;
+          " sent a direct message to " + otherUser.getName() + ": " + finalMessageContent;
         Activity activity =
-            new Activity(
-                UUID.randomUUID(),
-                user.getId(),
-                conversation.getId(),
-                Instant.now(),
-                "messageSent",
-                activityMessage,
-                conversation.getConversationUsers(),
-                conversation.getIsPublic());
-        activityStore.addActivity(activity);
-
-      sendEmailNotification(user, conversation);
+          new Activity(
+              UUID.randomUUID(),
+              loggedInUser.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "messageSent",
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
+      activityStore.addActivity(activity);
+      sendEmailNotification(loggedInUser, conversation);
     }
     // redirect to a GET request
-    response.sendRedirect("/chat/" + conversationTitle);
+    response.sendRedirect("/direct/" + otherUser.getName());
   }
 
   /**
@@ -289,6 +234,7 @@ public class ChatServlet extends HttpServlet {
           && conversationUser != null
           && !currentSession.isLoggedIn(conversationUser.getName())
           && conversationUser.getNotificationStatus()) {
+
         if (user.getNotificationFrequency().equals("everyMessage")) {
           try {
             javax.mail.Message msg = new MimeMessage(session);
@@ -314,17 +260,5 @@ public class ChatServlet extends HttpServlet {
         user.addNotification(msgBody);
       }
     }
-  }
-
-  //ensures that only users that have just 1 conversation shared are removed from conversation friends
-  public int conversationsShared(UUID u1, UUID u2) {
-    int count = 0;
-    List<Conversation> conversations = conversationStore.getAllConversations();
-    for (Conversation c: conversations) {
-      if (c.getConversationUsers().contains(u1) && c.getConversationUsers().contains(u2)) {
-        count++;
-      }
-    }
-    return count;
   }
 }

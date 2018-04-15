@@ -14,7 +14,7 @@
 
 package codeu.model.data;
 
-import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,9 +30,8 @@ public class Conversation {
   private final UUID owner;
   private final Instant creation;
   private final String title;
-  private UserStore userStore = UserStore.getInstance();
-  private List<User> conversationUsers = new ArrayList<>();
-
+  private List<UUID> conversationUsers = new ArrayList<>();
+  private boolean isPublic = true;
   /**
    * Constructs a new Conversation.
    *
@@ -46,7 +45,25 @@ public class Conversation {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.conversationUsers.add(userStore.getUser(owner));
+    this.conversationUsers.add(owner);
+  }
+
+  /**
+   * Constructs a new Conversation.
+   *
+   * @param id the ID of this Conversation
+   * @param owner the ID of the User who created this Conversation
+   * @param title the title of this Conversation
+   * @param creation the creation time of this Conversation
+   * @param isPublic whether this Conversation is public
+   */
+  public Conversation(UUID id, UUID owner, String title, Instant creation, boolean isPublic) {
+    this.id = id;
+    this.owner = owner;
+    this.creation = creation;
+    this.title = title;
+    this.isPublic = isPublic;
+    this.conversationUsers.add(owner);
   }
 
   /** Returns the ID of this Conversation. */
@@ -70,7 +87,7 @@ public class Conversation {
   }
 
   /** Returns the set of users in this Conversation. */
-  public List<User> getConversationUsers() {
+  public List<UUID> getConversationUsers() {
     return conversationUsers;
   }
 
@@ -80,30 +97,46 @@ public class Conversation {
    */
   public List<String> getUserIdsAsStrings() {
     List<String> ids = new ArrayList<>();
-    for (User user : conversationUsers) {
-      ids.add(user.getId().toString());
+    for (UUID user : conversationUsers) {
+      ids.add(user.toString());
     }
     return ids;
   }
+
   /** Adds a user to a conversation */
-  public void addUser(User user) {
+  public void addUser(UUID user) {
     conversationUsers.add(user);
-    PersistentStorageAgent.getInstance().updateEntity(this);
+    PersistentStorageAgent.getInstance().updateConversationEntityUsers(this);
   }
 
   /** Removes a user from a conversation */
-  public void removeUser(User user) {
+  public void removeUser(UUID user) {
     conversationUsers.remove(user);
-    PersistentStorageAgent.getInstance().updateEntity(this);
+    PersistentStorageAgent.getInstance().updateConversationEntityUsers(this);
   }
 
   /** Updates the list of users from a list of user Ids */
   public void setUsers(List<String> users) {
-    List<User> newUsers = new ArrayList<>();
+    List<UUID> newUsers = new ArrayList<>();
     for (String userId : users) {
       UUID id = UUID.fromString(userId);
-      newUsers.add(userStore.getUser(id));
+      newUsers.add(id);
     }
     conversationUsers = newUsers;
+  }
+
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+
+  public void setIsPublic(boolean isPublic) {
+    this.isPublic = isPublic;
+  }
+
+  public boolean hasPermission(UUID user) {
+    if (isPublic) {
+      return true;
+    }
+    return conversationUsers.contains(user);
   }
 }

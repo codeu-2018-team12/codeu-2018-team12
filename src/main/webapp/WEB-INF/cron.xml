@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/notifications</url>
+    <target>beta</target>
+    <description>Sends message notifications to users every hour</description>
+    <schedule>every 1 hours</schedule>
+  </cron>
+  <cron>
+    <url>/notifications</url>
+    <target>beta</target>
+    <description>Sends message notifications to users every 4 hours</description>
+    <schedule>every 4 hours</schedule>
+  </cron>
+  <cron>
+    <url>/notifications</url>
+    <target>beta</target>
+    <description>Sends message notifications to users every 24 hours</description>
+    <schedule>every 24 hours</schedule>
+  </cron>
+</cronentries>

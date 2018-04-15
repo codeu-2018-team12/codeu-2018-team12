@@ -140,7 +140,7 @@ public class PersistentDataStoreTest {
     String titleOne = "Test_Title";
     Instant creationOne = Instant.ofEpochMilli(1000);
     Conversation inputConversationOne =
-        new Conversation(idOne, ownerOneUUID, titleOne, creationOne);
+        new Conversation(idOne, ownerOneUUID, titleOne, creationOne, true);
 
     // save
     ConversationStore.getInstance().addConversation(inputConversationOne);
@@ -159,7 +159,7 @@ public class PersistentDataStoreTest {
     String titleTwo = "Test_Title_Two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
     Conversation inputConversationTwo =
-        new Conversation(idTwo, ownerTwoUUID, titleTwo, creationTwo);
+        new Conversation(idTwo, ownerTwoUUID, titleTwo, creationTwo, false);
 
     // save
     ConversationStore.getInstance().addConversation(inputConversationTwo);
@@ -230,9 +230,18 @@ public class PersistentDataStoreTest {
     Instant creationOne = Instant.ofEpochMilli(1000);
     String messageTypeOne = "joinedApp";
     String messageOne = "Ada joined!";
+    ArrayList<UUID> usersOne = new ArrayList<UUID>();
+    usersOne.add(userIdOne);
     Activity inputActivityOne =
-        new Activity(idOne, userIdOne, conversationIdOne, creationOne, messageTypeOne, messageOne);
-
+        new Activity(
+            idOne,
+            userIdOne,
+            conversationIdOne,
+            creationOne,
+            messageTypeOne,
+            messageOne,
+            usersOne,
+            true);
     UUID idTwo = UUID.randomUUID();
     UUID userIdTwo = UUID.randomUUID();
     UUID conversationIdTwo = UUID.randomUUID();
@@ -241,8 +250,18 @@ public class PersistentDataStoreTest {
     String messageTwo =
         "Grace sent a message in Programming Chat: \"I've always been more interested "
             + "in the future than in the past.\"";
+    ArrayList<UUID> usersTwo = new ArrayList<UUID>();
+    usersTwo.add(userIdTwo);
     Activity inputActivityTwo =
-        new Activity(idTwo, userIdTwo, conversationIdTwo, creationTwo, messageTypeTwo, messageTwo);
+        new Activity(
+            idTwo,
+            userIdTwo,
+            conversationIdTwo,
+            creationTwo,
+            messageTypeTwo,
+            messageTwo,
+            usersTwo,
+            false);
     // save
     persistentDataStore.writeThrough(inputActivityOne);
     persistentDataStore.writeThrough(inputActivityTwo);
@@ -258,6 +277,8 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(creationOne, resultActivityOne.getCreationTime());
     Assert.assertEquals(messageTypeOne, resultActivityOne.getActivityType());
     Assert.assertEquals(messageOne, resultActivityOne.getActivityMessage());
+    Assert.assertEquals(usersOne, resultActivityOne.getUsers());
+    Assert.assertEquals(true, resultActivityOne.getIsPublic());
 
     Activity resultActivityTwo = resultActivities.get(1);
     Assert.assertEquals(idTwo, resultActivityTwo.getId());
@@ -266,6 +287,8 @@ public class PersistentDataStoreTest {
     Assert.assertEquals(creationTwo, resultActivityTwo.getCreationTime());
     Assert.assertEquals(messageTypeTwo, resultActivityTwo.getActivityType());
     Assert.assertEquals(messageTwo, resultActivityTwo.getActivityMessage());
+    Assert.assertEquals(usersTwo, resultActivityTwo.getUsers());
+    Assert.assertEquals(false, resultActivityTwo.getIsPublic());
   }
 
   @Test
@@ -323,6 +346,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", UUID.randomUUID().toString());
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(true));
     ds.put(testEntity);
 
     Entity testEntity1 = new Entity("chat-conversations");
@@ -330,6 +354,7 @@ public class PersistentDataStoreTest {
     testEntity1.setProperty("owner_uuid", UUID.randomUUID().toString());
     testEntity1.setProperty("title", "test title");
     testEntity1.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(false));
     ds.put(testEntity1);
     assertEquals(2, ds.prepare(new Query("chat-conversations")).countEntities(withLimit(10)));
   }
@@ -369,6 +394,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", ownerId);
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(false));
     List<String> ids = new ArrayList<>();
     ids.add(ownerId);
     testEntity.setProperty("users", ids);
@@ -404,6 +430,7 @@ public class PersistentDataStoreTest {
     testEntity.setProperty("owner_uuid", ownerId);
     testEntity.setProperty("title", "test title");
     testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("isPublic", Boolean.toString(true));
     List<String> ids = new ArrayList<>();
     ids.add(ownerId);
     testEntity.setProperty("users", ids);

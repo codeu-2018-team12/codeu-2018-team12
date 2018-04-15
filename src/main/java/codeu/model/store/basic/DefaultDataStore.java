@@ -119,7 +119,6 @@ public class DefaultDataStore {
               Instant.now(),
               "codeUChatTest@gmail.com");
       UserStore.getInstance().addUser(user);
-      PersistentStorageAgent.getInstance().writeThrough(user);
       users.add(user);
     }
   }
@@ -130,7 +129,6 @@ public class DefaultDataStore {
       String title = "Conversation_" + i;
       Conversation conversation =
           new Conversation(UUID.randomUUID(), user.getId(), title, Instant.now());
-      PersistentStorageAgent.getInstance().writeThrough(conversation);
       conversations.add(conversation);
     }
   }
@@ -143,7 +141,6 @@ public class DefaultDataStore {
       Message message =
           new Message(
               UUID.randomUUID(), conversation.getId(), author.getId(), content, Instant.now());
-      PersistentStorageAgent.getInstance().writeThrough(message);
       messages.add(message);
     }
   }
@@ -191,8 +188,9 @@ public class DefaultDataStore {
               conversationId,
               Instant.now(),
               activityType,
-              activityMessage);
-      PersistentStorageAgent.getInstance().writeThrough(activity);
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
       activities.add(activity);
     }
   }

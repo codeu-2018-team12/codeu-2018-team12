@@ -15,10 +15,12 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="java.util.UUID" %>
+
 <%
 Conversation conversation = (Conversation) request.getAttribute("conversation");
 List<Message> messages = (List<Message>) request.getAttribute("messages");
-List<User> conversationUsers = (List<User>) request.getAttribute("conversationUsers");
+List<UUID> conversationUsers = (List<UUID>) request.getAttribute("conversationUsers");
 User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
 %>
 
@@ -59,11 +61,22 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <div id="chat">
       <ul>
     <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
+      if (user != null && conversationUsers.contains(user.getId())) {
+        for (Message message : messages) {
+          String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
     %>
       <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
+    <%
+      }
+    %>
+    <%
+      }
+    %>
+    <%
+      if (user != null && !conversationUsers.contains(user.getId())) {
+    %>
+      <h2> Messages from this conversation will appear here! </h2>
+      <p> To see these messages, you must first join the conversation. </p>
     <%
       }
     %>
@@ -76,7 +89,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if (user != null && conversationUsers.contains(user)) { %>
+    <% if (user != null && conversationUsers.contains(user.getId())) { %>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
         <textarea name="message"></textarea>
         </br>
@@ -84,7 +97,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         </br>
         <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
     </form>
-    <% } else if (user != null && !(conversationUsers.contains(user))) { %>
+    <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
     <p> Join the conversation to send a message! </p>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
             <button type="submit" name="button" value="joinButton">Join Conversation</button>

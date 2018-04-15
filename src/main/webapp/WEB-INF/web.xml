@@ -81,6 +81,16 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>DirectMessageServlet</servlet-name>
+    <servlet-class>codeu.controller.DirectMessageServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DirectMessageServlet</servlet-name>
+    <url-pattern>/direct/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>TestDataServlet</servlet-name>
     <servlet-class>codeu.controller.TestDataServlet</servlet-class>
   </servlet>
@@ -118,6 +128,36 @@
   <servlet-mapping>
     <servlet-name>SearchServlet</servlet-name>
     <url-pattern>/search</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <servlet-class>codeu.controller.PersonalActivityServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>PersonalActivityServlet</servlet-name>
+    <url-pattern>/personalActivityFeed</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SettingsServlet</servlet-name>
+    <servlet-class>codeu.controller.SettingsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SettingsServlet</servlet-name>
+    <url-pattern>/settings</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>NotificationsServlet</servlet-name>
+    <servlet-class>codeu.controller.NotificationsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>NotificationsServlet</servlet-name>
+    <url-pattern>/notifications</url-pattern>
   </servlet-mapping>
 
 </web-app>

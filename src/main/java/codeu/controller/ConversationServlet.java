@@ -22,6 +22,7 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -84,8 +85,20 @@ public class ConversationServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    List<Conversation> conversations = conversationStore.getAllConversationsSorted();
+    User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
+    List<Conversation> conversations =
+        loggedInUser == null
+            ? conversationStore.getAllPublicConversationsSorted()
+            : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+    List<Conversation> directMessages = new ArrayList<Conversation>();
+    for (Conversation convo : conversations) {
+      if (convo.getTitle().startsWith("direct:")) {
+        directMessages.add(convo);
+      }
+    }
+    conversations.removeAll(directMessages);
     request.setAttribute("conversations", conversations);
+    request.setAttribute("directMessages", directMessages);
     request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
   }
 
@@ -115,7 +128,9 @@ public class ConversationServlet extends HttpServlet {
 
     String conversationTitle = request.getParameter("conversationTitle");
     if (conversationTitle.isEmpty()) {
-      List<Conversation> conversations = conversationStore.getAllConversationsSorted();
+      User loggedInUser = userStore.getUser(username);
+      List<Conversation> conversations =
+          conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "Please specify a name for this chat.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
@@ -139,23 +154,24 @@ public class ConversationServlet extends HttpServlet {
         new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
 
     conversationStore.addConversation(conversation);
-
-    String activityMessage =
+      String activityMessage =
         " created a new conversation: "
             + "<a href=\"/chat/"
             + conversationTitle
             + "\">"
             + conversationTitle
             + "</a>.";
-    Activity activity =
-        new Activity(
-            UUID.randomUUID(),
-            user.getId(),
-            conversation.getId(),
-            Instant.now(),
-            "createdConvo",
-            activityMessage);
-    activityStore.addActivity(activity);
+      Activity activity =
+          new Activity(
+              UUID.randomUUID(),
+              user.getId(),
+              conversation.getId(),
+              Instant.now(),
+              "createdConvo",
+              activityMessage,
+              conversation.getConversationUsers(),
+              conversation.getIsPublic());
+      activityStore.addActivity(activity);
 
     response.sendRedirect("/chat/" + conversationTitle);
   }
