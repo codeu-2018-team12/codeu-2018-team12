@@ -480,4 +480,98 @@ public class PersistentDataStoreTest {
     String biography = (String) retrievedEntity.getProperty("biography");
     assertEquals(updatedBio, biography);
   }
+
+  @Test
+  public void testUpdateUserEntityProfilePrivacy() throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-users");
+    String testUUID = UUID.randomUUID().toString();
+    testEntity.setProperty("uuid", testUUID);
+    testEntity.setProperty("username", "test username");
+    testEntity.setProperty("password", "test password");
+    testEntity.setProperty("biography", "test bio");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
+    testEntity.setProperty("profilePrivacy", "allContent");
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-users")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity testResultEntity = preparedTestQuery.asSingleEntity();
+    String updatedProfilePrivacy = "someContent";
+    testResultEntity.setProperty("profilePrivacy", updatedProfilePrivacy);
+    ds.put(testResultEntity);
+
+    Key entityKey = testResultEntity.getKey();
+    Entity retrievedEntity = ds.get(entityKey);
+    String profilePrivacy = (String) retrievedEntity.getProperty("profilePrivacy");
+    assertEquals(updatedProfilePrivacy, profilePrivacy);
+  }
+
+  @Test
+  public void testUpdateUserEntityActivityFeedPrivacy() throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-users");
+    String testUUID = UUID.randomUUID().toString();
+    testEntity.setProperty("uuid", testUUID);
+    testEntity.setProperty("username", "test username");
+    testEntity.setProperty("password", "test password");
+    testEntity.setProperty("biography", "test bio");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
+    testEntity.setProperty("activityFeedPrivacy", "allContent");
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-users")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity testResultEntity = preparedTestQuery.asSingleEntity();
+    String updatedActivityFeedPrivacy = "someContent";
+    testResultEntity.setProperty("activityFeedPrivacy", updatedActivityFeedPrivacy);
+    ds.put(testResultEntity);
+
+    Key entityKey = testResultEntity.getKey();
+    Entity retrievedEntity = ds.get(entityKey);
+    String activityFeedPrivacy = (String) retrievedEntity.getProperty("activityFeedPrivacy");
+    assertEquals(updatedActivityFeedPrivacy, activityFeedPrivacy);
+  }
+
+  @Test
+  public void testUpdateUserEntityConversationFriends() throws PersistentDataStoreException, EntityNotFoundException {
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+    Entity testEntity = new Entity("chat-users");
+    String testUUID = UUID.randomUUID().toString();
+    List<String> testConversationFriends = new ArrayList<>();
+    testConversationFriends.add(UUID.randomUUID().toString());
+    testConversationFriends.add(UUID.randomUUID().toString());
+    testEntity.setProperty("uuid", testUUID);
+    testEntity.setProperty("username", "test username");
+    testEntity.setProperty("password", "test password");
+    testEntity.setProperty("biography", "test bio");
+    testEntity.setProperty("creation_time", Instant.ofEpochMilli(1000).toString());
+    testEntity.setProperty("email", "testEmail@gmail.com");
+    testEntity.setProperty("conversationFriends", testConversationFriends);
+    ds.put(testEntity);
+
+    Query testQuery =
+        new Query("chat-users")
+            .setFilter(new Query.FilterPredicate("uuid", Query.FilterOperator.EQUAL, testUUID));
+    PreparedQuery preparedTestQuery = ds.prepare(testQuery);
+    Entity testResultEntity = preparedTestQuery.asSingleEntity();
+
+    @SuppressWarnings("unchecked")
+    List<String> updatedTestConversationFriends = (List<String>) testResultEntity.getProperty("conversationFriends");
+    updatedTestConversationFriends.add(UUID.randomUUID().toString());
+    testResultEntity.setProperty("conversationFriends", updatedTestConversationFriends);
+    ds.put(testResultEntity);
+
+    Key entityKey = testResultEntity.getKey();
+    Entity retrievedEntity = ds.get(entityKey);
+    @SuppressWarnings("unchecked")
+    List<String> conversationFriends = (List<String>) retrievedEntity.getProperty("conversationFriends");
+    assertEquals(updatedTestConversationFriends, conversationFriends);
+  }
 }

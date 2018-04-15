@@ -143,6 +143,11 @@ public class ActivityStore {
     return publicActivities;
   }
 
+  /** Access list of activities with respect to user privacy settings
+   * @param currentUser the current logged in user
+   * @param activities1 the list of from which to activities to pull
+   * @return list of activities
+   */
   public List<Activity> getActivitiesPerPrivacy(User currentUser, List<Activity> activities1) {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();

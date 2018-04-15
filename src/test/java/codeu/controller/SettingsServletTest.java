@@ -1,3 +1,5 @@
 package codeu.controller;
 
-public class SettingsServletTest {}
+public class SettingsServletTest {
+
+}
