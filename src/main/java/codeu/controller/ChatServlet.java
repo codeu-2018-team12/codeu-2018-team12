@@ -26,6 +26,7 @@ import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -171,9 +172,14 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       UUID currUserId = user.getId();
+      //avoid ConcurrentModificationException
+      List<User> addConversationFriends = new ArrayList<>();
       for (UUID u: conversation.getConversationUsers()) {
         if (conversationsShared(currUserId, u) < 1)
-        user.addConversationFriend(UserStore.getInstance().getUser(u));
+        addConversationFriends.add(UserStore.getInstance().getUser(u));
+      }
+      for (User u1 : addConversationFriends) {
+        user.addConversationFriend(u1);
       }
       conversation.addUser(user.getId());
 
@@ -194,9 +200,14 @@ public class ChatServlet extends HttpServlet {
 
     if ("leaveButton".equals(button)) {
       UUID currUserId = user.getId();
+      //avoid ConcurrentModificationException
+      List<User> removeConversationFriends = new ArrayList<>();
       for (UUID u: conversation.getConversationUsers()) {
         if (conversationsShared(currUserId, u) == 1) {
-          user.removeConversationFriend(UserStore.getInstance().getUser(u));
+          removeConversationFriends.add(UserStore.getInstance().getUser(u));
+        }
+        for (User u1 : removeConversationFriends) {
+          user.removeConversationFriend(u1);
         }
         conversation.removeUser(user.getId());
       }
@@ -256,7 +267,7 @@ public class ChatServlet extends HttpServlet {
                 conversation.getIsPublic());
         activityStore.addActivity(activity);
 
-      sendEmailNotification(user, conversation);
+      //sendEmailNotification(user, conversation);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);

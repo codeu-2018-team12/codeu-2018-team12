@@ -95,10 +95,14 @@ public class SettingsServlet extends HttpServlet {
             "successNotifications", "You have successfully updated your notification status.");
       }
 
-      if (request.getParameter("submitSitePrivacy") != null) {
-        userStore.getUser(username).setActivityFeedPrivacy(activityFeedPrivacy);
+      if (request.getParameter("submitProfilePrivacy") != null) {
         userStore.getUser(username).setProfilePrivacy(profilePrivacy);
-        request.setAttribute("successPrivacy", "You have successfully updated your privacy settings.");
+        request.setAttribute("successPrivacy", "You have successfully updated your profile privacy settings.");
+      }
+
+      if (request.getParameter("submitActivityFeedPrivacy") != null) {
+        userStore.getUser(username).setActivityFeedPrivacy(activityFeedPrivacy);
+        request.setAttribute("successPrivacy", "You have successfully updated your activity feed privacy settings.");
       }
     } else {
 

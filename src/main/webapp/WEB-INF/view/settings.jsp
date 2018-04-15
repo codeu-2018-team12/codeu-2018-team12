@@ -75,6 +75,7 @@
           <option value="someContent">Allow only users in conversations I have joined to direct message me and see my sent messages</option>
           <option value="noContent">Prohibit direct messages from all users and allow only myself to see my sent messages</option>
         </select>
+        <button type="submit" name="submitProfilePrivacy" value="submitProfilePrivacy">Submit</button>
         <br><br>
         <label for="activityFeedPrivacy">Activity Feed Privacy: </label> <br>
         <select name ="activityFeedPrivacy" >
@@ -82,6 +83,7 @@
           <option value="someContent">Allow only users in conversations I have joined to see my activities</option>
           <option value="noContent">Prohibit all users besides myself from seeing my activities</option>
         </select>
+        <button type="submit" name="submitActivityFeedPrivacy" value="submitActivityFeedPrivacy">Submit</button>
         <br><br>
         <p>Note: Activities for CodeU Chat App include the following: </p>
         <ul>
@@ -91,7 +93,6 @@
           <li>Leaving a conversation</li>
           <li>Sending a message in a conversation</li>
         </ul>
-        <button type="submit" name="submitSitePrivacy" value="submitSitePrivacy">Submit</button>
         </form>
         <br><br>
         <hr/>
