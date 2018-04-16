@@ -295,10 +295,13 @@ public class ChatServlet extends HttpServlet {
             Transport.send(msg);
           } catch (AddressException e) {
             System.err.println("Invalid email address formatting. Email not sent.");
+            System.out.println("Invalid email address formatting. Email not sent.");
           } catch (MessagingException e) {
             System.err.println("An error has occurred with this message. Email not sent.");
+            System.out.println("An error has occurred with this message. Email not sent.");
           } catch (UnsupportedEncodingException e) {
             System.err.println("This character encoding is not supported. Email not sent");
+            System.out.println("This character encoding is not supported. Email not sent");
           }
         }
       } else {
