@@ -25,6 +25,8 @@ public class BounceHandlerServlet extends HttpServlet {
                 + " to "
                 + bounce.getOriginal().getTo()
                 + " has been bounced.");
+        log. warning("Subject:" + bounce.getOriginal().getSubject() +
+                " \n Text" + bounce.getOriginal().getText());
       }
     } catch (MessagingException e) {
       System.out.println("A messaging exception has occurred.");

@@ -142,7 +142,7 @@
 
   <servlet>
     <servlet-name>bouncehandler</servlet-name>
-    <servlet-class>com.example.appengine.mail.BounceHandlerServlet</servlet-class>
+    <servlet-class>codeu.controller.BounceHandlerServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
