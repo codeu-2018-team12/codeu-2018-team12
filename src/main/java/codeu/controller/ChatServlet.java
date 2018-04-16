@@ -326,9 +326,9 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * If a user leaves the conversation, ensure that the user, given they are not in other
-   * conversations with users in the conversation, then had the remove users from to their
-   * conversationFriends list
+   * If the current user leaves the conversation, ensure that the user is not in other conversations
+   * with other users in the current conversation. If this is true, then remove users from to the
+   * current user's conversationFriends list
    *
    * @param currentUser current user
    * @param conversation current conversation
@@ -352,8 +352,9 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * If a user joins the conversation, ensure that the user, given they are not already friends with
-   * a user in the conversation, then had the new users added to their conversationFriends list
+   * If the current user joins the conversation, ensure that the user is not already friends with
+   * other users in the current conversation. If this is true, then add new users to the current
+   * user's conversationFriends list
    *
    * @param currentUser current user
    * @param conversation current conversation
