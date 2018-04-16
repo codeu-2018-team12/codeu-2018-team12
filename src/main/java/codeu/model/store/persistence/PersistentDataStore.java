@@ -70,9 +70,9 @@ public class PersistentDataStore {
         String biography = (String) entity.getProperty("biography");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String email =
-                entity.getProperty("email") == null
-                        ? "codeUChatTest@gmail.com"
-                        : (String) entity.getProperty("email");
+            entity.getProperty("email") == null
+                ? "codeUChatTest@gmail.com"
+                : (String) entity.getProperty("email");
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());
         }

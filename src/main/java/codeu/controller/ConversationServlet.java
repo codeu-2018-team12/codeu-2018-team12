@@ -148,7 +148,7 @@ public class ConversationServlet extends HttpServlet {
       // new one
       User loggedInUser = userStore.getUser(username);
       List<Conversation> conversations =
-              conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+          conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "This conversation name is already taken.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);

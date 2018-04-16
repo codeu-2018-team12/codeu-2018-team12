@@ -176,7 +176,7 @@ public class ConversationServletTest {
     conversationServlet.doPost(mockRequest, mockResponse);
 
     Mockito.verify(mockConversationStore, Mockito.never())
-            .addConversation(Mockito.any(Conversation.class));
+        .addConversation(Mockito.any(Conversation.class));
     Mockito.verify(mockRequest).setAttribute("error", "This conversation name is already taken.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
