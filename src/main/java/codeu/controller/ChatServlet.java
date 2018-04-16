@@ -193,7 +193,6 @@ public class ChatServlet extends HttpServlet {
       removeConversationFriends(user, conversation);
       conversation.removeUser(user.getId());
 
-
       String activityMessage =
           " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
       Activity activity =
@@ -309,8 +308,7 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * Determines if two users have exactly one shared conversation that they have
-   * joined
+   * Determines if two users have exactly one shared conversation that they have joined
    *
    * @return boolean
    * @param u1 first user
@@ -328,9 +326,9 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * If a user leaves the conversation, ensure that the user,
-   * given they are not in other conversations with users in the conversation,
-   * then had the remove users from to their conversationFriends list
+   * If a user leaves the conversation, ensure that the user, given they are not in other
+   * conversations with users in the conversation, then had the remove users from to their
+   * conversationFriends list
    *
    * @param currentUser current user
    * @param conversation current conversation
@@ -338,8 +336,8 @@ public class ChatServlet extends HttpServlet {
   private void removeConversationFriends(User currentUser, Conversation conversation) {
     List<User> oldFriends = new ArrayList<>();
     for (UUID u : conversation.getConversationUsers()) {
-      //checking to see that the user and any users in the conversation
-      //have only this conversation in common
+      // checking to see that the user and any users in the conversation
+      // have only this conversation in common
       if (hasSingleCommonConversation(currentUser.getId(), u)) {
         // avoid ConcurrentModificationException
         oldFriends.add(UserStore.getInstance().getUser(u));
@@ -354,29 +352,27 @@ public class ChatServlet extends HttpServlet {
   }
 
   /**
-   * If a user joins the conversation, ensure that the user,
-   * given they are not already friends with a user in the conversation,
-   * then had the new users added to their conversationFriends list
+   * If a user joins the conversation, ensure that the user, given they are not already friends with
+   * a user in the conversation, then had the new users added to their conversationFriends list
    *
    * @param currentUser current user
    * @param conversation current conversation
    */
   private void addConversationFriends(User currentUser, Conversation conversation) {
-      List<User>  newFriends = new ArrayList<>();
-      for (UUID u : conversation.getConversationUsers()) {
-        // checking to see that the user and any users in the conversation
-        // are not friends yet
-        if ((!(hasSingleCommonConversation(currentUser.getId(), u))
-            && (!(currentUser.getConversationFriends().contains(u))))) {
-          // avoid ConcurrentModificationException
-          newFriends.add(UserStore.getInstance().getUser(u));
-        }
-        for (User u1 : newFriends) {
-          // if the two users are not friends, ensure they become friends
-          currentUser.addConversationFriend(u1);
-          u1.addConversationFriend(currentUser);
-        }
+    List<User> newFriends = new ArrayList<>();
+    for (UUID u : conversation.getConversationUsers()) {
+      // checking to see that the user and any users in the conversation
+      // are not friends yet
+      if ((!(hasSingleCommonConversation(currentUser.getId(), u))
+          && (!(currentUser.getConversationFriends().contains(u))))) {
+        // avoid ConcurrentModificationException
+        newFriends.add(UserStore.getInstance().getUser(u));
+      }
+      for (User u1 : newFriends) {
+        // if the two users are not friends, ensure they become friends
+        currentUser.addConversationFriend(u1);
+        u1.addConversationFriend(currentUser);
+      }
     }
   }
-
 }
