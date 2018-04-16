@@ -6,6 +6,10 @@ import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.Queue;
@@ -66,7 +70,24 @@ public class NotificationsServlet extends HttpServlet {
 
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-    List<User> users = userStore.getUsers();
+    Date date = new Date();
+    Calendar calendar = GregorianCalendar.getInstance();
+    calendar.setTime(date);
+    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+    List<User> users;
+
+    if (hour % 24 == 0) {
+      users = userStore.getUsers();
+    } else if (hour % 4 == 0) {
+      List<User> usersHour = userStore.getUsersByNotificationFrequency("everyHour");
+      List<User> usersFourHours = userStore.getUsersByNotificationFrequency("everyFourHours");
+      users = new ArrayList<>(usersHour.size() + usersFourHours.size());
+      users.addAll(usersHour);
+      users.addAll(usersFourHours);
+    } else {
+      users = userStore.getUsersByNotificationFrequency("everyHour");
+    }
 
     for (User user : users) {
       String emailBody =

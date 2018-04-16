@@ -248,4 +248,16 @@ public class UserStore {
   public List<User> getUsers() {
     return users;
   }
+
+  /** Returns a list of conversation users with the specified notification frequency * */
+  public List<User> getUsersByNotificationFrequency(String notificationFrequency) {
+
+    List<User> matchedUsers = new ArrayList<>();
+    for (User user : users) {
+      if (user.getNotificationFrequency().equals(notificationFrequency)) {
+        matchedUsers.add(user);
+      }
+    }
+    return matchedUsers;
+  }
 }
