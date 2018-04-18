@@ -141,7 +141,6 @@
   </servlet-mapping>
 
   <servlet>
-<<<<<<< HEAD
     <servlet-name>Upload</servlet-name>
     <servlet-class>Upload</servlet-class>
   </servlet>
@@ -160,27 +159,4 @@
     <servlet-name>Serve</servlet-name>
     <url-pattern>/serve</url-pattern>
   </servlet-mapping>-->
-
 </web-app>
-=======
-    <servlet-name>bouncehandler</servlet-name>
-    <servlet-class>codeu.controller.BounceHandlerServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>bouncehandler</servlet-name>
-    <url-pattern>/_ah/bounce</url-pattern>
-  </servlet-mapping>
-
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>bounce</web-resource-name>
-      <url-pattern>/_ah/bounce</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-      <role-name>admin</role-name>
-    </auth-constraint>
-  </security-constraint>
-
-</web-app>
->>>>>>> 95bac9a207b8842eec6c925a1bb64d0f0f96a442
