@@ -67,9 +67,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     %>
       <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
     <%
-      }
-    %>
-    <%
+       }
       }
     %>
     <%
