@@ -75,7 +75,7 @@
     }
     %>
     <hr/>
-    <% if(!directMessages.isEmpty()){
+    <% if(directMessages != null && !directMessages.isEmpty()){
     %>
       <h1>Direct Messages</h1>
       <ul class="mdl-list">
