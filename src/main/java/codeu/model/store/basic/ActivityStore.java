@@ -159,13 +159,13 @@ public class ActivityStore {
     for (Activity activity : activities1) {
       for (UUID u : activity.getUsers()) {
         User user = userstore.getUser(u);
-        if (currentUser.getConversationFriends().contains(u)
+        if (currentUser != null && currentUser.getConversationFriends().contains(u)
             && (user.getActivityFeedPrivacy().equals("someContent"))) {
           activitiesPerPrivacy.add(activity);
         } else if (user.getActivityFeedPrivacy().equals("allContent")) {
           activitiesPerPrivacy.add(activity);
         }
-        if (currentUser.getActivityFeedPrivacy().equals("noContent")) {
+        if (currentUser != null && currentUser.getActivityFeedPrivacy().equals("noContent")) {
           if (activity.getUserId().equals(currentUser.getId())) {
             activitiesPerPrivacy.add(activity);
           }
