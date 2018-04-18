@@ -294,14 +294,14 @@ public class ChatServlet extends HttpServlet {
             msg.setText(msgBody);
             Transport.send(msg);
           } catch (AddressException e) {
-            System.err.println("Invalid email address formatting. Email not sent.");
             System.out.println("Invalid email address formatting. Email not sent.");
+            System.out.println("AddressException:" + e);
           } catch (MessagingException e) {
-            System.err.println("An error has occurred with this message. Email not sent.");
             System.out.println("An error has occurred with this message. Email not sent.");
+            System.out.println("MessagingException:" + e);
           } catch (UnsupportedEncodingException e) {
-            System.err.println("This character encoding is not supported. Email not sent");
             System.out.println("This character encoding is not supported. Email not sent");
+            System.out.println("UnsupportedEncodingException:" + e);
           }
         }
       } else {
