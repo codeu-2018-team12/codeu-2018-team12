@@ -47,10 +47,12 @@ public class ActivityServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
-    List<Activity> activities =
+    List<Activity> activitiesPermitted =
         loggedInUser == null
             ? activityStore.getAllPublicActivities()
             : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
+    List<Activity> activities =
+        activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);
     request.setAttribute("activities", activities);
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }

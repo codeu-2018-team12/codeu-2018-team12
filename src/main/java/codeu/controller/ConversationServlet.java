@@ -159,7 +159,6 @@ public class ConversationServlet extends HttpServlet {
         new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
 
     conversationStore.addConversation(conversation);
-
     String activityMessage =
         " created a new conversation: "
             + "<a href=\"/chat/"

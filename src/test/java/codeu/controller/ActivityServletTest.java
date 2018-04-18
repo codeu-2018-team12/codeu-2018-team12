@@ -77,6 +77,8 @@ public class ActivityServletTest {
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
     Mockito.when(mockActivityStore.getAllPermittedActivitiesSorted(testUser.getId()))
         .thenReturn(sampleActivities);
+    Mockito.when(mockActivityStore.getActivitiesPerPrivacy(testUser, sampleActivities))
+        .thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);
 

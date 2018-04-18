@@ -61,11 +61,20 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <div id="chat">
       <ul>
     <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
+      if (user != null && conversationUsers.contains(user.getId())) {
+        for (Message message : messages) {
+          String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
     %>
       <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
+    <%
+       }
+      }
+    %>
+    <%
+      if (user != null && !conversationUsers.contains(user.getId())) {
+    %>
+      <h2> Messages from this conversation will appear here! </h2>
+      <p> To see these messages, you must first join the conversation. </p>
     <%
       }
     %>

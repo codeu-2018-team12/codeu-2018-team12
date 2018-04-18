@@ -78,15 +78,18 @@ public class ProfileServlet extends HttpServlet {
     User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
     User user = userStore.getUser(name);
     List<Activity> activities = null;
+    List<Activity> activitiesPermitted;
     if (user != null) {
-      activities =
+      activitiesPermitted =
           loggedInUser == null
               ? activityStore.getAllPublicActivitiesWithUserIdSorted(user.getId())
               : activityStore.getAllPermittedActivitiesWithUserIdSorted(
                   user.getId(), loggedInUser.getId());
+      activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);
+    request.setAttribute("loggedInUser", loggedInUser);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
 

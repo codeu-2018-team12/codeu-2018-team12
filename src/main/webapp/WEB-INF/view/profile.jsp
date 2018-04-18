@@ -10,6 +10,7 @@
 <%
 List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 User user = (User) request.getAttribute("user");
+User loggedInUser = (User) request.getAttribute("loggedInUser");
 %>
 
 <!DOCTYPE html>
@@ -51,12 +52,15 @@ User user = (User) request.getAttribute("user");
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button>
      </form>
-<% } else{ %>
+ <% } else {
+      if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+       && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
       <form action="/direct/<%= user.getName() %>">
        <input type="submit" value="Send <%= user.getName() %> a direct message" />
       </form>
-  <% }
-  } %>
+      <% } %>
+   <% } %>
+ <% } %>
     <br>
     <br>
   </div>
@@ -64,6 +68,8 @@ User user = (User) request.getAttribute("user");
    <h2>Recent Activity</h2>
    <div id="activities">
      <ul>
+     <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+      && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
        <%
          for (Activity activity : activities) {
            String type = activity.getActivityType();
@@ -80,6 +86,7 @@ User user = (User) request.getAttribute("user");
         <%
          }
         %>
+        <% } %>
      </ul>
    </div>
   </div>

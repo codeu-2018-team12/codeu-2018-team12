@@ -134,4 +134,103 @@ public class PersistentStorageAgentTest {
     persistentStorageAgent.updateUserEntityEmail(user);
     Mockito.verify(mockPersistentDataStore).updateUserEntityEmail(user);
   }
+
+  @Test
+  public void testUpdateEntityUserPassword() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityPassword(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityPassword(user);
+  }
+
+  @Test
+  public void testUpdateEntityUserNotificationStatus() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityNotificationStatus(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityNotificationStatus(user);
+  }
+
+  @Test
+  public void testUpdateEntityUserNotificationFrequency() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityNotificationFrequency(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityNotificationFrequency(user);
+  }
+
+  @Test
+  public void testUpdateEntityStoredNotifications() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityStoredNotifications(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityStoredNotifications(user);
+  }
+
+  @Test
+  public void testUpdateEntityProfilePrivacy() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityProfilePrivacy(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityProfilePrivacy(user);
+  }
+
+  @Test
+  public void testUpdateEntityActivityFeedPrivacy() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+    persistentStorageAgent.updateUserEntityActivityFeedPrivacy(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityActivityFeedPrivacy(user);
+  }
+
+  @Test
+  public void testUpdateUserEntityConversationFriends() {
+    User user =
+        new User(
+            UUID.randomUUID(),
+            "test_username",
+            "password",
+            "testbio",
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+
+    persistentStorageAgent.updateUserEntityConversationFriends(user);
+    Mockito.verify(mockPersistentDataStore).updateUserEntityConversationFriends(user);
+  }
 }

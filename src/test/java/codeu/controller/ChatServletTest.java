@@ -22,6 +22,8 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -32,6 +34,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +52,12 @@ public class ChatServletTest {
   private MessageStore mockMessageStore;
   private UserStore mockUserStore;
   private ActivityStore mockActivityStore;
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   @Before
   public void setup() {
+    helper.setUp();
     chatServlet = new ChatServlet();
 
     mockRequest = Mockito.mock(HttpServletRequest.class);
@@ -74,6 +80,11 @@ public class ChatServletTest {
 
     mockActivityStore = Mockito.mock(ActivityStore.class);
     chatServlet.setActivityStore(mockActivityStore);
+  }
+
+  @After
+  public void tearDown() {
+    helper.tearDown();
   }
 
   @Test

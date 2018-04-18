@@ -100,8 +100,10 @@ public class PersonalActivityServletTest {
             new ArrayList<UUID>(),
             true));
 
+    List<Activity> privateSampleActivities =
+        mockActivityStore.getActivitiesPerPrivacy(fakeUser, sampleActivities);
     List<Activity> sortedSampleActivities =
-        mockActivityStore.getActivityListSorted(sampleActivities);
+        mockActivityStore.getActivityListSorted(privateSampleActivities);
     personalActivityServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("activities", sortedSampleActivities);

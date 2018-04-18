@@ -24,7 +24,9 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -69,6 +71,26 @@ public class PersistentDataStore {
         String password = (String) entity.getProperty("password");
         String biography = (String) entity.getProperty("biography");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
+        Boolean notifications =
+            entity.getProperty("notificationStatus") == null
+                ? true
+                : (boolean) entity.getProperty("notificationStatus");
+        String notificationFrequency =
+            entity.getProperty("notificationFrequency") == null
+                ? "everyMessage"
+                : (String) entity.getProperty("notificationFrequency");
+        String profilePrivacy =
+            entity.getProperty("profilePrivacy") == null
+                ? "allContent"
+                : (String) entity.getProperty("profilePrivacy");
+        String activityFeedPrivacy =
+            entity.getProperty("activityFeedPrivacy") == null
+                ? "allContent"
+                : (String) entity.getProperty("activityFeedPrivacy");
+        List<String> conversationFriends =
+            entity.getProperty("conversationFriends") == null
+                ? new ArrayList<>()
+                : (List<String>) entity.getProperty("conversationFriends");
         String email =
             entity.getProperty("email") == null
                 ? "codeUChatTest@gmail.com"
@@ -76,7 +98,25 @@ public class PersistentDataStore {
         if (password != null && !password.startsWith("$2a$")) {
           password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
+        Queue<String> notificationQueue =
+            entity.getProperty("notification") == null
+                ? new LinkedList<String>()
+                : (Queue<String>) entity.getProperty("notifications");
         User user = new User(uuid, userName, password, biography, creationTime, email);
+        user.setNotifications(notificationQueue);
+        user.setConversationFriends(conversationFriends);
+        if (!(activityFeedPrivacy.equals("allContent"))) {
+          user.setActivityFeedPrivacy((activityFeedPrivacy));
+        }
+        if (!(profilePrivacy.equals("allContent"))) {
+          user.setProfilePrivacy((profilePrivacy));
+        }
+        if (!notifications) {
+          user.setNotificationStatus((notifications));
+        }
+        if (!(notificationFrequency.equals("everyMessage"))) {
+          user.setNotificationFrequency((notificationFrequency));
+        }
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -119,7 +159,6 @@ public class PersistentDataStore {
                 : ((String) entity.getProperty("isPublic")).equals("true");
         Conversation conversation =
             new Conversation(uuid, ownerUuid, title, creationTime, isPublic);
-        datastore.put(entity);
         conversation.setUsers(users);
         conversations.add(conversation);
       } catch (Exception e) {
@@ -232,6 +271,12 @@ public class PersistentDataStore {
     userEntity.setProperty("biography", user.getBio());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     userEntity.setProperty("email", user.getEmail());
+    userEntity.setProperty("notificationStatus", user.getNotificationStatus());
+    userEntity.setProperty("notificationFrequency", user.getNotificationFrequency());
+    userEntity.setProperty("notifications", user.getStoredNotifications());
+    userEntity.setProperty("profilePrivacy", user.getProfilePrivacy());
+    userEntity.setProperty("activityFeedPrivacy", user.getActivityFeedPrivacy());
+    userEntity.setProperty("conversationFriends", user.getUserIdsAsStrings());
     datastore.put(userEntity);
   }
 
@@ -272,7 +317,7 @@ public class PersistentDataStore {
     datastore.put(activityEntity);
   }
 
-  /** Updates the users property of a Conversation object in the Datastore service */
+  /** Updates the users property of a Conversation entity in the Datastore service */
   public void updateConversationEntityUsers(Conversation conversation) {
     Query query =
         new Query("chat-conversations")
@@ -286,7 +331,7 @@ public class PersistentDataStore {
     }
   }
 
-  /** Updates the biography property of a User object in the Datastore service */
+  /** Updates the biography property of a User entity in the Datastore service */
   public void updateUserEntityBiography(User user) {
     Query query =
         new Query("chat-users")
@@ -297,14 +342,107 @@ public class PersistentDataStore {
     datastore.put(resultEntity);
   }
 
-  /** Updates the email property of a User object in the Datastore service */
+  /** Updates the email property of a User entity in the Datastore service */
   public void updateUserEntityEmail(User user) {
     Query query =
         new Query("chat-users")
             .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     Entity resultEntity = preparedQuery.asSingleEntity();
-    resultEntity.setProperty("email", user.getEmail());
-    datastore.put(resultEntity);
+    if (resultEntity != null) {
+      resultEntity.setProperty("email", user.getEmail());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the password property of a User entity in the Datastore service */
+  public void updateUserEntityPassword(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("password", user.getPassword());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the notificationsFrequency property of a user entity in the Datastore service */
+  public void updateUserEntityNotificationFrequency(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("notificationFrequency", user.getNotificationFrequency());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the notifications property of a user entity in the Datastore service */
+  public void updateUserEntityNotificationStatus(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("notificationStatus", user.getNotificationStatus());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the notifications property of a user entity in the Datastore service */
+  public void updateUserEntityStoredNotifications(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("notifications", user.getStoredNotifications());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the profile privacy property of a user entity in the Datastore service */
+  public void updateUserEntityProfilePrivacy(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("profilePrivacy", user.getProfilePrivacy());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the activity feed privacy property of a user entity in the Datastore service */
+  public void updateUserEntityActivityFeedPrivacy(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("activityFeedPrivacy", user.getActivityFeedPrivacy());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the activity feed privacy property of a user entity in the Datastore service */
+  public void updateUserEntityConversationFriends(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Entity resultEntity = preparedQuery.asSingleEntity();
+    if (resultEntity != null) {
+      resultEntity.setProperty("conversationFriends", user.getUserIdsAsStrings());
+      datastore.put(resultEntity);
+    }
   }
 }

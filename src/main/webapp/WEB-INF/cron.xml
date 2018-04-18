@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+    <cron>
+        <url>/notifications</url>
+        <target>beta</target>
+        <description>Sends message notifications to users every hour</description>
+        <schedule>every 1 hours</schedule>
+    </cron>
+</cronentries>

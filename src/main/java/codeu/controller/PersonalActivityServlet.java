@@ -103,8 +103,10 @@ public class PersonalActivityServlet extends HttpServlet {
 
     // sort the activities
     List<Activity> personalizedActivities = activityStore.getActivityListSorted(tailoredActivities);
+    List<Activity> privacyActivities =
+        activityStore.getActivitiesPerPrivacy(user, personalizedActivities);
 
-    request.setAttribute("activities", personalizedActivities);
+    request.setAttribute("activities", privacyActivities);
     request
         .getRequestDispatcher("/WEB-INF/view/personalActivityFeed.jsp")
         .forward(request, response);
