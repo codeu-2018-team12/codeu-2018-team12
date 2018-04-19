@@ -31,12 +31,8 @@ public class MessageStore {
   /** Singleton instance of MessageStore. */
   private static MessageStore instance;
 
-  private Comparator<Message> msgComparator =
-      new Comparator<Message>() {
-        public int compare(Message m1, Message m2) {
-          return m2.getCreationTime().compareTo(m1.getCreationTime());
-        }
-      };
+  private static Comparator<Message> msgComparator =
+      (m1, m2) -> m2.getCreationTime().compareTo(m1.getCreationTime());
 
   /**
    * Returns the singleton instance of MessageStore that should be shared between all servlet
@@ -47,6 +43,17 @@ public class MessageStore {
       instance = new MessageStore(PersistentStorageAgent.getInstance());
     }
     return instance;
+  }
+
+  /**
+   * Retrieves a static sorter that takes in a list of messages and sort them
+   *
+   * @param messages the list of activities to be sorted
+   * @return the sorted list of messages
+   */
+  public static List<Message> sort(List<Message> messages) {
+    messages.sort(msgComparator);
+    return messages;
   }
 
   /**
@@ -101,27 +108,6 @@ public class MessageStore {
     return messages;
   }
 
-  /**
-   * Access the current set of conversations known to the application sorted with newest messages
-   * first.
-   */
-  public List<Message> getAllMessagesSorted() {
-    messages.sort(msgComparator);
-    return messages;
-  }
-
-  /** Access the content of the most recent message within a given conversation */
-  public String getMostRecentMessageFromConvo(UUID conversationId) {
-
-    String recentMessage = "";
-    messages.sort(msgComparator);
-
-    for (Message message : messages) {
-      if (message.getConversationId().equals(conversationId)) recentMessage = message.getContent();
-      break;
-    }
-    return recentMessage;
-  }
 
   /** Access the current set of Messages within the given Conversation. */
   public List<Message> getMessagesInConversation(UUID conversationId) {
@@ -133,7 +119,6 @@ public class MessageStore {
         messagesInConversation.add(message);
       }
     }
-
     return messagesInConversation;
   }
 
@@ -141,7 +126,7 @@ public class MessageStore {
    * Retrieves a list of messages belonging to a user with a specified ID sorted with newest
    * messages first
    */
-  public List<Message> getMessagesByAuthorSorted(UUID authorId) {
+  public List<Message> getMessagesByAuthor(UUID authorId) {
     List<Message> messagesWrittenByAuthor = new ArrayList<>();
 
     for (Message message : messages) {
@@ -149,9 +134,6 @@ public class MessageStore {
         messagesWrittenByAuthor.add(message);
       }
     }
-
-    messagesWrittenByAuthor.sort(msgComparator);
-
     return messagesWrittenByAuthor;
   }
 

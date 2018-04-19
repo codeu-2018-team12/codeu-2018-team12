@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static codeu.model.store.basic.MessageStore.sort;
+
 public class MessageStoreTest {
 
   private MessageStore messageStore;
@@ -73,7 +75,7 @@ public class MessageStoreTest {
 
   @Test
   public void testGetMessagesByAuthor() {
-    List<Message> resultMessages = messageStore.getMessagesByAuthorSorted(USER_ID_ONE);
+    List<Message> resultMessages = sort(messageStore.getMessagesByAuthor(USER_ID_ONE));
 
     Assert.assertEquals(2, resultMessages.size());
     assertEquals(MESSAGE_ONE, resultMessages.get(1));

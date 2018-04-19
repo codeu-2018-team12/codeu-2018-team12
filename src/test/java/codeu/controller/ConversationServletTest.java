@@ -36,6 +36,8 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 public class ConversationServletTest {
 
   private ConversationServlet conversationServlet;
@@ -78,7 +80,7 @@ public class ConversationServletTest {
     Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
     User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now(), null);
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
-    Mockito.when(mockConversationStore.getAllPermittedConversationsSorted(testUser.getId()))
+    Mockito.when(sort(mockConversationStore.getAllPermittedConversations(testUser.getId())))
         .thenReturn(fakeConversationList);
 
     conversationServlet.doGet(mockRequest, mockResponse);

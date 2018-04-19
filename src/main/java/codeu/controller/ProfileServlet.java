@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
 
@@ -82,9 +84,9 @@ public class ProfileServlet extends HttpServlet {
     if (user != null) {
       activitiesPermitted =
           loggedInUser == null
-              ? activityStore.getAllPublicActivitiesWithUserIdSorted(user.getId())
-              : activityStore.getAllPermittedActivitiesWithUserIdSorted(
-                  user.getId(), loggedInUser.getId());
+              ? sort(activityStore.getAllPublicActivitiesWithUserId(user.getId()))
+              : sort(activityStore.getAllPermittedActivitiesWithUserId(
+                  user.getId(), loggedInUser.getId()));
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
     request.setAttribute("activities", activities);

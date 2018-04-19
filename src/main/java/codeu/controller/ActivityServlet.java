@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 /** Servlet class responsible for activity feed. */
 public class ActivityServlet extends HttpServlet {
 
@@ -50,10 +52,10 @@ public class ActivityServlet extends HttpServlet {
 
     List<Activity> activitiesPermitted =
         loggedInUser == null
-            ? activityStore.getAllPublicActivitiesSorted()
-            : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
+            ? sort(activityStore.getAllPublicActivities())
+            : sort(activityStore.getAllPermittedActivities(loggedInUser.getId()));
     List<Activity> activities =
-        activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);
+        sort(activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted));
     request.setAttribute("activities", activities);
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }

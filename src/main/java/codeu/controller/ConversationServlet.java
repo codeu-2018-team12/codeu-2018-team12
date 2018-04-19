@@ -30,6 +30,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {
 
@@ -88,8 +90,8 @@ public class ConversationServlet extends HttpServlet {
     User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
     List<Conversation> conversations =
         loggedInUser == null
-            ? conversationStore.getAllPublicConversationsSorted()
-            : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+            ? sort(conversationStore.getAllPublicConversations())
+            : sort(conversationStore.getAllPermittedConversations(loggedInUser.getId()));
     List<Conversation> directMessages = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
       if (convo.getTitle().startsWith("direct:")) {
@@ -130,7 +132,7 @@ public class ConversationServlet extends HttpServlet {
     if (conversationTitle.isEmpty()) {
       User loggedInUser = userStore.getUser(username);
       List<Conversation> conversations =
-          conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+          sort(conversationStore.getAllPermittedConversations(loggedInUser.getId()));
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "Please specify a name for this chat.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
@@ -148,7 +150,7 @@ public class ConversationServlet extends HttpServlet {
       // new one
       User loggedInUser = userStore.getUser(username);
       List<Conversation> conversations =
-          conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+          sort(conversationStore.getAllPermittedConversations(loggedInUser.getId()));
       request.setAttribute("conversations", conversations);
       request.setAttribute("error", "This conversation name is already taken.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);

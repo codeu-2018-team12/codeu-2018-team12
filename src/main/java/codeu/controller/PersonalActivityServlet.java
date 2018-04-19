@@ -17,6 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+import static codeu.model.store.basic.ActivityStore.sort;
+
 /** Servlet class responsible for activity feed. */
 public class PersonalActivityServlet extends HttpServlet {
 
@@ -77,7 +80,7 @@ public class PersonalActivityServlet extends HttpServlet {
     }
     User user = userStore.getUser(username);
     UUID userID = user.getId();
-    List<Conversation> conversations = conversationStore.getAllConversationsSorted();
+    List<Conversation> conversations = sort(conversationStore.getAllConversations());
     List<Activity> conversationActivities = new ArrayList<>();
     List<Activity> tailoredActivities = new ArrayList<>();
 
@@ -102,9 +105,9 @@ public class PersonalActivityServlet extends HttpServlet {
     tailoredActivities.addAll(hashSet);
 
     // sort the activities
-    List<Activity> personalizedActivities = activityStore.getActivityListSorted(tailoredActivities);
+    List<Activity> personalizedActivities = sort(tailoredActivities);
     List<Activity> privacyActivities =
-        activityStore.getActivitiesPerPrivacy(user, personalizedActivities);
+        sort(activityStore.getActivitiesPerPrivacy(user, personalizedActivities));
 
     request.setAttribute("activities", privacyActivities);
     request

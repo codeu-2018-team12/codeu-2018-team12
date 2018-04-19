@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 public class ActivityServletTest {
 
   private ActivityServlet activityServlet;
@@ -75,9 +77,9 @@ public class ActivityServletTest {
     Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
     User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now(), null);
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
-    Mockito.when(mockActivityStore.getAllPermittedActivitiesSorted(testUser.getId()))
+    Mockito.when(sort(mockActivityStore.getAllPermittedActivities(testUser.getId())))
         .thenReturn(sampleActivities);
-    Mockito.when(mockActivityStore.getActivitiesPerPrivacy(testUser, sampleActivities))
+    Mockito.when(sort(mockActivityStore.getActivitiesPerPrivacy(testUser, sampleActivities)))
         .thenReturn(sampleActivities);
 
     activityServlet.doGet(mockRequest, mockResponse);
