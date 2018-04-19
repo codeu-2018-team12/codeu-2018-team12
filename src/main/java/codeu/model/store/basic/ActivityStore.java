@@ -19,9 +19,7 @@ import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -136,19 +134,18 @@ public class ActivityStore {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();
     for (Activity activity : activities1) {
-        UUID activityUserID = activity.getUserId();
-        User user = userstore.getUser(activityUserID);
-        if (currentUser != null && user != null
-            && currentUser.getConversationFriends().contains(activityUserID)
-            && (user.getActivityFeedPrivacy().equals("someContent"))) {
-          activitiesPerPrivacy.add(activity);
-        }
-        else if (user != null && user.getActivityFeedPrivacy().equals("allContent")) {
-          activitiesPerPrivacy.add(activity);
-        }
-        else if (currentUser != null && activityUserID.equals(currentUser.getId())) {
-          activitiesPerPrivacy.add(activity);
-        }
+      UUID activityUserID = activity.getUserId();
+      User user = userstore.getUser(activityUserID);
+      if (currentUser != null
+          && user != null
+          && currentUser.getConversationFriends().contains(activityUserID)
+          && (user.getActivityFeedPrivacy().equals("someContent"))) {
+        activitiesPerPrivacy.add(activity);
+      } else if (user != null && user.getActivityFeedPrivacy().equals("allContent")) {
+        activitiesPerPrivacy.add(activity);
+      } else if (currentUser != null && activityUserID.equals(currentUser.getId())) {
+        activitiesPerPrivacy.add(activity);
+      }
     }
     activitiesPerPrivacy.sort(activityComparator);
     return activitiesPerPrivacy;
