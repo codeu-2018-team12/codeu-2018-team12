@@ -67,15 +67,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     %>
       <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
     <%
-       }
-      }
-    %>
-    <%
-      if (user != null && !conversationUsers.contains(user.getId())) {
-    %>
-      <h2> Messages from this conversation will appear here! </h2>
-      <p> To see these messages, you must first join the conversation. </p>
-    <%
       }
     %>
     <%
