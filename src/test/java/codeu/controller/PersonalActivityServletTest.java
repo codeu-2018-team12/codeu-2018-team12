@@ -22,6 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 public class PersonalActivityServletTest {
   private PersonalActivityServlet personalActivityServlet;
   private HttpSession mockSession;
@@ -101,9 +103,9 @@ public class PersonalActivityServletTest {
             true));
 
     List<Activity> privateSampleActivities =
-        mockActivityStore.getActivitiesPerPrivacy(fakeUser, sampleActivities);
+        sort(mockActivityStore.getActivitiesPerPrivacy(fakeUser, sampleActivities));
     List<Activity> sortedSampleActivities =
-        mockActivityStore.getActivityListSorted(privateSampleActivities);
+        sort(privateSampleActivities);
     personalActivityServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("activities", sortedSampleActivities);

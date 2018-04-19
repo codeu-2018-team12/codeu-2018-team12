@@ -16,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 public class ActivityStoreTest {
   private final LocalServiceTestHelper helper =
       new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
@@ -74,16 +76,16 @@ public class ActivityStoreTest {
   }
 
   @Test
-  public void testGetAllPermittedActivitesSorted_Permited() {
-    List<Activity> permittedActivities = activityStore.getAllPermittedActivitiesSorted(USER_ONE);
+  public void testGetAllPermittedActivitiesSorted_Permitted() {
+    List<Activity> permittedActivities = sort(activityStore.getAllPermittedActivities(USER_ONE));
     Assert.assertEquals(permittedActivities.size(), 2);
     assertEquals(permittedActivities.get(0), ACTIVITY_ONE);
     assertEquals(permittedActivities.get(1), ACTIVITY_TWO);
   }
 
   @Test
-  public void testGetAllPermittedActivitesSorted_NotPermited() {
-    List<Activity> permittedActivities = activityStore.getAllPermittedActivitiesSorted(USER_TWO);
+  public void testGetAllPermittedActivitiesSorted_NotPermitted() {
+    List<Activity> permittedActivities = sort(activityStore.getAllPermittedActivities(USER_TWO));
     Assert.assertEquals(permittedActivities.size(), 1);
     assertEquals(permittedActivities.get(0), ACTIVITY_TWO);
   }
