@@ -50,6 +50,13 @@
 
     <h1>Conversations</h1>
 
+    <div>
+      <form action="/search" method="GET">
+        <input type="text" placeholder="Search for a conversation..." name="searchconvo" id="searchconvo">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
     <%
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
