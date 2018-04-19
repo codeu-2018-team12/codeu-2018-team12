@@ -413,7 +413,8 @@ public class PersistentDataStore {
   private Entity setUpUserEntity(User user) {
     Query query =
         new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+            .setFilter(new FilterPredicate("uuid",
+                FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return preparedQuery.asSingleEntity();
   }
@@ -427,7 +428,8 @@ public class PersistentDataStore {
     Query query =
         new Query("chat-conversations")
             .setFilter(
-                new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
+                new FilterPredicate("uuid",
+                    FilterOperator.EQUAL, conversation.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return preparedQuery.asSingleEntity();
   }
