@@ -1,5 +1,7 @@
 package codeu.controller;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
@@ -21,8 +23,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import static codeu.model.store.basic.ActivityStore.sort;
 
 public class PersonalActivityServletTest {
   private PersonalActivityServlet personalActivityServlet;
@@ -104,8 +104,7 @@ public class PersonalActivityServletTest {
 
     List<Activity> privateSampleActivities =
         sort(mockActivityStore.getActivitiesPerPrivacy(fakeUser, sampleActivities));
-    List<Activity> sortedSampleActivities =
-        sort(privateSampleActivities);
+    List<Activity> sortedSampleActivities = sort(privateSampleActivities);
     personalActivityServlet.doGet(mockRequest, mockResponse);
 
     Mockito.verify(mockRequest).setAttribute("activities", sortedSampleActivities);

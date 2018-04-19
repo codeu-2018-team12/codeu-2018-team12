@@ -14,6 +14,8 @@
 
 package codeu.controller;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
@@ -29,8 +31,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static codeu.model.store.basic.ConversationStore.sort;
 
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {

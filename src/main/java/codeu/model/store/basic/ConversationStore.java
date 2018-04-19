@@ -102,7 +102,6 @@ public class ConversationStore {
     return conversations;
   }
 
-
   public List<Conversation> getAllPublicConversations() {
     ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {

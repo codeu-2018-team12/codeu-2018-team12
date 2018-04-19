@@ -1,5 +1,7 @@
 package codeu.controller;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
@@ -12,8 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static codeu.model.store.basic.ActivityStore.sort;
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -85,8 +85,9 @@ public class ProfileServlet extends HttpServlet {
       activitiesPermitted =
           loggedInUser == null
               ? sort(activityStore.getAllPublicActivitiesWithUserId(user.getId()))
-              : sort(activityStore.getAllPermittedActivitiesWithUserId(
-                  user.getId(), loggedInUser.getId()));
+              : sort(
+                  activityStore.getAllPermittedActivitiesWithUserId(
+                      user.getId(), loggedInUser.getId()));
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
     request.setAttribute("activities", activities);

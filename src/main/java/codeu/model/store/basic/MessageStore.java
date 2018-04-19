@@ -108,7 +108,6 @@ public class MessageStore {
     return messages;
   }
 
-
   /** Access the current set of Messages within the given Conversation. */
   public List<Message> getMessagesInConversation(UUID conversationId) {
 

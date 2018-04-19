@@ -39,7 +39,6 @@ public class ActivityStore {
    * Returns the singleton instance of ActivityStore that should be shared between all servlet
    * classes. Do not call this function from a test; use getTestInstance() instead.
    */
-
   public static ActivityStore getInstance() {
     if (instance == null) {
       instance = new ActivityStore(PersistentStorageAgent.getInstance());

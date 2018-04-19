@@ -1,5 +1,8 @@
 package codeu.controller;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+import static codeu.model.store.basic.ConversationStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
@@ -16,9 +19,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static codeu.model.store.basic.ConversationStore.sort;
-import static codeu.model.store.basic.ActivityStore.sort;
 
 /** Servlet class responsible for activity feed. */
 public class PersonalActivityServlet extends HttpServlet {

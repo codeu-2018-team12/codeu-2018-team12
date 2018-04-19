@@ -1,5 +1,7 @@
 package codeu.controller;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
@@ -20,8 +22,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import static codeu.model.store.basic.ActivityStore.sort;
 
 public class ProfileServletTest {
 
@@ -105,8 +105,9 @@ public class ProfileServletTest {
     activities.add(activityOne);
     activities.add(activityTwo);
     Mockito.when(
-            sort(mockActivityStore.getAllPermittedActivitiesWithUserId(
-                testUser.getId(), testloggedInUser.getId())))
+            sort(
+                mockActivityStore.getAllPermittedActivitiesWithUserId(
+                    testUser.getId(), testloggedInUser.getId())))
         .thenReturn(activities);
     Mockito.when(mockActivityStore.getActivitiesPerPrivacy(testUser, activities))
         .thenReturn(activities);

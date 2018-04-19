@@ -1,5 +1,7 @@
 package codeu.model.store.basic;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
@@ -11,8 +13,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import static codeu.model.store.basic.ConversationStore.sort;
 
 public class ConversationStoreTest {
 

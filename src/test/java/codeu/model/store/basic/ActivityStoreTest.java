@@ -1,5 +1,7 @@
 package codeu.model.store.basic;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
@@ -15,8 +17,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import static codeu.model.store.basic.ActivityStore.sort;
 
 public class ActivityStoreTest {
   private final LocalServiceTestHelper helper =
