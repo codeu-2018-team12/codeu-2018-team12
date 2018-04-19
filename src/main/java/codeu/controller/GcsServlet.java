@@ -25,6 +25,7 @@ import com.google.appengine.tools.cloudstorage.GcsInputChannel;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
+
 import com.google.appengine.tools.cloudstorage.RetryParams;
 //[END gcs_imports]
 import java.io.IOException;
@@ -92,7 +93,7 @@ public class GcsServlet extends HttpServlet {
     GcsOutputChannel outputChannel;
     outputChannel = gcsService.createOrReplace(fileName, instance);
     copy(req.getInputStream(), Channels.newOutputStream(outputChannel));
-    console.log("End"); 
+   // console.log("End"); 
   }
 //[END doPost]
 
