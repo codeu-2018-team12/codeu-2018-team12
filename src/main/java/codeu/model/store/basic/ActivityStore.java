@@ -91,17 +91,6 @@ public class ActivityStore {
     return loaded;
   }
 
-  /** Access the current set of activities known to the application. */
-  public List<Activity> getAllActivities() {
-    return activities;
-  }
-
-  /** Access the current set of activities known to the application sorted with newest first. */
-  public List<Activity> getAllActivitiesSorted() {
-    activities.sort(activityComparator);
-    return activities;
-  }
-
   public List<Activity> getAllPermittedActivitiesSorted(UUID user) {
     ArrayList<Activity> permittedActivities = new ArrayList();
     for (Activity act : activities) {
@@ -113,13 +102,14 @@ public class ActivityStore {
     return permittedActivities;
   }
 
-  public List<Activity> getAllPublicActivities() {
+  public List<Activity> getAllPublicActivitiesSorted() {
     ArrayList<Activity> publicActivities = new ArrayList();
     for (Activity act : activities) {
       if (act.getIsPublic()) {
         publicActivities.add(act);
       }
     }
+    publicActivities.sort(activityComparator);
     return publicActivities;
   }
 

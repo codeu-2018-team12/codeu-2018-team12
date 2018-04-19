@@ -50,7 +50,7 @@ public class ActivityServlet extends HttpServlet {
 
     List<Activity> activitiesPermitted =
         loggedInUser == null
-            ? activityStore.getAllPublicActivities()
+            ? activityStore.getAllPublicActivitiesSorted()
             : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
     List<Activity> activities =
         activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);

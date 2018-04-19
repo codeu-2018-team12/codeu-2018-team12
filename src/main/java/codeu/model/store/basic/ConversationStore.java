@@ -104,16 +104,6 @@ public class ConversationStore {
     return conversations;
   }
 
-  public List<Conversation> getAllPublicConversations() {
-    ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
-    for (Conversation convo : conversations) {
-      if (convo.getIsPublic()) {
-        publicConversations.add(convo);
-      }
-    }
-    return publicConversations;
-  }
-
   public List<Conversation> getAllPublicConversationsSorted() {
     ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
@@ -123,16 +113,6 @@ public class ConversationStore {
     }
     publicConversations.sort(convoComparator);
     return publicConversations;
-  }
-
-  public List<Conversation> getAllPermittedConversations(UUID user) {
-    ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
-    for (Conversation convo : conversations) {
-      if (convo.hasPermission(user)) {
-        permittedConversations.add(convo);
-      }
-    }
-    return permittedConversations;
   }
 
   public List<Conversation> getAllPermittedConversationsSorted(UUID user) {
