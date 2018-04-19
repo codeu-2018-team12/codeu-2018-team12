@@ -156,18 +156,19 @@ public class ActivityStore {
   public List<Activity> getActivitiesPerPrivacy(User currentUser, List<Activity> activities1) {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();
-    for (Activity a : activities1) {
-      for (UUID u : a.getUsers()) {
+    for (Activity activity : activities1) {
+      for (UUID u : activity.getUsers()) {
         User user = userstore.getUser(u);
-        if (currentUser.getConversationFriends().contains(u)
+        if (currentUser != null
+            && currentUser.getConversationFriends().contains(u)
             && (user.getActivityFeedPrivacy().equals("someContent"))) {
-          activitiesPerPrivacy.add(a);
+          activitiesPerPrivacy.add(activity);
         } else if (user.getActivityFeedPrivacy().equals("allContent")) {
-          activitiesPerPrivacy.add(a);
+          activitiesPerPrivacy.add(activity);
         }
-        if (currentUser.getActivityFeedPrivacy().equals("noContent")) {
-          if (a.getUserId().equals(currentUser.getId())) {
-            activitiesPerPrivacy.add(a);
+        if (currentUser != null && currentUser.getActivityFeedPrivacy().equals("noContent")) {
+          if (activity.getUserId().equals(currentUser.getId())) {
+            activitiesPerPrivacy.add(activity);
           }
         }
       }

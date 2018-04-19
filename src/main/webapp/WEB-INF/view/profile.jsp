@@ -53,7 +53,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
        <button type="submit">Submit</button>
      </form>
  <% } else {
-      if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent")) && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+      if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+       && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
       <form action="/direct/<%= user.getName() %>">
        <input type="submit" value="Send <%= user.getName() %> a direct message" />
       </form>
@@ -67,7 +68,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
    <h2>Recent Activity</h2>
    <div id="activities">
      <ul>
-     <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent")) && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+     <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+      && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
        <%
          for (Activity activity : activities) {
            String type = activity.getActivityType();

@@ -115,9 +115,12 @@ public class SettingsServlet extends HttpServlet {
         return;
       }
 
-      if (confirmPassword.equals("") && email.equals("")) {
+      if (confirmPassword != null
+          && email != null
+          && confirmPassword.equals("")
+          && email.equals("")) {
         request.setAttribute(
-            "error", "Please enter information for at least one field before submitting");
+            "error", "Please enter information for at least one field before submitting.");
         request.getRequestDispatcher("/WEB-INF/view/settings.jsp").forward(request, response);
         return;
       }
