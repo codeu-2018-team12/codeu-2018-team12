@@ -118,7 +118,6 @@ public class DefaultDataStore {
               "this is a test biography",
               Instant.now(),
               "codeUChatTest@gmail.com");
-      UserStore.getInstance().addUser(user);
       PersistentStorageAgent.getInstance().writeThrough(user);
       users.add(user);
     }
