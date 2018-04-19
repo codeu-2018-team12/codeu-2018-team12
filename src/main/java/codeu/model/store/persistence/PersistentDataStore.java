@@ -405,31 +405,31 @@ public class PersistentDataStore {
     }
   }
 
-  /** Retrieves a User Entity object
+  /**
+   * Retrieves a User Entity object
    *
    * @param user user in application
    * @return User Entity
-   **/
+   */
   private Entity setUpUserEntity(User user) {
     Query query =
         new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid",
-                FilterOperator.EQUAL, user.getId().toString()));
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return preparedQuery.asSingleEntity();
   }
 
-  /** Retrieves a Conversation Entity object
+  /**
+   * Retrieves a Conversation Entity object
    *
    * @param conversation user in application
    * @return Conversation Entity
-   **/
+   */
   private Entity setUpConversationEntity(Conversation conversation) {
     Query query =
         new Query("chat-conversations")
             .setFilter(
-                new FilterPredicate("uuid",
-                    FilterOperator.EQUAL, conversation.getId().toString()));
+                new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return preparedQuery.asSingleEntity();
   }
