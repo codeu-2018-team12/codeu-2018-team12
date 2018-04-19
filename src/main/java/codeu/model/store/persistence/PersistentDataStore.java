@@ -319,12 +319,7 @@ public class PersistentDataStore {
 
   /** Updates the users property of a Conversation entity in the Datastore service */
   public void updateConversationEntityUsers(Conversation conversation) {
-    Query query =
-        new Query("chat-conversations")
-            .setFilter(
-                new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpConversationEntity(conversation);
     if (resultEntity != null) {
       resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
       datastore.put(resultEntity);
@@ -333,22 +328,14 @@ public class PersistentDataStore {
 
   /** Updates the biography property of a User entity in the Datastore service */
   public void updateUserEntityBiography(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     resultEntity.setProperty("biography", user.getBio());
     datastore.put(resultEntity);
   }
 
   /** Updates the email property of a User entity in the Datastore service */
   public void updateUserEntityEmail(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("email", user.getEmail());
       datastore.put(resultEntity);
@@ -357,11 +344,7 @@ public class PersistentDataStore {
 
   /** Updates the password property of a User entity in the Datastore service */
   public void updateUserEntityPassword(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("password", user.getPassword());
       datastore.put(resultEntity);
@@ -370,11 +353,7 @@ public class PersistentDataStore {
 
   /** Updates the notificationsFrequency property of a user entity in the Datastore service */
   public void updateUserEntityNotificationFrequency(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("notificationFrequency", user.getNotificationFrequency());
       datastore.put(resultEntity);
@@ -383,11 +362,7 @@ public class PersistentDataStore {
 
   /** Updates the notifications property of a user entity in the Datastore service */
   public void updateUserEntityNotificationStatus(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("notificationStatus", user.getNotificationStatus());
       datastore.put(resultEntity);
@@ -396,11 +371,7 @@ public class PersistentDataStore {
 
   /** Updates the notifications property of a user entity in the Datastore service */
   public void updateUserEntityStoredNotifications(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("notifications", user.getStoredNotifications());
       datastore.put(resultEntity);
@@ -409,11 +380,7 @@ public class PersistentDataStore {
 
   /** Updates the profile privacy property of a user entity in the Datastore service */
   public void updateUserEntityProfilePrivacy(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("profilePrivacy", user.getProfilePrivacy());
       datastore.put(resultEntity);
@@ -422,11 +389,7 @@ public class PersistentDataStore {
 
   /** Updates the activity feed privacy property of a user entity in the Datastore service */
   public void updateUserEntityActivityFeedPrivacy(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("activityFeedPrivacy", user.getActivityFeedPrivacy());
       datastore.put(resultEntity);
@@ -435,14 +398,37 @@ public class PersistentDataStore {
 
   /** Updates the activity feed privacy property of a user entity in the Datastore service */
   public void updateUserEntityConversationFriends(User user) {
-    Query query =
-        new Query("chat-users")
-            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
-    PreparedQuery preparedQuery = datastore.prepare(query);
-    Entity resultEntity = preparedQuery.asSingleEntity();
+    Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("conversationFriends", user.getUserIdsAsStrings());
       datastore.put(resultEntity);
     }
+  }
+
+  /** Retrieves a User Entity object
+   *
+   * @param user user in application
+   * @return User Entity
+   **/
+  private Entity setUpUserEntity(User user) {
+    Query query =
+        new Query("chat-users")
+            .setFilter(new FilterPredicate("uuid", FilterOperator.EQUAL, user.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    return preparedQuery.asSingleEntity();
+  }
+
+  /** Retrieves a Conversation Entity object
+   *
+   * @param conversation user in application
+   * @return Conversation Entity
+   **/
+  private Entity setUpConversationEntity(Conversation conversation) {
+    Query query =
+        new Query("chat-conversations")
+            .setFilter(
+                new FilterPredicate("uuid", FilterOperator.EQUAL, conversation.getId().toString()));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    return preparedQuery.asSingleEntity();
   }
 }

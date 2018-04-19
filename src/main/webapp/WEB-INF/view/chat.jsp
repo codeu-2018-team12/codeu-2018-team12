@@ -69,17 +69,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <%
       }
     %>
-    <%
-      }
-    %>
-    <%
-      if (user != null && !conversationUsers.contains(user.getId())) {
-    %>
-      <h2> Messages from this conversation will appear here! </h2>
-      <p> To see these messages, you must first join the conversation. </p>
-    <%
-      }
-    %>
       </ul>
     </div>
 

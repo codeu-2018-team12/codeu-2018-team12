@@ -47,6 +47,7 @@ public class ActivityServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
+
     List<Activity> activitiesPermitted =
         loggedInUser == null
             ? activityStore.getAllPublicActivities()

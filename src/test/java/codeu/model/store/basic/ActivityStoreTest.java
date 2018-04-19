@@ -1,18 +1,24 @@
 package codeu.model.store.basic;
 
 import codeu.model.data.Activity;
+import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class ActivityStoreTest {
+  private final LocalServiceTestHelper helper =
+      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   private ActivityStore activityStore;
   private PersistentStorageAgent mockPersistentStorageAgent;
@@ -45,6 +51,7 @@ public class ActivityStoreTest {
 
   @Before
   public void setup() {
+    helper.setUp();
     mockPersistentStorageAgent = Mockito.mock(PersistentStorageAgent.class);
     activityStore = ActivityStore.getTestInstance(mockPersistentStorageAgent);
 
@@ -52,6 +59,11 @@ public class ActivityStoreTest {
     activityList.add(ACTIVITY_ONE);
     activityList.add(ACTIVITY_TWO);
     activityStore.setActivities(activityList);
+  }
+
+  @After
+  public void tearDown() {
+    helper.tearDown();
   }
 
   @Test
@@ -116,5 +128,89 @@ public class ActivityStoreTest {
   }
 
   @Test
-  public void testGetActivitiesPerPrivacy() {}
+  public void testGetActivitiesPerPrivacy_General() {
+    UUID allContentId = UUID.randomUUID();
+    UUID noContentID = UUID.randomUUID();
+
+    User allContentUser =
+        new User(
+            allContentId,
+            "allContentUser",
+            "password",
+            null,
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+
+    User noContentUser =
+        new User(
+            noContentID,
+            "noContentUser",
+            "password",
+            null,
+            Instant.now(),
+            "codeUChatTestEmail@gmail.com");
+
+    allContentUser.setActivityFeedPrivacy("allContent");
+    allContentUser.setProfilePrivacy("allContent");
+
+    noContentUser.setActivityFeedPrivacy("noContent");
+    noContentUser.setProfilePrivacy("noContent");
+
+    Activity activity1 =
+        new Activity(
+            allContentId,
+            allContentId,
+            allContentId,
+            Instant.ofEpochMilli(2000),
+            "leftConvo",
+            "test_message",
+            users,
+            true);
+
+    Activity activity2 =
+        new Activity(
+            allContentId,
+            allContentId,
+            allContentId,
+            Instant.ofEpochMilli(2000),
+            "leftConvo",
+            "test_message",
+            users,
+            true);
+
+    Activity activity3 =
+        new Activity(
+            noContentID,
+            noContentID,
+            noContentID,
+            Instant.ofEpochMilli(2000),
+            "leftConvo",
+            "test_message",
+            users,
+            true);
+
+    Activity activity4 =
+        new Activity(
+            noContentID,
+            noContentID,
+            noContentID,
+            Instant.ofEpochMilli(2000),
+            "leftConvo",
+            "test_message",
+            users,
+            true);
+
+    List<Activity> activityList = new ArrayList<>();
+    activityList.add(activity1);
+    activityList.add(activity2);
+    activityList.add(activity3);
+    activityList.add(activity4);
+
+    List<Activity> activitiesPerPrivacy =
+        activityStore.getActivitiesPerPrivacy(allContentUser, activityList);
+
+    Assert.assertEquals(activity1, activitiesPerPrivacy.get(0));
+    Assert.assertEquals(activity2, activitiesPerPrivacy.get(1));
+    Assert.assertEquals(2, activitiesPerPrivacy.size());
+  }
 }

@@ -62,6 +62,12 @@ public class SettingsServlet extends HttpServlet {
       throws IOException, ServletException {
     String username = (String) request.getSession().getAttribute("user");
     User user = userStore.getUser(username);
+
+    if (user == null) {
+      response.sendRedirect("/login");
+      return;
+    }
+
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/settings.jsp").forward(request, response);
   }
