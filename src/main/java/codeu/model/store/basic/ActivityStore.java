@@ -19,9 +19,7 @@ import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -93,27 +91,6 @@ public class ActivityStore {
     return loaded;
   }
 
-  /** Access the current set of activities known to the application. */
-  public List<Activity> getAllActivities() {
-    return activities;
-  }
-
-  /** Access the current set of activities known to the application sorted with newest first. */
-  public List<Activity> getAllActivitiesSorted() {
-    activities.sort(activityComparator);
-    return activities;
-  }
-
-  public List<Activity> getAllPermittedActivities(UUID user) {
-    ArrayList<Activity> permittedActivities = new ArrayList();
-    for (Activity act : activities) {
-      if (act.hasPermission(user)) {
-        permittedActivities.add(act);
-      }
-    }
-    return permittedActivities;
-  }
-
   public List<Activity> getAllPermittedActivitiesSorted(UUID user) {
     ArrayList<Activity> permittedActivities = new ArrayList();
     for (Activity act : activities) {
@@ -123,16 +100,6 @@ public class ActivityStore {
     }
     permittedActivities.sort(activityComparator);
     return permittedActivities;
-  }
-
-  public List<Activity> getAllPublicActivities() {
-    ArrayList<Activity> publicActivities = new ArrayList();
-    for (Activity act : activities) {
-      if (act.getIsPublic()) {
-        publicActivities.add(act);
-      }
-    }
-    return publicActivities;
   }
 
   public List<Activity> getAllPublicActivitiesSorted() {
@@ -157,27 +124,19 @@ public class ActivityStore {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();
     for (Activity activity : activities1) {
-      for (UUID u : activity.getUsers()) {
-        User user = userstore.getUser(u);
-        if (currentUser != null
-            && currentUser.getConversationFriends().contains(u)
-            && (user.getActivityFeedPrivacy().equals("someContent"))) {
-          activitiesPerPrivacy.add(activity);
-        } else if (user.getActivityFeedPrivacy().equals("allContent")) {
-          activitiesPerPrivacy.add(activity);
-        }
-        if (currentUser != null && currentUser.getActivityFeedPrivacy().equals("noContent")) {
-          if (activity.getUserId().equals(currentUser.getId())) {
-            activitiesPerPrivacy.add(activity);
-          }
-        }
+      UUID activityUserID = activity.getUserId();
+      User user = userstore.getUser(activityUserID);
+      if (currentUser != null
+          && user != null
+          && currentUser.getConversationFriends().contains(activityUserID)
+          && (user.getActivityFeedPrivacy().equals("someContent"))) {
+        activitiesPerPrivacy.add(activity);
+      } else if (user != null && user.getActivityFeedPrivacy().equals("allContent")) {
+        activitiesPerPrivacy.add(activity);
+      } else if (currentUser != null && activityUserID.equals(currentUser.getId())) {
+        activitiesPerPrivacy.add(activity);
       }
     }
-    // remove any duplicates
-    Set<Activity> hashSet = new HashSet<>(activitiesPerPrivacy);
-    activitiesPerPrivacy.clear();
-    activitiesPerPrivacy.addAll(hashSet);
-
     activitiesPerPrivacy.sort(activityComparator);
     return activitiesPerPrivacy;
   }
@@ -223,16 +182,6 @@ public class ActivityStore {
     return userActivities;
   }
 
-  public List<Activity> getAllPublicActivitiesWithUserId(UUID user) {
-    ArrayList<Activity> result = new ArrayList<Activity>();
-    for (Activity activity : activities) {
-      if (activity.getUserId().equals(user) && activity.getIsPublic()) {
-        result.add(activity);
-      }
-    }
-    return result;
-  }
-
   public List<Activity> getAllPublicActivitiesWithUserIdSorted(UUID user) {
     ArrayList<Activity> result = new ArrayList<Activity>();
     for (Activity activity : activities) {
@@ -241,16 +190,6 @@ public class ActivityStore {
       }
     }
     result.sort(activityComparator);
-    return result;
-  }
-
-  public List<Activity> getAllPermittedActivitiesWithUserId(UUID user, UUID loggedInUser) {
-    ArrayList<Activity> result = new ArrayList<Activity>();
-    for (Activity activity : activities) {
-      if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
-        result.add(activity);
-      }
-    }
     return result;
   }
 
