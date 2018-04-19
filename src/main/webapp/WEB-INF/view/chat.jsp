@@ -54,7 +54,20 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
   <div id="container">
 
     <h1><%= conversation.getTitle() %>
-      <a href="" style="float: right">&#8635;</a></h1>
+      <a href="" style="float: right">&#8635;</a>
+      <%
+        if (user != null && conversationUsers.contains(user.getId())) {
+      %>
+      <div>
+        <form action="/search" method="GET">
+          <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <%
+        }
+      %>
+    </h1>
 
     <hr/>
 

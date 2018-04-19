@@ -38,7 +38,7 @@ public class SearchServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-    String search = request.getParameter("search");
+    String search = request.getParameter("searchuser");
     List<User> result = new ArrayList<User>();
     if (search != null) {
       result = userStore.searchUsersSorted(search);

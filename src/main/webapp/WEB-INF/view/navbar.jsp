@@ -14,7 +14,7 @@
       <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
       <a href="/activityFeed">Activity Feed</a>
       <a href="/conversations">Conversations</a>
-      <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>  
+      <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>
      <a href="<%=profileaddress %>">Your Profile</a>
       <a href="/settings">Settings</a>
       <a href="/logout">Logout</a>
@@ -25,7 +25,7 @@
     <a href="/about.jsp">About</a>
     <div id="search-container">
       <form action="/search" method="GET">
-        <input type="text" list="autocomplete" placeholder="Search for a user.." name="search" id="search">
+        <input type="text" list="autocomplete" placeholder="Search for a user.." name="searchuser" id="searchuser">
         <datalist id="autocomplete">
         <% for (User user : UserStore.getInstance().getUsers()) { %>
           <option value="<%= user.getName() %>">
