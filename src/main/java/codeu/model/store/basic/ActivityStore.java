@@ -99,7 +99,7 @@ public class ActivityStore {
   }
 
   public List<Activity> getAllPermittedActivities(UUID user) {
-    ArrayList<Activity> permittedActivities = new ArrayList();
+    ArrayList<Activity> permittedActivities = new ArrayList<>();
     for (Activity act : activities) {
       if (act.hasPermission(user)) {
         permittedActivities.add(act);
@@ -109,7 +109,7 @@ public class ActivityStore {
   }
 
   public List<Activity> getAllPublicActivities() {
-    ArrayList<Activity> publicActivities = new ArrayList();
+    ArrayList<Activity> publicActivities = new ArrayList<>();
     for (Activity act : activities) {
       if (act.getIsPublic()) {
         publicActivities.add(act);
