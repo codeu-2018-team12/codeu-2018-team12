@@ -20,6 +20,14 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
 
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+
+<%
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,8 +45,8 @@
 
       <h1>CodeU Chat App</h1>
       <img src="/resources/codeU.png">
-      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>
-
+      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>  
+     
       <ul>
         <li><a href="/login">Login</a> to get started.</li>
         <li>Go to the <a href="/conversations">conversations</a> page to
@@ -55,3 +63,4 @@
   </div>
 </body>
 </html>
+

@@ -10,6 +10,15 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreServiceFactory" %>
+<%@ page import="com.google.appengine.api.blobstore.BlobstoreService" %>
+
+<%
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+%>
+
+
+
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
@@ -94,6 +103,15 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         <button type="submit">Send</button>
         </br>
         <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
+
+
+        <form action="<%= blobstoreService.createUploadUrl("/upload") %>" method="post" enctype="multipart/form-data">
+            <input type="text" name="foo">
+            <input type="file" name="myFile">
+            <input type="submit" value="Submit">
+        </form>
+
+        
     </form>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
     <p> Join the conversation to send a message! </p>

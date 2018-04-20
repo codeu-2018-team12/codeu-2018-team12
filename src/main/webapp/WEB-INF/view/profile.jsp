@@ -37,6 +37,37 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
   </head>
   <body onload="scrollChat()">
   <h1 id="title"><%= user.getName() %>'s Profile</h1>
+
+  <form enctype="text/plain" method="get" name="putFile" id="putFile">
+    <div>
+    File Name: <input type="text" name="fileName" />
+    <br />  Choose a File: <br />
+    <input type="file" name="picToUpload">
+    <input type="submit" onclick='uploadFile(this)' value="Upload Content" />
+    </div>
+    </form>
+
+    <script>
+    function uploadFile() {
+      console.log("Start"); 
+  var bucket = "chatu-196017.appspot.com";
+  var filename = document.forms["putFile"]["fileName"].value;
+  if (bucket == null || bucket == "" || filename == null || filename == "") {
+    alert("Both Bucket and FileName are required");
+    return false;
+  } else {
+    var postData = document.forms["putFile"]["content"].value;
+    document.getElementById("content").value = null;
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "/gcs/" + bucket + "/" + filename, false);
+    request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+    request.send(postData);   
+  }
+}
+
+</script>
+
   <div id="container">
   <h2>Biography</h2>
     <% if (user.getBio() != null) { %>
