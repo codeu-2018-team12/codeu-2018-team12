@@ -8,6 +8,7 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
 List<User> users = (List<User>) request.getAttribute("users");
+List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
 %>
 
 <!DOCTYPE html>
@@ -35,16 +36,31 @@ List<User> users = (List<User>) request.getAttribute("users");
   <body onload="scrollChat()">
   <h1 id="title">Search Results</h1>
   <div id="container">
-   <h2>Users</h2>
-   <div id="users">
-     <ul>
    <%
-     for (User user : users) {
+    if (users != null) {
    %>
-   <li><a href="/profile/<%= user.getName() %>">
-     <%= user.getName() %></a></li>
+     <h2>Users</h2>
+     <div id="users">
+       <ul>
+     <%
+       for (User user : users) {
+     %>
+     <li><a href="/profile/<%= user.getName() %>">
+       <%= user.getName() %></a></li>
+     <%
+      }
+    } else if (conversations != null) { %>
+      <h2>Conversations</h2>
+      <div id="conversations">
+        <ul>
+      <%
+        for (Conversation convo : conversations) {
+      %>
+      <li><a href="/chat/<%= convo.getTitle() %>">
+        <%= convo.getTitle() %></a></li>
    <%
-     }
+        }
+    }
    %>
      </ul>
    </div>
