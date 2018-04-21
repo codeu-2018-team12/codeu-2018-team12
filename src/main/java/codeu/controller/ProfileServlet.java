@@ -8,13 +8,20 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import java.io.IOException;
 import java.util.List;
+import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.annotation.MultipartConfig;
 import java.nio.channels.Channels;
-import com.google.appengine.repackaged.org.joda.time.*;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.servlet.http.Part;
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -23,9 +30,9 @@ import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 
 @MultipartConfig(
-        maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
-        maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
-        fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
 )
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -112,6 +119,9 @@ public class ProfileServlet extends HttpServlet {
                   user.getId(), loggedInUser.getId());
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
+
+    //    String profilePictureuser.getProfilePicture();
+    //    request.setAttribute("profilePicture", profilePicture);
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);
     request.setAttribute("loggedInUser", loggedInUser);
@@ -122,28 +132,28 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
     String requestUrl = request.getRequestURI();
     String name = requestUrl.substring("/profile/".length());
     User user = userStore.getUser(name);
-    user.setBio(request.getParameter("newBio"));
+
+    if (request.getParameter("submitBiography") != null) {
+      user.setBio(request.getParameter("newBio"));
+    }
+    if (request.getParameter("submitProfilePic") != null) {
+      Collection<Part> parts = request.getParts();
+      Part image = parts.iterator().next();
+      System.out.println("PART" + image);
+      String fileName = storeImage(image);
+      user.setProfilePicture(fileName);
+    }
     response.sendRedirect(requestUrl);
   }
 
-  private String storeImage(Part image) throws IOException {
-
-    String filename = uploadedFilename(image); // Extract filename
-    GcsFileOptions.Builder builder = new GcsFileOptions.Builder();
-
-    builder.acl("public-read"); // Set the file to be publicly viewable
-    GcsFileOptions instance = GcsFileOptions.getDefaultInstance();
-    GcsOutputChannel outputChannel;
-    GcsFilename gcsFile = new GcsFilename(bucket, filename);
-    outputChannel = gcsService.createOrReplace(gcsFile, instance);
-    copy(filePart.getInputStream(), Channels.newOutputStream(outputChannel));
-
-    return filename; // Return the filename without GCS/bucket appendage
-  }
-
+  /**
+   * UploadedFilename() extracts the filename from the HTTP headers and appends a timestamp to
+   * create a unique filename.
+   */
   private String uploadedFilename(final Part part) {
 
     final String partHeader = part.getHeader("content-disposition");
@@ -155,14 +165,16 @@ public class ProfileServlet extends HttpServlet {
         DateTime dt = DateTime.now(DateTimeZone.UTC);
         String dtString = dt.toString(dtf);
         final String fileName =
-                dtString + content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+            dtString + content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
 
+        System.out.println("FILENAME" + fileName);
         return fileName;
       }
     }
     return null;
   }
 
+  /** The storeImage() method writes to Cloud Storage using copy */
   private void copy(InputStream input, OutputStream output) throws IOException {
 
     try {
@@ -176,6 +188,26 @@ public class ProfileServlet extends HttpServlet {
       input.close();
       output.close();
     }
+  }
 
+  /**
+   * The storeImage() method sets the file permissions to public-read to make it publicly visible.
+   * The image is written to Cloud Storage using the copy() function from the App Engine Tools
+   * library.
+   */
+  private String storeImage(Part image) throws IOException {
+
+    String filename = uploadedFilename(image); // Extract filename
+    GcsFileOptions.Builder builder = new GcsFileOptions.Builder();
+
+    builder.acl("public-read"); // Set the file to be publicly viewable
+    GcsFileOptions instance = GcsFileOptions.getDefaultInstance();
+    GcsOutputChannel outputChannel;
+    GcsFilename gcsFile = new GcsFilename(bucket, filename);
+    outputChannel = gcsService.createOrReplace(gcsFile, instance);
+    // filePart
+    copy(image.getInputStream(), Channels.newOutputStream(outputChannel));
+
+    return filename; // Return the filename without GCS/bucket appendage
   }
 }

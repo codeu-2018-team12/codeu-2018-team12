@@ -50,7 +50,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
      <form action="/profile/<%= user.getName() %>" method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
-       <button type="submit">Submit</button>
+       <button type="submit" name="submitBiography" value="submitBiography">Submit</button>
      </form>
  <% } else {
       if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
@@ -64,12 +64,25 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
 
  <h2>Upload Profile Picture </h2>
  <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
+
    <div class="form-group">
-     <label for="filename">Upload image</label>
-     <input type="file" name="image" accept="image/*">
+     <label for="file-name">Upload image</label>
+     <input type="file" name="image" id="image" accept="image/*">
+
+   <div>
+     <label for="caption">Caption your picture</label>
+     <input type="text" name="caption" id="caption" size="40"/>
    </div>
-   <button type="submitImage">Save</button>
+    <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
+
+   </div>
  </form>
+
+ <% if (user.getProfilePicture() != null) {
+       System.out.println(user.getProfilePicture());%>
+    <h2>Profile Picture Here: </h2> <br>
+    <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
+  <% } %>
     <br>
     <br>
   </div>
