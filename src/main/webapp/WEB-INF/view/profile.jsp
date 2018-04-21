@@ -47,7 +47,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
  <% if (request.getSession().getAttribute("user") != null){
         if (request.getSession().getAttribute("user").equals(user.getName())) { %>
      <p> You can change your biography below: </p>
-     <form action='' user method="POST">
+     <form action="/profile" method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button>
@@ -61,6 +61,15 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <% } %>
    <% } %>
  <% } %>
+
+ <h2>Upload Profile Picture </h2>
+ <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
+   <div class="form-group">
+     <label for="filename">Upload image</label>
+     <input type="file" name="image" accept="image/*">
+   </div>
+   <button type="submitImage">Save</button>
+ </form>
     <br>
     <br>
   </div>
