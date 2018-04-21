@@ -6,28 +6,28 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import java.io.IOException;
-import java.util.List;
-import java.util.Collection;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.annotation.MultipartConfig;
-import java.nio.channels.Channels;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.servlet.http.Part;
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
 import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.Channels;
+import java.util.Collection;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 @MultipartConfig(
   maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
@@ -119,7 +119,7 @@ public class ProfileServlet extends HttpServlet {
                   user.getId(), loggedInUser.getId());
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
-    
+
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);
     request.setAttribute("loggedInUser", loggedInUser);
