@@ -119,9 +119,7 @@ public class ProfileServlet extends HttpServlet {
                   user.getId(), loggedInUser.getId());
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
-
-    //    String profilePictureuser.getProfilePicture();
-    //    request.setAttribute("profilePicture", profilePicture);
+    
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);
     request.setAttribute("loggedInUser", loggedInUser);

@@ -277,6 +277,7 @@ public class PersistentDataStore {
     userEntity.setProperty("profilePrivacy", user.getProfilePrivacy());
     userEntity.setProperty("activityFeedPrivacy", user.getActivityFeedPrivacy());
     userEntity.setProperty("conversationFriends", user.getUserIdsAsStrings());
+    userEntity.setProperty("profilePicture", user.getProfilePicture());
     datastore.put(userEntity);
   }
 
@@ -374,6 +375,15 @@ public class PersistentDataStore {
     Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
       resultEntity.setProperty("notifications", user.getStoredNotifications());
+      datastore.put(resultEntity);
+    }
+  }
+
+  /** Updates the notifications property of a user entity in the Datastore service */
+  public void updateUserEntityProfilePicture(User user) {
+    Entity resultEntity = setUpUserEntity(user);
+    if (resultEntity != null) {
+      resultEntity.setProperty("profilePicture", user.getProfilePicture());
       datastore.put(resultEntity);
     }
   }
