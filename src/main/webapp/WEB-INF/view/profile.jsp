@@ -47,7 +47,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
  <% if (request.getSession().getAttribute("user") != null){
         if (request.getSession().getAttribute("user").equals(user.getName())) { %>
      <p> You can change your biography below: </p>
-     <form action="/profile" method="POST">
+     <form action="/profile/<%= user.getName() %>" method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
        <button type="submit">Submit</button>
