@@ -68,14 +68,12 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
    <div class="form-group">
      <label for="file-name">Upload image</label>
      <input type="file" name="image" id="image" accept="image/*">
-
+    </ div>
    <div>
      <label for="caption">Caption your picture</label>
      <input type="text" name="caption" id="caption" size="40"/>
    </div>
     <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
-
-   </div>
  </form>
 
  <% if (user.getProfilePicture() != null) {
