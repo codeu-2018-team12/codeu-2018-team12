@@ -141,7 +141,6 @@ public class ProfileServlet extends HttpServlet {
     if (request.getParameter("submitProfilePic") != null) {
       Collection<Part> parts = request.getParts();
       Part image = parts.iterator().next();
-      System.out.println("PART" + image);
       String fileName = storeImage(image);
       user.setProfilePicture(fileName);
     }
@@ -153,19 +152,16 @@ public class ProfileServlet extends HttpServlet {
    * create a unique filename.
    */
   private String uploadedFilename(final Part part) {
-
     final String partHeader = part.getHeader("content-disposition");
 
     for (String content : part.getHeader("content-disposition").split(";")) {
       if (content.trim().startsWith("filename")) {
-        // Append a date and time to the filename
         DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
         DateTime dt = DateTime.now(DateTimeZone.UTC);
         String dtString = dt.toString(dtf);
         final String fileName =
             dtString + content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
 
-        System.out.println("FILENAME" + fileName);
         return fileName;
       }
     }
@@ -174,7 +170,6 @@ public class ProfileServlet extends HttpServlet {
 
   /** The storeImage() method writes to Cloud Storage using copy */
   private void copy(InputStream input, OutputStream output) throws IOException {
-
     try {
       byte[] buffer = new byte[BUFFER_SIZE];
       int bytesRead = input.read(buffer);
@@ -194,16 +189,14 @@ public class ProfileServlet extends HttpServlet {
    * library.
    */
   private String storeImage(Part image) throws IOException {
-
     String filename = uploadedFilename(image); // Extract filename
     GcsFileOptions.Builder builder = new GcsFileOptions.Builder();
 
-    builder.acl("public-read"); // Set the file to be publicly viewable
+    builder.acl("public-read");
     GcsFileOptions instance = GcsFileOptions.getDefaultInstance();
     GcsOutputChannel outputChannel;
     GcsFilename gcsFile = new GcsFilename(bucket, filename);
     outputChannel = gcsService.createOrReplace(gcsFile, instance);
-    // filePart
     copy(image.getInputStream(), Channels.newOutputStream(outputChannel));
 
     return filename; // Return the filename without GCS/bucket appendage
