@@ -60,6 +60,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       </form>
       <% } %>
    <% } %>
+
  <% } %>
 
  <h2>Upload Profile Picture </h2>
