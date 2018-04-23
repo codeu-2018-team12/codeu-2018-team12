@@ -20,8 +20,17 @@ public class Filterer {
     String[] tokens = input.split("((?<=\\())|((?=\\)))| ");
     List<String> tokensList = new ArrayList<String>(Arrays.asList(tokens));
     HashSet<Conversation> conversations = new HashSet<Conversation>(convos);
-    return new ArrayList<Conversation>(
-        filterConversationsByTokens(conversations, conversations, tokensList));
+    List<Conversation> result =
+        new ArrayList<Conversation>(
+            filterConversationsByTokens(conversations, conversations, tokensList));
+    List<Conversation> direct = new ArrayList<Conversation>();
+    for (Conversation convo : result) {
+      if (convo.getTitle().startsWith("direct:")) {
+        direct.add(convo);
+      }
+    }
+    result.removeAll(direct);
+    return result;
   }
 
   private static HashSet<Conversation> filterConversationsByTokens(
