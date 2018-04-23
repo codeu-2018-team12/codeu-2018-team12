@@ -379,7 +379,7 @@ public class PersistentDataStore {
     }
   }
 
-  /** Updates the notifications property of a user entity in the Datastore service */
+  /** Updates the profile picture property of a user entity in the Datastore service */
   public void updateUserEntityProfilePicture(User user) {
     Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {
@@ -406,7 +406,7 @@ public class PersistentDataStore {
     }
   }
 
-  /** Updates the activity feed privacy property of a user entity in the Datastore service */
+  /** Updates the conversation friends property of a user entity in the Datastore service */
   public void updateUserEntityConversationFriends(User user) {
     Entity resultEntity = setUpUserEntity(user);
     if (resultEntity != null) {

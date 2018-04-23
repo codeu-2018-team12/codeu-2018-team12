@@ -93,6 +93,10 @@ public class ProfileServlet extends HttpServlet {
     this.userStore = userStore;
   }
 
+  /**
+   * Sets the ActivityStore used by this servlet. This function provides a common setup method for
+   * use by the test framework or the servlet's init() function.
+   */
   void setActivityStore(ActivityStore activityStore) {
     this.activityStore = activityStore;
   }
@@ -119,7 +123,6 @@ public class ProfileServlet extends HttpServlet {
                   user.getId(), loggedInUser.getId());
       activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
     }
-
     request.setAttribute("activities", activities);
     request.setAttribute("user", user);
     request.setAttribute("loggedInUser", loggedInUser);
@@ -130,7 +133,6 @@ public class ProfileServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
-
     String requestUrl = request.getRequestURI();
     String name = requestUrl.substring("/profile/".length());
     User user = userStore.getUser(name);
@@ -189,7 +191,7 @@ public class ProfileServlet extends HttpServlet {
    * library.
    */
   private String storeImage(Part image) throws IOException {
-    String filename = uploadedFilename(image); // Extract filename
+    String filename = uploadedFilename(image);
     GcsFileOptions.Builder builder = new GcsFileOptions.Builder();
 
     builder.acl("public-read");

@@ -240,7 +240,7 @@ public class DirectMessageServlet extends HttpServlet {
             javax.mail.Message msg = new MimeMessage(session);
             msg.setFrom(
                 new InternetAddress(
-                    "chatu-196017@appspot.gserviceaccount.com", "CodeU Team 12 Admin"));
+                    "chatMessageAdmin@chatu-196017.appspotmail.com", "CodeU Team 12 Admin"));
             msg.addRecipient(
                 javax.mail.Message.RecipientType.TO,
                 new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
