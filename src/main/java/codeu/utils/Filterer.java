@@ -4,10 +4,12 @@ import codeu.model.data.Conversation;
 import codeu.model.data.Message;
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -70,16 +72,13 @@ public class Filterer {
       }
     } else if (token.startsWith("before:")) {
       String dateString = token.substring("before:".length());
-      filteredConvos =
-          filterConversationsByCreationDate(convos, getInstantFromString(dateString), -1);
+      filteredConvos = filterConversationsByCreationDate(convos, dateString, -1);
     } else if (token.startsWith("after:")) {
       String dateString = token.substring("after:".length());
-      filteredConvos =
-          filterConversationsByCreationDate(convos, getInstantFromString(dateString), 1);
+      filteredConvos = filterConversationsByCreationDate(convos, dateString, 1);
     } else if (token.startsWith("on:")) {
       String dateString = token.substring("on:".length());
-      filteredConvos =
-          filterConversationsByCreationDate(convos, getInstantFromString(dateString), 0);
+      filteredConvos = filterConversationsByCreationDate(convos, dateString, 0);
     } else if (token.startsWith("with:")) {
       String username = token.substring("with:".length());
       User user = UserStore.getInstance().getUser(username);
@@ -105,14 +104,25 @@ public class Filterer {
   }
 
   private static HashSet<Conversation> filterConversationsByCreationDate(
-      HashSet<Conversation> convos, Instant date, int comp) {
+      HashSet<Conversation> convos, String dateString, int comp) {
+    DateTimeFormatter formatter =
+        new DateTimeFormatterBuilder()
+            .appendPattern("MM-dd-yyyy")
+            .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
+            .toFormatter()
+            .withZone(ZoneId.systemDefault());
+    ZonedDateTime date = ZonedDateTime.parse(dateString, formatter);
     HashSet<Conversation> filteredConvos = new HashSet<Conversation>();
     for (Conversation convo : convos) {
-      if (convo.getCreationTime().compareTo(date) > 0 && comp > 0) {
+      ZonedDateTime convoDate =
+          ZonedDateTime.ofInstant(convo.getCreationTime(), ZoneId.systemDefault());
+      convoDate = convoDate.truncatedTo(ChronoUnit.DAYS);
+      int dateComp = convoDate.compareTo(date);
+      if (dateComp > 0 && comp > 0) {
         filteredConvos.add(convo);
-      } else if (convo.getCreationTime().compareTo(date) == 0 && comp == 0) {
+      } else if (dateComp == 0 && comp == 0) {
         filteredConvos.add(convo);
-      } else if (convo.getCreationTime().compareTo(date) < 0 && comp < 0) {
+      } else if (dateComp < 0 && comp < 0) {
         filteredConvos.add(convo);
       }
     }
@@ -175,16 +185,13 @@ public class Filterer {
       }
     } else if (token.startsWith("before:")) {
       String dateString = token.substring("before:".length());
-      filteredMessages =
-          filterMessagesByCreationDate(messages, getInstantFromString(dateString), -1);
+      filteredMessages = filterMessagesByCreationDate(messages, dateString, -1);
     } else if (token.startsWith("after:")) {
       String dateString = token.substring("after:".length());
-      filteredMessages =
-          filterMessagesByCreationDate(messages, getInstantFromString(dateString), 1);
+      filteredMessages = filterMessagesByCreationDate(messages, dateString, 1);
     } else if (token.startsWith("on:")) {
       String dateString = token.substring("on:".length());
-      filteredMessages =
-          filterMessagesByCreationDate(messages, getInstantFromString(dateString), 0);
+      filteredMessages = filterMessagesByCreationDate(messages, dateString, 0);
     } else if (token.startsWith("by:")) {
       String username = token.substring("by:".length());
       User user = UserStore.getInstance().getUser(username);
@@ -220,24 +227,28 @@ public class Filterer {
   }
 
   private static HashSet<Message> filterMessagesByCreationDate(
-      HashSet<Message> messages, Instant date, int comp) {
+      HashSet<Message> messages, String dateString, int comp) {
+    DateTimeFormatter formatter =
+        new DateTimeFormatterBuilder()
+            .appendPattern("MM-dd-yyyy")
+            .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
+            .toFormatter()
+            .withZone(ZoneId.systemDefault());
+    ZonedDateTime date = ZonedDateTime.parse(dateString, formatter);
     HashSet<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messages) {
-      if (message.getCreationTime().compareTo(date) > 0 && comp > 0) {
+      ZonedDateTime msgDate =
+          ZonedDateTime.ofInstant(message.getCreationTime(), ZoneId.systemDefault());
+      msgDate = msgDate.truncatedTo(ChronoUnit.DAYS);
+      int dateComp = msgDate.compareTo(date);
+      if (dateComp > 0 && comp > 0) {
         filteredMessages.add(message);
-      } else if (message.getCreationTime().compareTo(date) == 0 && comp == 0) {
+      } else if (dateComp == 0 && comp == 0) {
         filteredMessages.add(message);
-      } else if (message.getCreationTime().compareTo(date) < 0 && comp < 0) {
+      } else if (dateComp < 0 && comp < 0) {
         filteredMessages.add(message);
       }
     }
     return filteredMessages;
-  }
-
-  private static Instant getInstantFromString(String str) {
-    DateTimeFormatter formatter =
-        DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
-    LocalDate date = LocalDate.parse(str, formatter);
-    return date.atStartOfDay(ZoneId.systemDefault()).toInstant();
   }
 }
