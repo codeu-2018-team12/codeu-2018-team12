@@ -10,6 +10,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,15 +19,17 @@ public class Filterer {
   public static List<Conversation> filterConversations(List<Conversation> convos, String input) {
     String[] tokens = input.split("((?<=\\())|((?=\\)))| ");
     List<String> tokensList = new ArrayList<String>(Arrays.asList(tokens));
-    return filterConversationsByTokens(convos, convos, tokensList);
+    HashSet<Conversation> conversations = new HashSet<Conversation>(convos);
+    return new ArrayList<Conversation>(
+        filterConversationsByTokens(conversations, conversations, tokensList));
   }
 
-  private static List<Conversation> filterConversationsByTokens(
-      List<Conversation> originalConvos, List<Conversation> convos, List<String> tokens) {
+  private static HashSet<Conversation> filterConversationsByTokens(
+      HashSet<Conversation> originalConvos, HashSet<Conversation> convos, List<String> tokens) {
     if (tokens.size() == 0) {
       return convos;
     }
-    List<Conversation> filteredConvos =
+    HashSet<Conversation> filteredConvos =
         filterConversationsByTokensHelper(originalConvos, convos, tokens);
     if (tokens.size() == 0) {
       return filteredConvos;
@@ -43,9 +46,9 @@ public class Filterer {
     }
   }
 
-  private static List<Conversation> filterConversationsByTokensHelper(
-      List<Conversation> originalConvos, List<Conversation> convos, List<String> tokens) {
-    List<Conversation> filteredConvos = convos;
+  private static HashSet<Conversation> filterConversationsByTokensHelper(
+      HashSet<Conversation> originalConvos, HashSet<Conversation> convos, List<String> tokens) {
+    HashSet<Conversation> filteredConvos = convos;
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
     if (tokens.get(0).equals("(")) {
@@ -85,7 +88,7 @@ public class Filterer {
       tokens.remove(0);
       User user = UserStore.getInstance().getUser(username);
       if (user == null) {
-        return new ArrayList<Conversation>();
+        return new HashSet<Conversation>();
       }
       filteredConvos = filterConversationsByMember(convos, user.getId());
       return filteredConvos;
@@ -96,9 +99,9 @@ public class Filterer {
     }
   }
 
-  private static List<Conversation> filterConversationsByTitle(
-      List<Conversation> convos, String title) {
-    ArrayList<Conversation> filteredConvos = new ArrayList<Conversation>();
+  private static HashSet<Conversation> filterConversationsByTitle(
+      HashSet<Conversation> convos, String title) {
+    HashSet<Conversation> filteredConvos = new HashSet<Conversation>();
     for (Conversation convo : convos) {
       if (convo.getTitle().contains(title)) {
         filteredConvos.add(convo);
@@ -107,9 +110,9 @@ public class Filterer {
     return filteredConvos;
   }
 
-  private static List<Conversation> filterConversationsByCreationDate(
-      List<Conversation> convos, Instant date, int comp) {
-    ArrayList<Conversation> filteredConvos = new ArrayList<Conversation>();
+  private static HashSet<Conversation> filterConversationsByCreationDate(
+      HashSet<Conversation> convos, Instant date, int comp) {
+    HashSet<Conversation> filteredConvos = new HashSet<Conversation>();
     for (Conversation convo : convos) {
       if (convo.getCreationTime().compareTo(date) > 0 && comp > 0) {
         filteredConvos.add(convo);
@@ -122,9 +125,9 @@ public class Filterer {
     return filteredConvos;
   }
 
-  private static List<Conversation> filterConversationsByMember(
-      List<Conversation> convos, UUID user) {
-    ArrayList<Conversation> filteredConvos = new ArrayList<Conversation>();
+  private static HashSet<Conversation> filterConversationsByMember(
+      HashSet<Conversation> convos, UUID user) {
+    HashSet<Conversation> filteredConvos = new HashSet<Conversation>();
     for (Conversation convo : convos) {
       if (convo.getConversationUsers().contains(user)) {
         filteredConvos.add(convo);
@@ -133,8 +136,8 @@ public class Filterer {
     return filteredConvos;
   }
 
-  private static List<Message> filterMessagesByContent(List<Message> messages, String content) {
-    ArrayList<Message> filteredMessages = new ArrayList<Message>();
+  private static HashSet<Message> filterMessagesByContent(List<Message> messages, String content) {
+    HashSet<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messages) {
       if (message.getContent().contains(content)) {
         filteredMessages.add(message);
@@ -143,8 +146,8 @@ public class Filterer {
     return filteredMessages;
   }
 
-  private static List<Message> filterMessagesByAuthor(List<Message> messages, UUID user) {
-    ArrayList<Message> filteredMessages = new ArrayList<Message>();
+  private static HashSet<Message> filterMessagesByAuthor(HashSet<Message> messages, UUID user) {
+    HashSet<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messages) {
       if (message.getAuthorId().equals(user)) {
         filteredMessages.add(message);
@@ -153,9 +156,9 @@ public class Filterer {
     return filteredMessages;
   }
 
-  private static List<Message> filterMessagesByCreationDate(
-      List<Message> messages, Instant date, int comp) {
-    ArrayList<Message> filteredMessages = new ArrayList<Message>();
+  private static HashSet<Message> filterMessagesByCreationDate(
+      HashSet<Message> messages, Instant date, int comp) {
+    HashSet<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messages) {
       if (message.getCreationTime().compareTo(date) > 0 && comp > 0) {
         filteredMessages.add(message);
