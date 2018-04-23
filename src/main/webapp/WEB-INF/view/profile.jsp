@@ -60,10 +60,15 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       </form>
       <% } %>
    <% } %>
-
  <% } %>
 
+<% if (request.getSession().getAttribute("user") != null){
+        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+<% if (user.getProfilePicture() == null) { %>
  <h2>Upload Profile Picture </h2>
+ <% } else { %>
+ <h2> Change Profile Picture </h2>
+ <% } %>
  <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
    <div class="form-group">
      <label for="file-name">Upload image</label>
@@ -71,6 +76,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
     </div>
     <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
  </form>
+ <% } %>
+ <% } %>
 
  <% if (user.getProfilePicture() != null) {%>
     <h2>Profile Picture Here: </h2> <br>
