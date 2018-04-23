@@ -61,7 +61,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       <div>
         <form action="/search" method="GET">
           <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
-          <button type="submit">Search</button>
+          <button type="submit" name="searchbutton" value="<%= conversation.getTitle() %>">Search</button>
         </form>
       </div>
       <%

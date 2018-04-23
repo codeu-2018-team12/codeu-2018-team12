@@ -9,6 +9,7 @@
 <%
 List<User> users = (List<User>) request.getAttribute("users");
 List<Conversation> conversations = (List<Conversation>) request.getAttribute("conversations");
+List<Message> messages = (List<Message>) request.getAttribute("messages");
 %>
 
 <!DOCTYPE html>
@@ -18,7 +19,7 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
   <link rel="stylesheet" href="/css/main.css" type="text/css">
    <jsp:include page="./navbar.jsp" />
    <style>
-     #users {
+     #results {
        background-color: white;
        height: 500px;
        overflow-y: scroll
@@ -28,8 +29,8 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
    <script>
      // scroll the chat div to the bottom
      function scrollChat() {
-       var userDiv = document.getElementById('users');
-       userDiv.scrollTop = 0;
+       var resultsDiv = document.getElementById('results');
+       resultsDiv.scrollTop = 0;
      };
    </script>
   </head>
@@ -40,26 +41,37 @@ List<Conversation> conversations = (List<Conversation>) request.getAttribute("co
     if (users != null) {
    %>
      <h2>Users</h2>
-     <div id="users">
+     <div id="results">
        <ul>
      <%
        for (User user : users) {
      %>
-     <li><a href="/profile/<%= user.getName() %>">
-       <%= user.getName() %></a></li>
+        <li><a href="/profile/<%= user.getName() %>">
+         <%= user.getName() %></a></li>
      <%
       }
     } else if (conversations != null) { %>
       <h2>Conversations</h2>
-      <div id="conversations">
+      <div id="results">
         <ul>
       <%
         for (Conversation convo : conversations) {
       %>
-      <li><a href="/chat/<%= convo.getTitle() %>">
-        <%= convo.getTitle() %></a></li>
+          <li><a href="/chat/<%= convo.getTitle() %>">
+          <%= convo.getTitle() %></a></li>
    <%
         }
+    } else if (messages != null) { %>
+      <h2>Messages</h2>
+      <div id="results">
+        <ul>
+      <%
+      for (Message msg : messages) {
+        String author = UserStore.getInstance().getUser(msg.getAuthorId()).getName();
+        %>
+        <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= msg.getContent() %></li>
+      <%
+      }
     }
    %>
      </ul>

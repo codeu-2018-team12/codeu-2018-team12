@@ -93,7 +93,6 @@ public class Filterer {
       return filteredConvos;
     } else if (tokens.get(0).startsWith("with:")) {
       String username = tokens.get(0).substring("with:".length());
-      System.out.println(username);
       tokens.remove(0);
       User user = UserStore.getInstance().getUser(username);
       if (user == null) {
@@ -145,7 +144,91 @@ public class Filterer {
     return filteredConvos;
   }
 
-  private static HashSet<Message> filterMessagesByContent(List<Message> messages, String content) {
+  public static List<Message> filterMessages(List<Message> messages, String input) {
+    String[] tokens = input.split("((?<=\\())|((?=\\)))| ");
+    List<String> tokensList = new ArrayList<String>(Arrays.asList(tokens));
+    HashSet<Message> messagesHash = new HashSet<Message>(messages);
+    List<Message> result =
+        new ArrayList<Message>(filterMessagesByTokens(messagesHash, messagesHash, tokensList));
+    return result;
+  }
+
+  private static HashSet<Message> filterMessagesByTokens(
+      HashSet<Message> originalMessages, HashSet<Message> messages, List<String> tokens) {
+    if (tokens.size() == 0) {
+      return messages;
+    }
+    HashSet<Message> filteredMessages =
+        filterMessagesByTokensHelper(originalMessages, messages, tokens);
+    if (tokens.size() == 0) {
+      return filteredMessages;
+    }
+    if (tokens.get(0).equals("AND")) {
+      tokens.remove(0);
+      return filterMessagesByTokens(originalMessages, filteredMessages, tokens);
+    } else if (tokens.get(0).equals("OR")) {
+      tokens.remove(0);
+      filteredMessages.addAll(filterMessagesByTokens(originalMessages, originalMessages, tokens));
+      return filteredMessages;
+    } else {
+      return filteredMessages;
+    }
+  }
+
+  private static HashSet<Message> filterMessagesByTokensHelper(
+      HashSet<Message> originalMessages, HashSet<Message> messages, List<String> tokens) {
+    HashSet<Message> filteredMessages = messages;
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
+    if (tokens.get(0).equals("(")) {
+      tokens.remove(0);
+      filteredMessages = filterMessagesByTokens(originalMessages, messages, tokens);
+      if (tokens.size() == 0 || !tokens.get(0).equals(")")) {
+        throw new UnsupportedOperationException(
+            "Incorrect string format - mismatched parentheses.");
+      } else {
+        tokens.remove(0);
+        return filteredMessages;
+      }
+    } else if (tokens.get(0).startsWith("before:")) {
+      String dateString = tokens.get(0).substring("before:".length());
+      tokens.remove(0);
+      LocalDate date = LocalDate.parse(dateString, formatter);
+      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+      filteredMessages = filterMessagesByCreationDate(messages, instant, -1);
+      return filteredMessages;
+    } else if (tokens.get(0).startsWith("after:")) {
+      String dateString = tokens.get(0).substring("after:".length());
+      tokens.remove(0);
+      LocalDate date = LocalDate.parse(dateString, formatter);
+      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+      filteredMessages = filterMessagesByCreationDate(messages, instant, 1);
+      return filteredMessages;
+    } else if (tokens.get(0).startsWith("on:")) {
+      String dateString = tokens.get(0).substring("on:".length());
+      tokens.remove(0);
+      LocalDate date = LocalDate.parse(dateString, formatter);
+      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
+      filteredMessages = filterMessagesByCreationDate(messages, instant, 0);
+      return filteredMessages;
+    } else if (tokens.get(0).startsWith("by:")) {
+      String username = tokens.get(0).substring("by:".length());
+      tokens.remove(0);
+      User user = UserStore.getInstance().getUser(username);
+      if (user == null) {
+        return new HashSet<Message>();
+      }
+      filteredMessages = filterMessagesByAuthor(messages, user.getId());
+      return filteredMessages;
+    } else {
+      filteredMessages = filterMessagesByContent(messages, tokens.get(0));
+      tokens.remove(0);
+      return filteredMessages;
+    }
+  }
+
+  private static HashSet<Message> filterMessagesByContent(
+      HashSet<Message> messages, String content) {
     HashSet<Message> filteredMessages = new HashSet<Message>();
     for (Message message : messages) {
       if (message.getContent().contains(content)) {
