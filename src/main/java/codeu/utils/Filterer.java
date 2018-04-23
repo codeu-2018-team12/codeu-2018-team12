@@ -40,28 +40,26 @@ public class Filterer {
     }
     HashSet<Conversation> filteredConvos =
         filterConversationsByTokensHelper(originalConvos, convos, tokens);
-    if (tokens.size() == 0) {
+    if (tokens.size() < 2) {
       return filteredConvos;
     }
-    if (tokens.get(0).equals("AND")) {
+    String token = tokens.get(0);
+    if (token.equals("AND")) {
       tokens.remove(0);
-      return filterConversationsByTokens(originalConvos, filteredConvos, tokens);
-    } else if (tokens.get(0).equals("OR")) {
+      filteredConvos = filterConversationsByTokens(originalConvos, filteredConvos, tokens);
+    } else if (token.equals("OR")) {
       tokens.remove(0);
       filteredConvos.addAll(filterConversationsByTokens(originalConvos, originalConvos, tokens));
-      return filteredConvos;
-    } else {
-      return filteredConvos;
     }
+    return filteredConvos;
   }
 
   private static HashSet<Conversation> filterConversationsByTokensHelper(
       HashSet<Conversation> originalConvos, HashSet<Conversation> convos, List<String> tokens) {
     HashSet<Conversation> filteredConvos = convos;
-    DateTimeFormatter formatter =
-        DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
-    if (tokens.get(0).equals("(")) {
-      tokens.remove(0);
+    String token = tokens.get(0);
+    tokens.remove(0);
+    if (token.equals("(")) {
       filteredConvos = filterConversationsByTokens(originalConvos, convos, tokens);
       if (tokens.size() == 0 || !tokens.get(0).equals(")")) {
         throw new UnsupportedOperationException(
@@ -70,41 +68,29 @@ public class Filterer {
         tokens.remove(0);
         return filteredConvos;
       }
-    } else if (tokens.get(0).startsWith("before:")) {
-      String dateString = tokens.get(0).substring("before:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredConvos = filterConversationsByCreationDate(convos, instant, -1);
-      return filteredConvos;
-    } else if (tokens.get(0).startsWith("after:")) {
-      String dateString = tokens.get(0).substring("after:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredConvos = filterConversationsByCreationDate(convos, instant, 1);
-      return filteredConvos;
-    } else if (tokens.get(0).startsWith("on:")) {
-      String dateString = tokens.get(0).substring("on:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredConvos = filterConversationsByCreationDate(convos, instant, 0);
-      return filteredConvos;
-    } else if (tokens.get(0).startsWith("with:")) {
-      String username = tokens.get(0).substring("with:".length());
-      tokens.remove(0);
+    } else if (token.startsWith("before:")) {
+      String dateString = token.substring("before:".length());
+      filteredConvos =
+          filterConversationsByCreationDate(convos, getInstantFromString(dateString), -1);
+    } else if (token.startsWith("after:")) {
+      String dateString = token.substring("after:".length());
+      filteredConvos =
+          filterConversationsByCreationDate(convos, getInstantFromString(dateString), 1);
+    } else if (token.startsWith("on:")) {
+      String dateString = token.substring("on:".length());
+      filteredConvos =
+          filterConversationsByCreationDate(convos, getInstantFromString(dateString), 0);
+    } else if (token.startsWith("with:")) {
+      String username = token.substring("with:".length());
       User user = UserStore.getInstance().getUser(username);
       if (user == null) {
         return new HashSet<Conversation>();
       }
       filteredConvos = filterConversationsByMember(convos, user.getId());
-      return filteredConvos;
     } else {
-      filteredConvos = filterConversationsByTitle(convos, tokens.get(0));
-      tokens.remove(0);
-      return filteredConvos;
+      filteredConvos = filterConversationsByTitle(convos, token);
     }
+    return filteredConvos;
   }
 
   private static HashSet<Conversation> filterConversationsByTitle(
@@ -160,71 +146,56 @@ public class Filterer {
     }
     HashSet<Message> filteredMessages =
         filterMessagesByTokensHelper(originalMessages, messages, tokens);
-    if (tokens.size() == 0) {
+    if (tokens.size() < 2) {
       return filteredMessages;
     }
-    if (tokens.get(0).equals("AND")) {
+    String token = tokens.get(0);
+    if (token.equals("AND")) {
       tokens.remove(0);
-      return filterMessagesByTokens(originalMessages, filteredMessages, tokens);
-    } else if (tokens.get(0).equals("OR")) {
+      filteredMessages = filterMessagesByTokens(originalMessages, filteredMessages, tokens);
+    } else if (token.equals("OR")) {
       tokens.remove(0);
       filteredMessages.addAll(filterMessagesByTokens(originalMessages, originalMessages, tokens));
-      return filteredMessages;
-    } else {
-      return filteredMessages;
     }
+    return filteredMessages;
   }
 
   private static HashSet<Message> filterMessagesByTokensHelper(
       HashSet<Message> originalMessages, HashSet<Message> messages, List<String> tokens) {
     HashSet<Message> filteredMessages = messages;
-    DateTimeFormatter formatter =
-        DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
-    if (tokens.get(0).equals("(")) {
-      tokens.remove(0);
+    String token = tokens.get(0);
+    tokens.remove(0);
+    if (token.equals("(")) {
       filteredMessages = filterMessagesByTokens(originalMessages, messages, tokens);
       if (tokens.size() == 0 || !tokens.get(0).equals(")")) {
         throw new UnsupportedOperationException(
             "Incorrect string format - mismatched parentheses.");
       } else {
         tokens.remove(0);
-        return filteredMessages;
       }
-    } else if (tokens.get(0).startsWith("before:")) {
-      String dateString = tokens.get(0).substring("before:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredMessages = filterMessagesByCreationDate(messages, instant, -1);
-      return filteredMessages;
-    } else if (tokens.get(0).startsWith("after:")) {
-      String dateString = tokens.get(0).substring("after:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredMessages = filterMessagesByCreationDate(messages, instant, 1);
-      return filteredMessages;
-    } else if (tokens.get(0).startsWith("on:")) {
-      String dateString = tokens.get(0).substring("on:".length());
-      tokens.remove(0);
-      LocalDate date = LocalDate.parse(dateString, formatter);
-      Instant instant = date.atStartOfDay(ZoneId.systemDefault()).toInstant();
-      filteredMessages = filterMessagesByCreationDate(messages, instant, 0);
-      return filteredMessages;
-    } else if (tokens.get(0).startsWith("by:")) {
-      String username = tokens.get(0).substring("by:".length());
-      tokens.remove(0);
+    } else if (token.startsWith("before:")) {
+      String dateString = token.substring("before:".length());
+      filteredMessages =
+          filterMessagesByCreationDate(messages, getInstantFromString(dateString), -1);
+    } else if (token.startsWith("after:")) {
+      String dateString = token.substring("after:".length());
+      filteredMessages =
+          filterMessagesByCreationDate(messages, getInstantFromString(dateString), 1);
+    } else if (token.startsWith("on:")) {
+      String dateString = token.substring("on:".length());
+      filteredMessages =
+          filterMessagesByCreationDate(messages, getInstantFromString(dateString), 0);
+    } else if (token.startsWith("by:")) {
+      String username = token.substring("by:".length());
       User user = UserStore.getInstance().getUser(username);
       if (user == null) {
         return new HashSet<Message>();
       }
       filteredMessages = filterMessagesByAuthor(messages, user.getId());
-      return filteredMessages;
     } else {
-      filteredMessages = filterMessagesByContent(messages, tokens.get(0));
-      tokens.remove(0);
-      return filteredMessages;
+      filteredMessages = filterMessagesByContent(messages, token);
     }
+    return filteredMessages;
   }
 
   private static HashSet<Message> filterMessagesByContent(
@@ -261,5 +232,12 @@ public class Filterer {
       }
     }
     return filteredMessages;
+  }
+
+  private static Instant getInstantFromString(String str) {
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern("MM-dd-yyyy").withZone(ZoneId.systemDefault());
+    LocalDate date = LocalDate.parse(str, formatter);
+    return date.atStartOfDay(ZoneId.systemDefault()).toInstant();
   }
 }

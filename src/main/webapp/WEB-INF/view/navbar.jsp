@@ -25,7 +25,7 @@
     <a href="/about.jsp">About</a>
     <div id="search-container">
       <form action="/search" method="GET">
-        <input type="text" list="autocomplete" placeholder="Search for a user.." name="searchuser" id="searchuser">
+        <input type="text" list="autocomplete" placeholder="Search for a user..." name="searchuser" id="searchuser">
         <datalist id="autocomplete">
         <% for (User user : UserStore.getInstance().getUsers()) { %>
           <option value="<%= user.getName() %>">
