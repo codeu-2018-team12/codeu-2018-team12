@@ -93,10 +93,10 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("messages", result);
       } catch (DateTimeException dte) {
         System.out.println(dte);
-        request.setAttribute("messages", new ArrayList<Conversation>());
+        request.setAttribute("messages", new ArrayList<Message>());
       } catch (UnsupportedOperationException uoe) {
         System.out.println(uoe);
-        request.setAttribute("messages", new ArrayList<Conversation>());
+        request.setAttribute("messages", new ArrayList<Message>());
       }
     }
     request.getRequestDispatcher("/WEB-INF/view/search.jsp").forward(request, response);
