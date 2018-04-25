@@ -1,5 +1,7 @@
 package codeu.model.store.basic;
 
+import static codeu.model.store.basic.MessageStore.sort;
+
 import codeu.model.data.Message;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
@@ -73,7 +75,7 @@ public class MessageStoreTest {
 
   @Test
   public void testGetMessagesByAuthor() {
-    List<Message> resultMessages = messageStore.getMessagesByAuthorSorted(USER_ID_ONE);
+    List<Message> resultMessages = sort(messageStore.getMessagesByAuthor(USER_ID_ONE));
 
     Assert.assertEquals(2, resultMessages.size());
     assertEquals(MESSAGE_ONE, resultMessages.get(1));

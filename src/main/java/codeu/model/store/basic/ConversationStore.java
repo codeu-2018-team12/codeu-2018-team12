@@ -31,12 +31,8 @@ public class ConversationStore {
   /** Singleton instance of ConversationStore. */
   private static ConversationStore instance;
 
-  private Comparator<Conversation> convoComparator =
-      new Comparator<Conversation>() {
-        public int compare(Conversation copvOne, Conversation copvTwo) {
-          return copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
-        }
-      };
+  private static Comparator<Conversation> convoComparator =
+      (copvOne, copvTwo) -> copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
 
   /**
    * Returns the singleton instance of ConversationStore that should be shared between all servlet
@@ -47,6 +43,17 @@ public class ConversationStore {
       instance = new ConversationStore(PersistentStorageAgent.getInstance());
     }
     return instance;
+  }
+
+  /**
+   * Retrieves a static sorter that takes in a list of conversations and sort them
+   *
+   * @param conversations the list of activities to be sorted
+   * @return the sorted list of conversation
+   */
+  public static List<Conversation> sort(List<Conversation> conversations) {
+    conversations.sort(convoComparator);
+    return conversations;
   }
 
   /**
@@ -95,34 +102,23 @@ public class ConversationStore {
     return conversations;
   }
 
-  /**
-   * Access the current set of conversations known to the application with newest conversations
-   * first.
-   */
-  public List<Conversation> getAllConversationsSorted() {
-    conversations.sort(convoComparator);
-    return conversations;
-  }
-
-  public List<Conversation> getAllPublicConversationsSorted() {
+  public List<Conversation> getAllPublicConversations() {
     ArrayList<Conversation> publicConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
       if (convo.getIsPublic()) {
         publicConversations.add(convo);
       }
     }
-    publicConversations.sort(convoComparator);
     return publicConversations;
   }
 
-  public List<Conversation> getAllPermittedConversationsSorted(UUID user) {
+  public List<Conversation> getAllPermittedConversations(UUID user) {
     ArrayList<Conversation> permittedConversations = new ArrayList<Conversation>();
     for (Conversation convo : conversations) {
       if (convo.hasPermission(user)) {
         permittedConversations.add(convo);
       }
     }
-    permittedConversations.sort(convoComparator);
     return permittedConversations;
   }
 

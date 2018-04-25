@@ -32,12 +32,8 @@ public class ActivityStore {
   /** Singleton instance of ActivityStore. */
   private static ActivityStore instance;
 
-  private Comparator<Activity> activityComparator =
-      new Comparator<Activity>() {
-        public int compare(Activity copvOne, Activity copvTwo) {
-          return copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
-        }
-      };
+  private static Comparator<Activity> activityComparator =
+      (copvOne, copvTwo) -> copvTwo.getCreationTime().compareTo(copvOne.getCreationTime());
 
   /**
    * Returns the singleton instance of ActivityStore that should be shared between all servlet
@@ -48,6 +44,17 @@ public class ActivityStore {
       instance = new ActivityStore(PersistentStorageAgent.getInstance());
     }
     return instance;
+  }
+
+  /**
+   * Retrieves a static sorter that takes in a list of activities and sort them
+   *
+   * @param activities the list of activities to be sorted
+   * @return the sorted list of activities
+   */
+  public static List<Activity> sort(List<Activity> activities) {
+    activities.sort(activityComparator);
+    return activities;
   }
 
   /**
@@ -91,25 +98,23 @@ public class ActivityStore {
     return loaded;
   }
 
-  public List<Activity> getAllPermittedActivitiesSorted(UUID user) {
-    ArrayList<Activity> permittedActivities = new ArrayList();
+  public List<Activity> getAllPermittedActivities(UUID user) {
+    ArrayList<Activity> permittedActivities = new ArrayList<>();
     for (Activity act : activities) {
       if (act.hasPermission(user)) {
         permittedActivities.add(act);
       }
     }
-    permittedActivities.sort(activityComparator);
     return permittedActivities;
   }
 
-  public List<Activity> getAllPublicActivitiesSorted() {
-    ArrayList<Activity> publicActivities = new ArrayList();
+  public List<Activity> getAllPublicActivities() {
+    ArrayList<Activity> publicActivities = new ArrayList<>();
     for (Activity act : activities) {
       if (act.getIsPublic()) {
         publicActivities.add(act);
       }
     }
-    publicActivities.sort(activityComparator);
     return publicActivities;
   }
 
@@ -137,14 +142,7 @@ public class ActivityStore {
         activitiesPerPrivacy.add(activity);
       }
     }
-    activitiesPerPrivacy.sort(activityComparator);
     return activitiesPerPrivacy;
-  }
-
-  /** Access a current subset of activities known to the application sorted with newest first. */
-  public List<Activity> getActivityListSorted(List<Activity> activityList) {
-    activityList.sort(activityComparator);
-    return activityList;
   }
 
   /** Add a new activity to the current set of activities known to the application. */
@@ -182,25 +180,23 @@ public class ActivityStore {
     return userActivities;
   }
 
-  public List<Activity> getAllPublicActivitiesWithUserIdSorted(UUID user) {
+  public List<Activity> getAllPublicActivitiesWithUserId(UUID user) {
     ArrayList<Activity> result = new ArrayList<Activity>();
     for (Activity activity : activities) {
       if (activity.getUserId().equals(user) && activity.getIsPublic()) {
         result.add(activity);
       }
     }
-    result.sort(activityComparator);
     return result;
   }
 
-  public List<Activity> getAllPermittedActivitiesWithUserIdSorted(UUID user, UUID loggedInUser) {
+  public List<Activity> getAllPermittedActivitiesWithUserId(UUID user, UUID loggedInUser) {
     ArrayList<Activity> result = new ArrayList<Activity>();
     for (Activity activity : activities) {
       if (activity.getUserId().equals(user) && activity.hasPermission(loggedInUser)) {
         result.add(activity);
       }
     }
-    result.sort(activityComparator);
     return result;
   }
 
