@@ -47,10 +47,10 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
  <% if (request.getSession().getAttribute("user") != null){
         if (request.getSession().getAttribute("user").equals(user.getName())) { %>
      <p> You can change your biography below: </p>
-     <form action='' user method="POST">
+     <form action="/profile/<%= user.getName() %>" method="POST">
        <label for="newBio">New Bio: </label>
        <input type="text" name="newBio" id="newBio">
-       <button type="submit">Submit</button>
+       <button type="submit" name="submitBiography" value="submitBiography">Submit</button>
      </form>
  <% } else {
       if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
@@ -61,6 +61,28 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <% } %>
    <% } %>
  <% } %>
+
+<% if (request.getSession().getAttribute("user") != null){
+        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+<% if (user.getProfilePicture() == null) { %>
+ <h2>Upload Profile Picture </h2>
+ <% } else { %>
+ <h2> Change Profile Picture </h2>
+ <% } %>
+ <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
+   <div class="form-group">
+     <label for="file-name">Upload image</label>
+     <input type="file" name="image" id="image" accept="image/*">
+    </div>
+    <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
+ </form>
+ <% } %>
+ <% } %>
+
+ <% if (user.getProfilePicture() != null) {%>
+    <h2>Profile Picture Here: </h2> <br>
+    <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
+  <% } %>
     <br>
     <br>
   </div>
