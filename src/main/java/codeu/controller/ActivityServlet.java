@@ -1,5 +1,7 @@
 package codeu.controller;
 
+import static codeu.model.store.basic.ActivityStore.sort;
+
 import codeu.model.data.Activity;
 import codeu.model.data.User;
 import codeu.model.store.basic.ActivityStore;
@@ -50,10 +52,10 @@ public class ActivityServlet extends HttpServlet {
 
     List<Activity> activitiesPermitted =
         loggedInUser == null
-            ? activityStore.getAllPublicActivitiesSorted()
-            : activityStore.getAllPermittedActivitiesSorted(loggedInUser.getId());
+            ? sort(activityStore.getAllPublicActivities())
+            : sort(activityStore.getAllPermittedActivities(loggedInUser.getId()));
     List<Activity> activities =
-        activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted);
+        sort(activityStore.getActivitiesPerPrivacy(loggedInUser, activitiesPermitted));
     request.setAttribute("activities", activities);
     request.getRequestDispatcher("/WEB-INF/view/activityFeed.jsp").forward(request, response);
   }

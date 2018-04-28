@@ -1,5 +1,7 @@
 package codeu.model.store.basic;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 import codeu.model.data.Conversation;
 import codeu.model.data.User;
 import codeu.model.store.persistence.PersistentStorageAgent;
@@ -80,18 +82,18 @@ public class ConversationStoreTest {
   }
 
   @Test
-  public void testGetAllPermittedConversationsSorted_Permited() {
+  public void testGetAllPermittedConversationsSorted_Permitted() {
     List<Conversation> permittedConversations =
-        conversationStore.getAllPermittedConversationsSorted(USER_TWO.getId());
+        sort(conversationStore.getAllPermittedConversations(USER_TWO.getId()));
     Assert.assertEquals(2, permittedConversations.size());
     assertEquals(CONVERSATION_TWO, permittedConversations.get(0));
     assertEquals(CONVERSATION_ONE, permittedConversations.get(1));
   }
 
   @Test
-  public void testGetAllPermittedConversationsSorted_NotPermited() {
+  public void testGetAllPermittedConversationsSorted_NotPermitted() {
     List<Conversation> permittedConversations =
-        conversationStore.getAllPermittedConversationsSorted(USER_ONE.getId());
+        sort(conversationStore.getAllPermittedConversations(USER_ONE.getId()));
     Assert.assertEquals(1, permittedConversations.size());
     assertEquals(CONVERSATION_ONE, permittedConversations.get(0));
   }
