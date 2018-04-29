@@ -72,7 +72,6 @@ public class SearchServlet extends HttpServlet {
               ? ConversationStore.sort(conversationStore.getAllPublicConversations())
               : ConversationStore.sort(
                   conversationStore.getAllPermittedConversations(loggedInUser.getId()));
-
       try {
         ConversationFilterer filterer =
             new ConversationFilterer(conversations, userStore.getUsers());
