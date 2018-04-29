@@ -17,7 +17,7 @@ import java.util.UUID;
 
 /**
  * Class to filter a list of messages based on a string formed using the following Context Free
- * Grammar(CFG): [A -> B and A | B or A | B]; [B -> (A) | filter]
+ * Grammar(CFG): [A -> B AND A | B OR A | B]; [B -> (A) | filter]
  */
 public class MessageFilterer {
 
@@ -58,7 +58,7 @@ public class MessageFilterer {
     return result;
   }
 
-  /* Handles the [A -> B and A | B or A | B] branch of the CFG
+  /* Handles the [A -> B AND A | B OR A | B] branch of the CFG
    *
    * @return the subset of messages from the original list that match the token list
    */
