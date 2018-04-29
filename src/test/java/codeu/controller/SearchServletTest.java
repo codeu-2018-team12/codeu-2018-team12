@@ -84,7 +84,7 @@ public class SearchServletTest {
     Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("testuser");
     User testUser = new User(UUID.randomUUID(), "testuser", null, null, Instant.now(), null);
     Mockito.when(mockUserStore.getUser("testuser")).thenReturn(testUser);
-    Mockito.when(mockConversationStore.getAllPermittedConversationsSorted(testUser.getId()))
+    Mockito.when(mockConversationStore.getAllPermittedConversations(testUser.getId()))
         .thenReturn(fakeConversationList);
 
     searchServlet.doGet(mockRequest, mockResponse);
@@ -106,7 +106,7 @@ public class SearchServletTest {
         new Message(
             UUID.randomUUID(), fakeConversation.getId(), UUID.randomUUID(), "test", Instant.now()));
 
-    Mockito.when(mockMessageStore.getMessagesInConversationSorted(fakeConversation.getId()))
+    Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversation.getId()))
         .thenReturn(fakeMessageList);
 
     searchServlet.doGet(mockRequest, mockResponse);

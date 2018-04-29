@@ -69,8 +69,9 @@ public class SearchServlet extends HttpServlet {
       search = request.getParameter("searchconvo");
       List<Conversation> conversations =
           loggedInUser == null
-              ? conversationStore.getAllPublicConversationsSorted()
-              : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
+              ? ConversationStore.sort(conversationStore.getAllPublicConversations())
+              : ConversationStore.sort(
+                  conversationStore.getAllPermittedConversations(loggedInUser.getId()));
       try {
         ConversationFilterer filterer =
             new ConversationFilterer(conversations, userStore.getUsers());
@@ -90,7 +91,7 @@ public class SearchServlet extends HttpServlet {
       List<Message> messages =
           convo == null
               ? new ArrayList<Message>()
-              : messageStore.getMessagesInConversationSorted(convo.getId());
+              : MessageStore.sort(messageStore.getMessagesInConversation(convo.getId()));
       try {
         MessageFilterer filterer = new MessageFilterer(messages, userStore.getUsers());
         List<Message> result = filterer.filterMessages(search);
