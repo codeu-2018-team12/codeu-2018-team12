@@ -40,6 +40,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSessionBindingEvent;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
@@ -171,143 +173,18 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      addConversationFriends(user, conversation);
-      conversation.addUser(user.getId());
-
-      String activityMessage =
-          " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "leftConvo",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
+        joinConversation(user, conversation);
     }
 
     if ("leaveButton".equals(button)) {
-      removeConversationFriends(user, conversation);
-      conversation.removeUser(user.getId());
-
-      String activityMessage =
-          " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "leftConvo",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
+        leaveConversation(user, conversation);
     }
 
     if (button == null && conversation.getConversationUsers().contains(user.getId())) {
-      String messageContent = request.getParameter("message");
-
-      // this removes any HTML from the message content
-      String cleanedMessageContent =
-          Jsoup.clean(
-              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
-      String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
-
-      Message message =
-          new codeu.model.data.Message(
-              UUID.randomUUID(),
-              conversation.getId(),
-              user.getId(),
-              finalMessageContent,
-              Instant.now());
-      messageStore.addMessage(message);
-
-      String activityMessage =
-          " sent a message in "
-              + "<a href=\"/chat/"
-              + conversationTitle
-              + "\">"
-              + conversationTitle
-              + "</a>"
-              + ": "
-              + finalMessageContent;
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "messageSent",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
-
-      sendEmailNotification(user, conversation);
+      createMessage(request, user, conversation);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
-  }
-
-  /**
-   * Method to send an email notification to all users in a conversation who are not logged on other
-   * than the message sender
-   */
-  public void sendEmailNotification(User user, Conversation conversation) {
-
-    Properties props = new Properties();
-    Session session = Session.getDefaultInstance(props, null);
-
-    List<UUID> conversationUsers = conversation.getConversationUsers();
-
-    String msgBody =
-        user.getName()
-            + " sent a message in "
-            + conversation.getTitle()
-            + " on "
-            + conversation.getCreationTime()
-            + " while you were away. \n \n ";
-
-    SessionListener currentSession = SessionListener.getInstance();
-
-    for (UUID conversationUserUUID : conversationUsers) {
-      User conversationUser = userStore.getUser(conversationUserUUID);
-      if (conversationUser != user
-          && conversationUser != null
-          && !currentSession.isLoggedIn(conversationUser.getName())
-          && conversationUser.getNotificationStatus()) {
-        if (user.getNotificationFrequency().equals("everyMessage")) {
-          try {
-            javax.mail.Message msg = new MimeMessage(session);
-            msg.setFrom(
-                new InternetAddress(
-                    "chatMessageAdmin@chatu-196017.appspotmail.com", "CodeU Team 12 Admin"));
-            msg.addRecipient(
-                javax.mail.Message.RecipientType.TO,
-                new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
-            msg.setSubject(user.getName() + " has sent you a message");
-            msgBody += " Please log in to view this message";
-            msg.setText(msgBody);
-            Transport.send(msg);
-          } catch (AddressException e) {
-            System.out.println("Invalid email address formatting. Email not sent.");
-            System.out.println("AddressException:" + e);
-          } catch (MessagingException e) {
-            System.out.println("An error has occurred with this message. Email not sent.");
-            System.out.println("MessagingException:" + e);
-          } catch (UnsupportedEncodingException e) {
-            System.out.println("This character encoding is not supported. Email not sent");
-            System.out.println("UnsupportedEncodingException:" + e);
-          }
-        }
-      } else {
-        user.addNotification(msgBody);
-      }
-    }
   }
 
   /**
@@ -376,6 +253,154 @@ public class ChatServlet extends HttpServlet {
         // if the two users are not friends, ensure they become friends
         currentUser.addConversationFriend(u1);
         u1.addConversationFriend(currentUser);
+      }
+    }
+  }
+
+  /** Constructs a method object and adds it to messageStore */
+  private void createMessage(HttpServletRequest request, User user, Conversation conversation) {
+    String messageContent = request.getParameter("message");
+
+    // this removes any HTML from the message content
+    String cleanedMessageContent =
+            Jsoup.clean(
+                    messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+
+    Message message =
+            new codeu.model.data.Message(
+                    UUID.randomUUID(),
+                    conversation.getId(),
+                    user.getId(),
+                    finalMessageContent,
+                    Instant.now());
+    messageStore.addMessage(message);
+
+    createActivity(conversation, user, finalMessageContent);
+  }
+
+  /** Constructs an activity object and adds it to activityStore */
+  private void createActivity(Conversation conversation, User user, String messageContent) {
+
+    String activityMessage =
+            " sent a message in "
+                    + "<a href=\"/chat/"
+                    + conversation.getTitle()
+                    + "\">"
+                    + conversation.getTitle()
+                    + "</a>"
+                    + ": "
+                    + messageContent;
+
+    Activity activity =
+            new Activity(
+                    UUID.randomUUID(),
+                    user.getId(),
+                    conversation.getId(),
+                    Instant.now(),
+                    "messageSent",
+                    activityMessage,
+                    conversation.getConversationUsers(),
+                    conversation.getIsPublic());
+    activityStore.addActivity(activity);
+
+    sendEmailNotification(user, conversation);
+
+  }
+
+  /** Removes a user from a conversation */
+  private void leaveConversation(User user, Conversation conversation){
+    removeConversationFriends(user, conversation);
+    conversation.removeUser(user.getId());
+
+    String activityMessage =
+            " left " + "<a href=\"/chat/" + conversation.getTitle() + "\">" + conversation.getTitle() + "</a>.";
+    Activity activity =
+            new Activity(
+                    UUID.randomUUID(),
+                    user.getId(),
+                    conversation.getId(),
+                    Instant.now(),
+                    "leftConvo",
+                    activityMessage,
+                    conversation.getConversationUsers(),
+                    conversation.getIsPublic());
+    activityStore.addActivity(activity);
+  }
+
+  /** Adds a user to a conversation */
+  private void joinConversation(User user, Conversation conversation){
+    addConversationFriends(user, conversation);
+    conversation.addUser(user.getId());
+
+    String activityMessage =
+            " joined " + "<a href=\"/chat/" + conversation.getTitle() + "\">" + conversation.getTitle() + "</a>.";
+    Activity activity =
+            new Activity(
+                    UUID.randomUUID(),
+                    user.getId(),
+                    conversation.getId(),
+                    Instant.now(),
+                    "leftConvo",
+                    activityMessage,
+                    conversation.getConversationUsers(),
+                    conversation.getIsPublic());
+    activityStore.addActivity(activity);
+  }
+
+  /**
+   * Method to send an email notification to all users in a conversation who are not logged on other
+   * than the message sender
+   */
+  public void sendEmailNotification(User user, Conversation conversation) {
+
+    Properties props = new Properties();
+    Session session = Session.getDefaultInstance(props, null);
+
+    List<UUID> conversationUsers = conversation.getConversationUsers();
+
+    String msgBody =
+            user.getName()
+                    + " sent a message in "
+                    + conversation.getTitle()
+                    + " on "
+                    + conversation.getCreationTime()
+                    + " while you were away. \n \n ";
+
+    SessionListener currentSession = SessionListener.getInstance();
+
+    for (UUID conversationUserUUID : conversationUsers) {
+      User conversationUser = userStore.getUser(conversationUserUUID);
+      if (conversationUser != user
+              && conversationUser != null
+              && !currentSession.isLoggedIn(conversationUser.getName())
+              && conversationUser.getNotificationStatus()) {
+        if (user.getNotificationFrequency().equals("everyMessage")) {
+          try {
+            javax.mail.Message msg = new MimeMessage(session);
+            msg.setFrom(
+                    new InternetAddress(
+                            "chatMessageAdmin@chatu-196017.appspotmail.com", "CodeU Team 12 Admin"));
+            msg.addRecipient(
+                    javax.mail.Message.RecipientType.TO,
+                    new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
+            msg.setSubject(user.getName() + " has sent you a message");
+            msgBody += " Please log in to view this message";
+            msg.setText(msgBody);
+            Transport.send(msg);
+          } catch (AddressException e) {
+            System.out.println("Invalid email address formatting. Email not sent.");
+            System.out.println("AddressException:" + e);
+          } catch (MessagingException e) {
+            System.out.println("An error has occurred with this message. Email not sent.");
+            System.out.println("MessagingException:" + e);
+          } catch (UnsupportedEncodingException e) {
+            System.out.println("This character encoding is not supported. Email not sent");
+            System.out.println("UnsupportedEncodingException:" + e);
+          }
+        }
+      } else {
+        user.addNotification(msgBody);
       }
     }
   }
