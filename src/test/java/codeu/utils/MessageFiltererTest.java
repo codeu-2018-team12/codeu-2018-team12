@@ -116,6 +116,68 @@ public class MessageFiltererTest {
     assertEquals(res2.get(0), MESSAGE_TWO);
   }
 
+  @Test
+  public void testFilterMessagesAnd() {
+    List<Message> res1 = filterer.filterMessages("by:one AND one");
+    Assert.assertEquals(1, res1.size());
+    assertEquals(res1.get(0), MESSAGE_ONE);
+
+    List<Message> res2 = filterer.filterMessages("one AND by:one");
+    Assert.assertEquals(1, res2.size());
+    assertEquals(res2.get(0), MESSAGE_ONE);
+
+    List<Message> res3 = filterer.filterMessages("by:two AND after:04-25-2018");
+    Assert.assertEquals(1, res3.size());
+    assertEquals(res3.get(0), MESSAGE_TWO);
+
+    List<Message> res4 = filterer.filterMessages("message AND three");
+    Assert.assertEquals(1, res4.size());
+    assertEquals(res4.get(0), MESSAGE_THREE);
+  }
+
+  @Test
+  public void testFilterMessagesOr() {
+    List<Message> res1 = filterer.filterMessages("by:not_a_name OR one");
+    Assert.assertEquals(1, res1.size());
+    assertEquals(res1.get(0), MESSAGE_ONE);
+
+    List<Message> res2 = filterer.filterMessages("one OR by:not_a_name");
+    Assert.assertEquals(1, res2.size());
+    assertEquals(res2.get(0), MESSAGE_ONE);
+
+    List<Message> res3 = filterer.filterMessages("by:two OR by:one");
+    Assert.assertEquals(3, res3.size());
+    assertEquals(res3.get(0), MESSAGE_TWO);
+    assertEquals(res3.get(1), MESSAGE_THREE);
+    assertEquals(res3.get(2), MESSAGE_ONE);
+
+    List<Message> res4 = filterer.filterMessages("after:04-25-2018 OR on:04-25-2018");
+    Assert.assertEquals(2, res4.size());
+    assertEquals(res4.get(0), MESSAGE_TWO);
+    assertEquals(res4.get(1), MESSAGE_THREE);
+  }
+
+  @Test
+  public void testFilterMessagesChain() {
+    List<Message> res1 = filterer.filterMessages("(by:not_a_name OR one) AND by:one");
+    Assert.assertEquals(1, res1.size());
+    assertEquals(res1.get(0), MESSAGE_ONE);
+
+    List<Message> res2 = filterer.filterMessages("(by:two AND two) OR one");
+    Assert.assertEquals(2, res2.size());
+    assertEquals(res2.get(0), MESSAGE_TWO);
+    assertEquals(res2.get(1), MESSAGE_ONE);
+
+    List<Message> res3 = filterer.filterMessages("by:two OR (by:one AND one)");
+    Assert.assertEquals(2, res3.size());
+    assertEquals(res3.get(0), MESSAGE_TWO);
+    assertEquals(res3.get(1), MESSAGE_ONE);
+
+    List<Message> res4 =
+        filterer.filterMessages("(after:04-25-2018 OR on:04-25-2018) AND before:04-25-2018");
+    Assert.assertEquals(0, res4.size());
+  }
+
   private void assertEquals(Message expectedMessage, Message actualMessage) {
     Assert.assertEquals(expectedMessage.getId(), actualMessage.getId());
     Assert.assertEquals(expectedMessage.getConversationId(), actualMessage.getConversationId());
