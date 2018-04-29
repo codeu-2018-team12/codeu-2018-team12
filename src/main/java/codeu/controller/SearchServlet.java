@@ -6,7 +6,8 @@ import codeu.model.data.User;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.utils.Filterer;
+import codeu.utils.ConversationFilterer;
+import codeu.utils.MessageFilterer;
 import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.ArrayList;
@@ -71,7 +72,9 @@ public class SearchServlet extends HttpServlet {
               ? conversationStore.getAllPublicConversationsSorted()
               : conversationStore.getAllPermittedConversationsSorted(loggedInUser.getId());
       try {
-        List<Conversation> result = Filterer.filterConversations(conversations, search);
+        ConversationFilterer filterer =
+            new ConversationFilterer(conversations, userStore.getUsers());
+        List<Conversation> result = filterer.filterConversations(search);
         request.setAttribute("conversations", result);
       } catch (DateTimeException dte) {
         System.out.println(dte);
@@ -89,7 +92,8 @@ public class SearchServlet extends HttpServlet {
               ? new ArrayList<Message>()
               : messageStore.getMessagesInConversationSorted(convo.getId());
       try {
-        List<Message> result = Filterer.filterMessages(messages, search);
+        MessageFilterer filterer = new MessageFilterer(messages, userStore.getUsers());
+        List<Message> result = filterer.filterMessages(search);
         request.setAttribute("messages", result);
       } catch (DateTimeException dte) {
         System.out.println(dte);
