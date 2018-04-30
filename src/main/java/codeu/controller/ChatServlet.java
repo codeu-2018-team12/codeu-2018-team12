@@ -22,14 +22,12 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -37,11 +35,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSessionBindingEvent;
-
+import javax.servlet.http.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
@@ -171,18 +165,16 @@ public class ChatServlet extends HttpServlet {
       response.sendRedirect("/conversations");
       return;
     }
-
     if ("joinButton".equals(button)) {
-        joinConversation(user, conversation);
-    }
+      joinConversation(user, conversation);
 
-    if ("leaveButton".equals(button)) {
+    } else if ("leaveButton".equals(button)) {
         leaveConversation(user, conversation);
-    }
 
-    if (button == null && conversation.getConversationUsers().contains(user.getId())) {
+    } else if (button == null && conversation.getConversationUsers().contains(user.getId())) {
       createMessage(request, user, conversation);
-    }
+
+    } 
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
