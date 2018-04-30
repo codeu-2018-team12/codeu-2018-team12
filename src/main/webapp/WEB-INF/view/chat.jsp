@@ -28,24 +28,26 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 <html>
 <head>
   <title><%= conversation.getTitle() %></title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <jsp:include page="./navbar.jsp" />
-
+  <link rel="stylesheet" href="/css/chat.css" type="text/css">
   <style>
-    #chat {
-      background-color: white;
-      height: 500px;
-      overflow-y: scroll;
-      word-break: break-all;
-      word-wrap: break-word;
-    }
+   [hidden] {
+     display: none !important;
+   }
   </style>
-
+  <jsp:include page="./navbar.jsp" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script>
     // scroll the chat div to the bottom
     function scrollChat() {
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
+    };
+
+    document.getElementById("image").onchange = function() {
+        document.getElementById("chatForm").submit();
     };
   </script>
 </head>
@@ -88,12 +90,17 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <% } %>
 
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
-    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <textarea name="message"></textarea>
+    <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
+        <textarea placeholder="Enter your message here" name="message"></textarea>
         </br>
-        <button type="submit">Send</button>
-        </br>
-        <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
+        <label class="btn btn-info">
+        <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+        <input type="file" name="image" id="image" accept="image/*" hidden>
+        </label>
+        <button type="submit" class="btn btn-info" value="submitMessage"> Submit
+        </button>
+        <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation
+        </button>
     </form>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
     <p> Join the conversation to send a message! </p>

@@ -1,0 +1,20 @@
+ a {
+   color: #283593;
+ }
+
+ #chat {
+   background-color: white;
+   height: 500px;
+   overflow-y: scroll;
+   word-break: break-all;
+   word-wrap: break-word;
+ }
+
+ .btn{
+   background-color: #283593;
+   border-color: #283593;
+ }
+
+ [hidden] {
+   display: none !important;
+ }
