@@ -18,6 +18,7 @@ import java.nio.channels.Channels;
   maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
   fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
 )
+
 public class ImageStorage {
 
   private final GcsService gcsService =
@@ -36,7 +37,6 @@ public class ImageStorage {
    * create a unique filename.
    */
   public String uploadedFilename(final Part part) {
-    final String partHeader = part.getHeader("content-disposition");
 
     for (String content : part.getHeader("content-disposition").split(";")) {
       if (content.trim().startsWith("filename")) {

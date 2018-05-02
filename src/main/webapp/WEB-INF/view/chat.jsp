@@ -97,14 +97,14 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         <span class="glyphicon glyphicon-camera"></span>  Upload Photo
         <input type="file" name="image" id="image" accept="image/*" hidden>
         </label>
-        <button type="submit" class="btn btn-info" value="submitMessage"> Submit
+        <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit
         </button>
         <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation
         </button>
     </form>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
     <p> Join the conversation to send a message! </p>
-    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
+    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
             <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
     <% } else { %>

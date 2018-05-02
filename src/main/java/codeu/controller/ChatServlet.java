@@ -29,10 +29,17 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
+
+@MultipartConfig(
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+)
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -134,7 +141,9 @@ public class ChatServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
+    Part image = request.getPart("image");
     String button = request.getParameter("button");
+    String submitText = request.getParameter("submitText");
 
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
@@ -159,15 +168,16 @@ public class ChatServlet extends HttpServlet {
       response.sendRedirect("/conversations");
       return;
     }
+
     if ("joinButton".equals(button)) {
       joinConversation(user, conversation);
-
     } else if ("leaveButton".equals(button)) {
-        leaveConversation(user, conversation);
-
-    } else if (button == null && conversation.getConversationUsers().contains(user.getId())) {
+      leaveConversation(user, conversation);
+    } else if (submitText != null && conversation.getConversationUsers().contains(user.getId())) {
       createMessage(request, user, conversation);
-
+    } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
+      ImageStorage imageStorage = new ImageStorage();
+      imageStorage.storeImage(image);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
@@ -245,21 +255,20 @@ public class ChatServlet extends HttpServlet {
 
   /** Constructs a method object and adds it to messageStore */
   private void createMessage(HttpServletRequest request, User user, Conversation conversation) {
-    String messageContent = request.getParameter("message");
 
+    String messageContent = request.getParameter("message");
     // this removes any HTML from the message content
     String cleanedMessageContent =
-            Jsoup.clean(
-                    messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+        Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
     String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
 
     Message message =
-            new codeu.model.data.Message(
-                    UUID.randomUUID(),
-                    conversation.getId(),
-                    user.getId(),
-                    finalMessageContent,
-                    Instant.now());
+        new codeu.model.data.Message(
+            UUID.randomUUID(),
+            conversation.getId(),
+            user.getId(),
+            finalMessageContent,
+            Instant.now());
     messageStore.addMessage(message);
 
     createActivity(conversation, user, finalMessageContent);
@@ -269,69 +278,78 @@ public class ChatServlet extends HttpServlet {
   private void createActivity(Conversation conversation, User user, String messageContent) {
 
     String activityMessage =
-            " sent a message in "
-                    + "<a href=\"/chat/"
-                    + conversation.getTitle()
-                    + "\">"
-                    + conversation.getTitle()
-                    + "</a>"
-                    + ": "
-                    + messageContent;
+        " sent a message in "
+            + "<a href=\"/chat/"
+            + conversation.getTitle()
+            + "\">"
+            + conversation.getTitle()
+            + "</a>"
+            + ": "
+            + messageContent;
 
     Activity activity =
-            new Activity(
-                    UUID.randomUUID(),
-                    user.getId(),
-                    conversation.getId(),
-                    Instant.now(),
-                    "messageSent",
-                    activityMessage,
-                    conversation.getConversationUsers(),
-                    conversation.getIsPublic());
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "messageSent",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
     activityStore.addActivity(activity);
 
     Email email = new Email();
     email.sendEmailNotification(user, conversation);
-
   }
 
   /** Removes a user from a conversation */
-  private void leaveConversation(User user, Conversation conversation){
+  private void leaveConversation(User user, Conversation conversation) {
     removeConversationFriends(user, conversation);
     conversation.removeUser(user.getId());
 
     String activityMessage =
-            " left " + "<a href=\"/chat/" + conversation.getTitle() + "\">" + conversation.getTitle() + "</a>.";
+        " left "
+            + "<a href=\"/chat/"
+            + conversation.getTitle()
+            + "\">"
+            + conversation.getTitle()
+            + "</a>.";
     Activity activity =
-            new Activity(
-                    UUID.randomUUID(),
-                    user.getId(),
-                    conversation.getId(),
-                    Instant.now(),
-                    "leftConvo",
-                    activityMessage,
-                    conversation.getConversationUsers(),
-                    conversation.getIsPublic());
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "leftConvo",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
     activityStore.addActivity(activity);
   }
 
   /** Adds a user to a conversation */
-  private void joinConversation(User user, Conversation conversation){
+  private void joinConversation(User user, Conversation conversation) {
     addConversationFriends(user, conversation);
     conversation.addUser(user.getId());
 
     String activityMessage =
-            " joined " + "<a href=\"/chat/" + conversation.getTitle() + "\">" + conversation.getTitle() + "</a>.";
+        " joined "
+            + "<a href=\"/chat/"
+            + conversation.getTitle()
+            + "\">"
+            + conversation.getTitle()
+            + "</a>.";
     Activity activity =
-            new Activity(
-                    UUID.randomUUID(),
-                    user.getId(),
-                    conversation.getId(),
-                    Instant.now(),
-                    "leftConvo",
-                    activityMessage,
-                    conversation.getConversationUsers(),
-                    conversation.getIsPublic());
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "leftConvo",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
     activityStore.addActivity(activity);
   }
 }
