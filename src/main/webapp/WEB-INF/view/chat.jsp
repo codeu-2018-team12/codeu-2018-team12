@@ -29,16 +29,12 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <link rel="stylesheet" href="/css/chat.css" type="text/css">
-  <style>
-   [hidden] {
-     display: none !important;
-   }
-  </style>
+  <link rel="stylesheet" href="/css/main.css?DvEEeE1e" type="text/css">
+  <link rel="stylesheet" href="/css/chat.css?3eeSeSSddD1" type="text/css">
+
   <jsp:include page="./navbar.jsp" />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
     // scroll the chat div to the bottom
     function scrollChat() {
@@ -46,9 +42,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
 
-    document.getElementById("image").onchange = function() {
-        document.getElementById("chatForm").submit();
-    };
   </script>
 </head>
 <body onload="scrollChat()">
@@ -60,16 +53,47 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 
     <hr/>
 
-    <div id="chat">
-      <ul>
+    <div id="chat" class="col-md-8">
+     <ul class="chat">
     <%
       if (user != null && conversationUsers.contains(user.getId())) {
+        int boxNum = 1;
         for (Message message : messages) {
           String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+          if (boxNum % 2 == 0) {
     %>
-      <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
+      <li class="left clearfix">
+        <span class="chat-img pull-left">
+        <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
+        </span>
+        <div class="chat-body clearfix">
+        <div class="header">
+        <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+        <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
+        </div>
+        <p> <%= message.getContent() %> </p>
+        </div>
+      </li>
+    <%
+        } else {
+    %>
+
+       <li class="right clearfix">
+         <span class="chat-img pull-right">
+         <a href="/profile/<%= author %>"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="User Avatar"></a>
+         </span>
+         <div class="chat-body clearfix">
+         <div class="header">
+         <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+         <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins ago</small>
+         </div>
+         <p> <%= message.getContent() %> </p>
+         </div>
+      </li>
     <%
         }
+        boxNum++;
+       }
       }
     %>
     <%
@@ -80,7 +104,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <%
       }
     %>
-      </ul>
     </div>
 
     <hr/>
@@ -93,9 +116,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
         <textarea placeholder="Enter your message here" name="message"></textarea>
         </br>
-        <label class="btn btn-info">
+        <label class="btn btn-info image">
         <span class="glyphicon glyphicon-camera"></span>  Upload Photo
-        <input type="file" name="image" id="image" accept="image/*" hidden>
+        <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
         </label>
         <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit
         </button>

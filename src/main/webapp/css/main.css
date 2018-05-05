@@ -47,7 +47,7 @@ nav a {
 }
 
 h1 {
-  color: #757575;
+  color: ##474a4f;
 }
 
 #title {
@@ -68,7 +68,7 @@ textarea{
   height: 150px;
   padding: 5px 5px;
   box-sizing: border-box;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   font-size: 18px;
   font-family: Arial;
 }
