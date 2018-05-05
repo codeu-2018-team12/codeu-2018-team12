@@ -22,6 +22,7 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.persistence.PersistentStorageAgent;
 import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
 import codeu.utils.Email;
@@ -177,7 +178,9 @@ public class ChatServlet extends HttpServlet {
       createMessage(request, user, conversation);
     } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
       ImageStorage imageStorage = new ImageStorage();
-      imageStorage.storeImage(image);
+      String imageName = imageStorage.storeImage(image);
+      System.out.println("IMAGE" + imageName);
+      conversation.addImage(imageName);
     }
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);

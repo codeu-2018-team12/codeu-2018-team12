@@ -14,7 +14,7 @@
 
 package codeu.model.data;
 
-import java.time.Instant;
+import java.time.*;
 import java.util.UUID;
 
 /** Class representing a message. Messages are sent by a User in a Conversation. */
@@ -66,5 +66,17 @@ public class Message {
   /** Returns the creation time of this Message. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  /** Returns a formatted creation time */
+  public String getCreationTimeFormatted() {
+    LocalDateTime time = LocalDateTime.ofInstant(creation, ZoneOffset.UTC);
+    String day = Integer.toString(time.getDayOfMonth());
+    String month = Integer.toString(time.getMonthValue());
+    String year = Integer.toString(time.getYear());
+    String hour = Integer.toString(time.getHour());
+    String min = Integer.toString(time.getMinute());
+
+    return day + "/" + month + "/" + year + "\t" + hour + ":" + min;
   }
 }
