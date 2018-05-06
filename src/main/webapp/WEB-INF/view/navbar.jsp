@@ -7,7 +7,6 @@
       padding-left:16px;
       padding-bottom:20px
     }
-
     #logo {
        height: 40px;
        width: 40px;

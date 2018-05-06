@@ -16,7 +16,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
 <!DOCTYPE html>
 <html>
 <head>
-  <% if (user != null) {%>
+    <% if (user != null) {%>
     <title><%= user.getName() %></title>
  <link rel="stylesheet" href="/css/main.css">
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -31,8 +31,12 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
         height: 500px;
         overflow-y: scroll
       }
-    </style>
 
+          .container {
+              margin-left: 0;
+              width:100%;
+          }
+    </style>
     <script>
       // scroll the chat div to the bottom
       function scrollChat() {
@@ -42,86 +46,100 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
   </head>
   <body onload="scrollChat()">
   <h1 id="title"><%= user.getName() %>'s Profile</h1>
-  <div id="container">
-  <h2>Biography</h2>
-    <% if (user.getBio() != null) { %>
-       <%= user.getBio() %>
-      <%} else {%>
-        <p> This biography has not yet been set up! </p>
+  <div class="container">
+
+<div class="row">
+ <div class="col-md-4">
+   <% if (request.getSession().getAttribute("user") != null){
+           if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+   <% if (user.getProfilePicture() == null) { %>
+    <h2>Upload Profile Picture </h2>
+    <% } else { %>
+    <h2> Change Profile Picture </h2>
+    <% } %>
+    <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="file-name">Upload image</label>
+        <input type="file" name="image" id="image" accept="image/*">
+       </div>
+       <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
+    </form>
+    <% } %>
+    <% } %>
+
+    <% if (user.getProfilePicture() != null) {%>
+       <h2>Profile Picture Here: </h2> <br>
+       <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
      <% } %>
- <% if (request.getSession().getAttribute("user") != null){
-        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
-     <p> You can change your biography below: </p>
-     <form action="/profile/<%= user.getName() %>" method="POST">
-       <label for="newBio">New Bio: </label>
-       <input type="text" name="newBio" id="newBio">
-       <button type="submit" name="submitBiography" value="submitBiography">Submit</button>
-     </form>
- <% } else {
-      if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
-       && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
-      <form action="/direct/<%= user.getName() %>">
-       <input type="submit" value="Send <%= user.getName() %> a direct message" />
-      </form>
-      <% } %>
-   <% } %>
- <% } %>
+       <br>
+       <br>
+ </div>
 
-<% if (request.getSession().getAttribute("user") != null){
-        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
-<% if (user.getProfilePicture() == null) { %>
- <h2>Upload Profile Picture </h2>
- <% } else { %>
- <h2> Change Profile Picture </h2>
- <% } %>
- <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
-   <div class="form-group">
-     <label for="file-name">Upload image</label>
-     <input type="file" name="image" id="image" accept="image/*">
-    </div>
-    <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
- </form>
- <% } %>
- <% } %>
-
- <% if (user.getProfilePicture() != null) {%>
-    <h2>Profile Picture Here: </h2> <br>
-    <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
-  <% } %>
-    <br>
-    <br>
-  </div>
-  <div id="container">
-   <h2>Recent Activity</h2>
-   <div id="activities">
-     <ul>
-     <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
-      && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
-       <%
-         for (Activity activity : activities) {
-           String type = activity.getActivityType();
-           String message = activity.getActivityMessage();
-           Instant creationTime = activity.getCreationTime();
-           LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
-           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
-           String time = ldt.format(formatter);
-       %>
-       <li>
-         <strong><%= time %>:</strong>
-         <%= user.getName() %> <%= message %>
-       </li>
-        <%
-         }
-        %>
+ <div class="col-md-8">
+   <h2>Biography</h2>
+       <% if (user.getBio() != null) { %>
+          <%= user.getBio() %>
+         <%} else {%>
+           <p> This biography has not yet been set up! </p>
         <% } %>
-     </ul>
-   </div>
-  </div>
-<% } else { %>
-  <title>Profile Not Found</title>
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <jsp:include page="./navbar.jsp" />
-  <h1 id="title">Profile Not Found</h1>
-<% } %>
+    <% if (request.getSession().getAttribute("user") != null){
+           if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+        <p> You can change your biography below: </p>
+        <form action="/profile/<%= user.getName() %>" method="POST">
+          <label for="newBio">New Bio: </label>
+          <input type="text" name="newBio" id="newBio">
+          <button type="submit" name="submitBiography" value="submitBiography">Submit</button>
+        </form>
+    <% } else {
+         if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+          && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+         <form action="/direct/<%= user.getName() %>">
+          <input type="submit" value="Send <%= user.getName() %> a direct message" />
+         </form>
+         <% } %>
+      <% } %>
+    <% } %>
+
+    <% if (user.getProfilePicture() != null) {%>
+        <h2>Profile Picture Here: </h2> <br>
+        <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
+      <% } %>
+        <br>
+        <br>
+      </div>
+      <div id="container">
+       <h2>Recent Activity</h2>
+       <div id="activities">
+         <ul>
+         <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+          && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+           <%
+             for (Activity activity : activities) {
+               String type = activity.getActivityType();
+               String message = activity.getActivityMessage();
+               Instant creationTime = activity.getCreationTime();
+               LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+               DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+               String time = ldt.format(formatter);
+           %>
+           <li>
+             <strong><%= time %>:</strong>
+             <%= user.getName() %> <%= message %>
+           </li>
+            <%
+             }
+            %>
+            <% } %>
+         </ul>
+       </div>
+      </div>
+    <% } else { %>
+      <title>Profile Not Found</title>
+      <link rel="stylesheet" href="/css/main.css" type="text/css">
+      <jsp:include page="./navbar.jsp" />
+      <h1 id="title">Profile Not Found</h1>
+    <% } %>
+ </div>
+</div>
 </body>
 </html>
