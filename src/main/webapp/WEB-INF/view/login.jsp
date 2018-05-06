@@ -20,27 +20,36 @@
 <head>
   <title>Login</title>
  <link rel="stylesheet" href="/css/main.css">
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+   <link rel="stylesheet" href="/css/login.css?3eweedserhrdrfrdeSSeeddD1" type="text/css">
+ <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
  <jsp:include page="./navbar.jsp" />
 </head>
 <body>
 
-  <div id="container">
-    <h1>Login</h1>
-
-    <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-    <% } %>
-
-    <form action="/login" method="POST">
-      <label for="username">Username: </label>
-      <input type="text" name="username" id="username">
-      <br/>
-      <label for="password">Password: </label>
-      <input type="password" name="password" id="password">
-      <br/>
-      <br/>
-      <button type="submit">Login</button>
-    </form>
-  </div>
+    <div class="container">
+        <% if(request.getAttribute("error") != null){ %>
+          <div class="alert alert-warning">
+            <strong>Error: Invalid username or password</strong>
+          </div>
+         <% } %>
+        <div class="card card-container">
+            <img id="profile-img" class="profile-img-card" src="../resources/codeU.png" />
+            <p id="profile-name" class="profile-name-card"></p>
+            <form action="/login" class="form-signin" method="POST">
+                <input type="text" id="inputUsername" class="form-control" name="username" placeholder="Username"
+                required
+                autofocus> <br/>
+                <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password"
+                required> <br/>
+                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+            </form>
+            <a href="/register"> Need an account? </a>
+        </div>
+    </div>
 </body>
 </html>
+

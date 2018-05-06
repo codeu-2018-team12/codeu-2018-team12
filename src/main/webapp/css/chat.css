@@ -10,13 +10,11 @@
       word-break: break-all;
       word-wrap: break-word;
       padding-right: 40px;
-      margin-bottom: 20 px;
-      border: 1px solid #ccc;
     }
 
     .btn{
-      background-color: #283593;
-      border-color: #283593;
+      background-color: #0c6121;
+      border-color: #0c6121;
     }
 
     [hidden] {
@@ -58,7 +56,7 @@
       width: 60px;
       height: 60px;
       border-radius: 65em;
-      border:2px solid #797a7c;
+      border:3px solid #c4c8ce;
       -moz-border-radius: 65em;
       -webkit-border-radius: 65em;
     }

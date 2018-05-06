@@ -22,36 +22,55 @@
 
 <!DOCTYPE html>
 <html>
-<head>
+<title>CodeU Chat App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
  <link rel="stylesheet" href="/css/main.css">
  <jsp:include page="/WEB-INF/view/navbar.jsp" />
-</head>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="/css/main.css?DwvEeedsedrecerreddrdEeE1e" type="text/css">
+ <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+<style>
+body,h1 {font-family: "Raleway", sans-serif}
+body, html {height: 100%}
+.bgimg {
+    background-image: linear-gradient(to right top, #375f6f, #3b6b7a, #407783, #45848d, #4c9095);
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
 
+ #title {
+    font-size: 64px!important;
+    font-family: "Raleway";
+    margin-bottom: 50px;
+ }
 
+ a {
+     margin-left: 40%;
+     margin-right: 50%;
+     text-align: center;
+ }
+
+ #aboutButton {
+    display: flex;
+    justify-content: center;
+ }
+
+</style>
 <body>
 
-
-  <div id="container">
-    <div
-      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
-
-      <h1>CodeU Chat App</h1>
-      <img src="/resources/codeU.png">
-      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>
-
-      <ul>
-        <li><a href="/login">Login</a> to get started.</li>
-        <li>Go to the <a href="/conversations">conversations</a> page to
-            create or join a conversation.</li>
-        <li>View the <a href="/about.jsp">about</a> page to learn more about us
-            and the project.</li>
-        <li>You can <a href="/testdata">load test data</a> to fill the site with
-            example data.</li>
-        <li>You can view the project's GitHub page
-            <a href="https://github.com/codeu-2018-team12/codeu-2018-team12">
-              here</a>.</li>
-      </ul>
-    </div>
+<div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+  <div class="w3-display-middle">
+    <h1 id="title" class="w3-animate-top">Team 12's Chat App</h1>
+        <div id="aboutButton">
+        <a href="/about.jsp" class="btn btn-primary btn-round-lg btn-lg">Explore This Project</a>
+        </div>
   </div>
+</div>
+
 </body>
 </html>

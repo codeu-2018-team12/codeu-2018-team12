@@ -8,8 +8,13 @@
 <html>
 <head>
   <title>Settings</title>
-  <link rel="stylesheet" href="/css/main.css">
-  <jsp:include page="./navbar.jsp" />
+ <link rel="stylesheet" href="/css/main.css">
+ <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+ <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+ <jsp:include page="./navbar.jsp" />
 </head>
 <body>
     <h1 id="title">Settings Page</h1>
