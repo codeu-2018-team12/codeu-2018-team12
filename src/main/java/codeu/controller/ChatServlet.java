@@ -22,7 +22,6 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
-import codeu.model.store.persistence.PersistentStorageAgent;
 import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
 import codeu.utils.Email;
@@ -172,16 +171,25 @@ public class ChatServlet extends HttpServlet {
 
     if ("joinButton".equals(button)) {
       joinConversation(user, conversation);
+
     } else if ("leaveButton".equals(button)) {
       leaveConversation(user, conversation);
+
     } else if (submitText != null && conversation.getConversationUsers().contains(user.getId())) {
-      createMessage(request, user, conversation);
+      String messageContent = request.getParameter("message");
+      // this removes any HTML from the message content
+      String cleanedMessageContent =
+          Jsoup.clean(
+              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+      String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+      createMessage(request, cleanedMessageContent, user, conversation, false);
+
     } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
       ImageStorage imageStorage = new ImageStorage();
       String imageName = imageStorage.storeImage(image);
-      System.out.println("IMAGE" + imageName);
-      conversation.addImage(imageName);
+      createMessage(request, imageName, user, conversation, true);
     }
+
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
   }
@@ -257,38 +265,50 @@ public class ChatServlet extends HttpServlet {
   }
 
   /** Constructs a method object and adds it to messageStore */
-  private void createMessage(HttpServletRequest request, User user, Conversation conversation) {
-
-    String messageContent = request.getParameter("message");
-    // this removes any HTML from the message content
-    String cleanedMessageContent =
-        Jsoup.clean(messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
-    String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+  private void createMessage(
+      HttpServletRequest request,
+      String messageContent,
+      User user,
+      Conversation conversation,
+      boolean containsImage) {
 
     Message message =
         new codeu.model.data.Message(
             UUID.randomUUID(),
             conversation.getId(),
             user.getId(),
-            finalMessageContent,
-            Instant.now());
+            messageContent,
+            Instant.now(),
+            containsImage);
     messageStore.addMessage(message);
 
-    createActivity(conversation, user, finalMessageContent);
+    createActivity(conversation, user, messageContent, containsImage);
   }
 
   /** Constructs an activity object and adds it to activityStore */
-  private void createActivity(Conversation conversation, User user, String messageContent) {
+  private void createActivity(
+      Conversation conversation, User user, String messageContent, boolean containsImage) {
 
-    String activityMessage =
-        " sent a message in "
-            + "<a href=\"/chat/"
-            + conversation.getTitle()
-            + "\">"
-            + conversation.getTitle()
-            + "</a>"
-            + ": "
-            + messageContent;
+    String activityMessage;
+    if (containsImage) {
+      activityMessage =
+          " sent a picture in"
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>.";
+    } else {
+      activityMessage =
+          " sent a message in "
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>"
+              + ": "
+              + messageContent;
+    }
 
     Activity activity =
         new Activity(
@@ -318,6 +338,7 @@ public class ChatServlet extends HttpServlet {
             + "\">"
             + conversation.getTitle()
             + "</a>.";
+
     Activity activity =
         new Activity(
             UUID.randomUUID(),
@@ -343,6 +364,7 @@ public class ChatServlet extends HttpServlet {
             + "\">"
             + conversation.getTitle()
             + "</a>.";
+
     Activity activity =
         new Activity(
             UUID.randomUUID(),

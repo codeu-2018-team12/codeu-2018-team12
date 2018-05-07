@@ -23,16 +23,11 @@ body, html {
    width:300px;
 }
 
-/*
- * Card component
- */
 .card {
     background-color: #F7F7F7;
-    /* just in case there no content*/
     padding: 20px 25px 30px;
     margin: 0 auto 25px;
     margin-top: 80px;
-    /* shadows and rounded borders */
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
@@ -51,9 +46,6 @@ body, html {
     border-radius: 50%;
 }
 
-/*
- * Form styles
- */
 .profile-name-card {
     font-size: 16px;
     font-weight: bold;
@@ -106,9 +98,7 @@ body, html {
 }
 
 .btn.btn-signin {
-    /*background-color: #4d90fe; */
     background-color: rgb(104, 145, 162);
-    /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;
     font-weight: 700;
     font-size: 14px;
@@ -126,15 +116,5 @@ body, html {
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
-}
-
-.forgot-password {
-    color: rgb(104, 145, 162);
-}
-
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-    color: rgb(12, 97, 33);
+    background-color: #03585D;
 }

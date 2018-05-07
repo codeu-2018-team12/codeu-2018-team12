@@ -153,11 +153,6 @@ public class PersistentDataStore {
                 ? new ArrayList<String>()
                 : (List<String>) entity.getProperty("users");
 
-        List<String> images =
-                entity.getProperty("images") == null
-                        ? new ArrayList<String>()
-                        : (List<String>) entity.getProperty("images");
-
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         boolean isPublic =
             entity.getProperty("isPublic") == null
@@ -166,7 +161,6 @@ public class PersistentDataStore {
         Conversation conversation =
             new Conversation(uuid, ownerUuid, title, creationTime, isPublic);
         conversation.setUsers(users);
-        conversation.setImages(images);
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -200,7 +194,11 @@ public class PersistentDataStore {
         UUID authorUuid = UUID.fromString((String) entity.getProperty("author_uuid"));
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String content = (String) entity.getProperty("content");
-        Message message = new Message(uuid, conversationUuid, authorUuid, content, creationTime);
+        boolean containsImage =
+                entity.getProperty("containsImage") == null
+                        ? true
+                        : ((boolean) entity.getProperty("containsImage"));
+        Message message = new Message(uuid, conversationUuid, authorUuid, content, creationTime, containsImage);
         messages.add(message);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -296,6 +294,8 @@ public class PersistentDataStore {
     messageEntity.setProperty("author_uuid", message.getAuthorId().toString());
     messageEntity.setProperty("content", message.getContent());
     messageEntity.setProperty("creation_time", message.getCreationTime().toString());
+    messageEntity.setProperty("contains_image", Boolean.toString(message.containsImage()));
+
     datastore.put(messageEntity);
   }
 
@@ -307,7 +307,6 @@ public class PersistentDataStore {
     conversationEntity.setProperty("title", conversation.getTitle());
     conversationEntity.setProperty("creation_time", conversation.getCreationTime().toString());
     conversationEntity.setProperty("users", conversation.getUserIdsAsStrings());
-    conversationEntity.setProperty("images", conversation.getConversationImages());
     conversationEntity.setProperty("isPublic", Boolean.toString(conversation.getIsPublic()));
     datastore.put(conversationEntity);
   }
@@ -331,15 +330,6 @@ public class PersistentDataStore {
     Entity resultEntity = setUpConversationEntity(conversation);
     if (resultEntity != null) {
       resultEntity.setProperty("users", conversation.getUserIdsAsStrings());
-      datastore.put(resultEntity);
-    }
-  }
-
-  /** Updates the images property of a Conversation entity in the Datastore service */
-  public void updateConversationEntityImages(Conversation conversation) {
-    Entity resultEntity = setUpConversationEntity(conversation);
-    if (resultEntity != null) {
-      resultEntity.setProperty("images", conversation.getConversationImages());
       datastore.put(resultEntity);
     }
   }

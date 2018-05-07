@@ -21,22 +21,11 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
  <link rel="stylesheet" href="/css/main.css">
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedfdfeEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/profile.css?DwvEcefrrgfredEeE1e" type="text/css">
  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
  <jsp:include page="./navbar.jsp" />
-    <style>
-      #activities {
-        background-color: white;
-        height: 500px;
-        overflow-y: scroll
-      }
-
-          .container {
-              margin-left: 0;
-              width:100%;
-          }
-    </style>
     <script>
       // scroll the chat div to the bottom
       function scrollChat() {
@@ -45,37 +34,26 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
     </script>
   </head>
   <body onload="scrollChat()">
-  <h1 id="title"><%= user.getName() %>'s Profile</h1>
   <div class="container">
 
 <div class="row">
- <div class="col-md-4">
+ <div class="col-md-2">
    <% if (request.getSession().getAttribute("user") != null){
            if (request.getSession().getAttribute("user").equals(user.getName())) { %>
-   <% if (user.getProfilePicture() == null) { %>
-    <h2>Upload Profile Picture </h2>
+        <form id="pictureUpload" method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
+        <label for="image">
+        <img id="profile-picture" src="../resources/codeu.png">
+        <input type="file" name="image" id="image" onchange="form.submit()" accept="image/*" style="display: none;"/>
+        </label>
+        </form>
     <% } else { %>
-    <h2> Change Profile Picture </h2>
-    <% } %>
-    <form method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
-      <div class="form-group">
-        <label for="file-name">Upload image</label>
-        <input type="file" name="image" id="image" accept="image/*">
-       </div>
-       <button type="submit" name="submitProfilePic" value="submitProfilePic">Save</button>
-    </form>
-    <% } %>
-    <% } %>
-
-    <% if (user.getProfilePicture() != null) {%>
-       <h2>Profile Picture Here: </h2> <br>
-       <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
-     <% } %>
-       <br>
-       <br>
+        <img id="profile-picture" src="../resources/codeu.png">
+    <% }
+     }%>
  </div>
 
- <div class="col-md-8">
+ <div class="col-md-10">
+   <h1 id="title"><%= user.getName() %>'s Profile</h1>
    <h2>Biography</h2>
        <% if (user.getBio() != null) { %>
           <%= user.getBio() %>
@@ -99,14 +77,6 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
          <% } %>
       <% } %>
     <% } %>
-
-    <% if (user.getProfilePicture() != null) {%>
-        <h2>Profile Picture Here: </h2> <br>
-        <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"> <br>
-      <% } %>
-        <br>
-        <br>
-      </div>
       <div id="container">
        <h2>Recent Activity</h2>
        <div id="activities">
@@ -138,8 +108,9 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <link rel="stylesheet" href="/css/main.css" type="text/css">
       <jsp:include page="./navbar.jsp" />
       <h1 id="title">Profile Not Found</h1>
-    <% } %>
+    <% }%>
  </div>
+</div>
 </div>
 </body>
 </html>

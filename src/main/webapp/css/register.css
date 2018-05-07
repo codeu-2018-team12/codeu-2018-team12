@@ -101,18 +101,10 @@ body, html {
 .btn.btn-register:hover,
 .btn.btn-register:active,
 .btn.btn-register:focus {
-    background-color: rgb(12, 97, 33);
+    background-color: #03585D;
 }
 
-.forgot-password {
-    color: rgb(104, 145, 162);
-}
 
-.forgot-password:hover,
-.forgot-password:active,
-.forgot-password:focus{
-    color: rgb(12, 97, 33);
-}
 
     label {
       display: inline-block;

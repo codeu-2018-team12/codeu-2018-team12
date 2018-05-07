@@ -21,8 +21,8 @@
  <title>CodeU Chat App</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
- <link rel="stylesheet" href="/css/main.css?d5eeddhrdd">
-  <link rel="stylesheet" href="/css/about.css?ddehdeserd5">
+ <link rel="stylesheet" href="/css/main.css?d5eeddh3rddd">
+  <link rel="stylesheet" href="/css/about.css?ddehd3edserd5">
    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
  <jsp:include page="/WEB-INF/view/navbar.jsp" />
@@ -32,7 +32,7 @@
 <body>
 
   <div class="container">
-    <h1>About This App</h1>
+    <h1>About This Project</h1>
     <p>
         This project was created by Team 12 as part of CodeU, a program where groups of students, with the guidance
         of an engineer mentor, collaborate remotely over the course of 12 weeks to build a chat web app and
@@ -217,7 +217,7 @@
        <div class="timeline-badge warning"></div>
        <div class="timeline-panel">
          <div class="timeline-heading">
-           <h4 class="timeline-title">Users can now search for conversations and messages</h4>
+           <h4 class="timeline-title">Users can search for conversations and messages</h4>
            <p><small class="text-muted"></i>April 29, 2018</small></p>
          </div>
        </div>

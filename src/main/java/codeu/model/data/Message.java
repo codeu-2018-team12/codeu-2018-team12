@@ -25,6 +25,7 @@ public class Message {
   private final UUID author;
   private final String content;
   private final Instant creation;
+  private final boolean containsImage;
 
   /**
    * Constructs a new Message.
@@ -35,12 +36,13 @@ public class Message {
    * @param content the text content of this Message
    * @param creation the creation time of this Message
    */
-  public Message(UUID id, UUID conversation, UUID author, String content, Instant creation) {
+  public Message(UUID id, UUID conversation, UUID author, String content, Instant creation, boolean imageStatus) {
     this.id = id;
     this.conversation = conversation;
     this.author = author;
     this.content = content;
     this.creation = creation;
+    this.containsImage = imageStatus;
   }
 
   /** Returns the ID of this Message. */
@@ -63,6 +65,10 @@ public class Message {
     return content;
   }
 
+  /** Returns true if message contains image and false otherwise */
+  public boolean containsImage(){
+    return containsImage;
+  }
   /** Returns the creation time of this Message. */
   public Instant getCreationTime() {
     return creation;

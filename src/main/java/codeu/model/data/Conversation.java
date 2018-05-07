@@ -30,7 +30,6 @@ public class Conversation {
   private final Instant creation;
   private final String title;
   private List<UUID> conversationUsers = new ArrayList<>();
-  private List<String> conversationImages = new ArrayList<>();
   private boolean isPublic = true;
   /**
    * Constructs a new Conversation.
@@ -91,9 +90,6 @@ public class Conversation {
     return conversationUsers;
   }
 
-  /** Returns the set of names of images used in this conversation */
-  public List<String> getConversationImages() { return conversationImages; }
-
   /**
    * Returns the set of users in this Conversation as a list of strings indicating the UUID of each
    * user. For use in persistentDataStore
@@ -126,21 +122,6 @@ public class Conversation {
       newUsers.add(id);
     }
     conversationUsers = newUsers;
-  }
-
-  /** Updates the list of users from a list of user Ids */
-  public void setImages(List<String> images) {
-    List<String> newImages = new ArrayList<>();
-    for (String image : conversationImages) {
-      newImages.add(image);
-    }
-    conversationImages = newImages;
-  }
-
-  /** Adds a new image to a conversation. */
-  public void addImage(String imageName){
-    conversationImages.add(imageName);
-    PersistentStorageAgent.getInstance().updateConversationEntityImages(this);
   }
 
   /** Returns true if conversation is public, false, otherwise */

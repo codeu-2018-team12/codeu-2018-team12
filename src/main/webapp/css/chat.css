@@ -1,5 +1,5 @@
  a {
-      color: #283593;
+      color: #537DA9;
     }
 
     #chat {
@@ -12,9 +12,10 @@
       padding-right: 40px;
     }
 
-    .btn{
-      background-color: #0c6121;
-      border-color: #0c6121;
+    .btn btn-info,
+    .btn btn-info image{
+      background-color: #537DA9;
+      border-color: #537DA9;
     }
 
     [hidden] {

@@ -13,10 +13,17 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+
+@MultipartConfig(
+        maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+        maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+        fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+)
 
 /** Servlet class responsible for the profile page. */
 public class ProfileServlet extends HttpServlet {
@@ -114,12 +121,12 @@ public class ProfileServlet extends HttpServlet {
     if (request.getParameter("submitBiography") != null) {
       user.setBio(request.getParameter("newBio"));
     }
-    if (request.getParameter("submitProfilePic") != null) {
-      Collection<Part> parts = request.getParts();
-      Part image = parts.iterator().next();
+
+    Part image = request.getPart("image");
+    if (image != null) {
       ImageStorage imageStorage = new ImageStorage();
-      String fileName = imageStorage.storeImage(image);
-      user.setProfilePicture(fileName);
+      String imageName = imageStorage.storeImage(image);
+      user.setProfilePicture(imageName);
     }
     response.sendRedirect(requestUrl);
   }

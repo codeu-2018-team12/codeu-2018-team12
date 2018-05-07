@@ -8,7 +8,6 @@
       padding-bottom:20px
     }
     #logo {
-       height: 40px;
        width: 40px;
        margin: 10px;
        margin-top: 2px;
@@ -17,7 +16,7 @@
   <nav>
     <a id="navTitle" href="/"><img id="logo" src="../resources/chat-icon.png">CodeU Chat App</a>
     <% if (request.getSession().getAttribute("user") != null) { %>
-      <a href="/personalActivityFeed">Activity Feed</a>
+      <a href="/activityFeed">Activity Feed</a>
       <a href="/conversations">Conversations</a>
       <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>
      <a href="<%=profileaddress %>">Your Profile</a>

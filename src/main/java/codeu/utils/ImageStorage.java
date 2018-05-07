@@ -83,6 +83,7 @@ public class ImageStorage {
     outputChannel = gcsService.createOrReplace(gcsFile, instance);
     copy(image.getInputStream(), Channels.newOutputStream(outputChannel));
 
+    System.out.println("FILENAME" + filename);
     return filename; // Return the filename without GCS/bucket appendage
   }
 }

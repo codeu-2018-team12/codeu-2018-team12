@@ -7,8 +7,8 @@
    <link rel="stylesheet" href="/css/main.css">
    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-     <link rel="stylesheet" href="/css/main.css?DwvEeedsedreeedE1e" type="text/css">
-     <link rel="stylesheet" href="/css/register.css?3ewrfdeSeeSeeddD1" type="text/css">
+     <link rel="stylesheet" href="/css/main.css?DwvEeedsedreeeedE1e" type="text/css">
+     <link rel="stylesheet" href="/css/register.css?3ewerfdeSeeSeeddD1" type="text/css">
    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
    <jsp:include page="./navbar.jsp" />

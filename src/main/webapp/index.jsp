@@ -60,6 +60,10 @@ body, html {height: 100%}
     justify-content: center;
  }
 
+.btn-primary{
+   background-color: #537DA9;
+   border-color: #537DA9;
+}
 </style>
 <body>
 

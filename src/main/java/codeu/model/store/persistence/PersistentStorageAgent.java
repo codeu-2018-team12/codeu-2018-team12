@@ -123,12 +123,6 @@ public class PersistentStorageAgent {
   public void updateConversationEntityUsers(Conversation conversation) {
     persistentDataStore.updateConversationEntityUsers(conversation);
   }
-
-  /** Updates a Conversation object in the Datastore service */
-  public void updateConversationEntityImages(Conversation conversation) {
-    persistentDataStore.updateConversationEntityImages(conversation);
-  }
-
   /** Updates the biography of a User object in the Datastore service */
   public void updateUserEntityBiography(User user) {
     persistentDataStore.updateUserEntityBiography(user);

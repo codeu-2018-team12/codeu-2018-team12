@@ -29,8 +29,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 <head>
   <title><%= conversation.getTitle() %></title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/main.css?DwvEeE1e" type="text/css">
-  <link rel="stylesheet" href="/css/chat.css?3dSeeddD1" type="text/css">
+  <link rel="stylesheet" href="/css/main.css?1" type="text/css">
+  <link rel="stylesheet" href="/css/chat.css?2" type="text/css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <jsp:include page="./navbar.jsp" />
@@ -40,70 +40,82 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       var chatDiv = document.getElementById('chat');
       chatDiv.scrollTop = chatDiv.scrollHeight;
     };
-
   </script>
 </head>
 <body onload="scrollChat()">
 
   <div id="container">
-
     <h1><%= conversation.getTitle() %>
-      <a href="" style="float: right">&#8635;</a></h1>
-
+    <a href="" style="float: right">&#8635;</a></h1>
     <hr/>
-
     <div id="chat" class="col-md-8">
-     <ul class="chat">
-    <%
+      <ul class="chat">
+      <%
       if (user != null && conversationUsers.contains(user.getId())) {
         int boxNum = 1;
         for (Message message : messages) {
           String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
           if (boxNum % 2 == 0) {
-    %>
+      %>
       <li class="left clearfix">
         <span class="chat-img pull-left">
-        <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
+        <% if (user.getProfilePicture() == null) { %>
+            <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
+         <% } else { %>
+        <a href="/profile/<%= author %>">
+        <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"
+         alt="User Avatar"></a>
+        <% } %>
         </span>
         <div class="chat-body clearfix">
-        <div class="header">
-        <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-        <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
-        </div>
-        <p> <%= message.getContent() %> </p>
-        </div>
+          <div class="header">
+            <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+            <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
+          </div>
+          <% if (!message.containsImage()){%>
+            <p> <%= message.getContent()%> </p>
+          <% } else { %>
+             <img src="http://storage.googleapis.com/chatu-196017.appspot.com/" + message>
+          <% } %>
+       </div>
       </li>
-    <%
+      <%
         } else {
-    %>
-
-       <li class="right clearfix">
-         <span class="chat-img pull-right">
-         <a href="/profile/<%= author %>"><img src="https://bootdey.com/img/Content/user_1.jpg" alt="User Avatar"></a>
+      %>
+      <li class="right clearfix">
+        <% if (user.getProfilePicture() == null) { %>
+           <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
+        <% } else { %>
+            <a href="/profile/<%= author %>">
+            <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>">
+            alt="User Avatar"></a>
+       <% } %>
          </span>
          <div class="chat-body clearfix">
-         <div class="header">
-         <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-         <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins ago</small>
+           <div class="header">
+             <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins ago</small>
+           </div>
+             <% if (!message.containsImage()){%>
+                <p> <%= message.getContent()%> </p>
+             <% } else { %>
+                 <img src="http://storage.googleapis.com/chatu-196017.appspot.com/" + message>
+             <% } %>
          </div>
-         <p> <%= message.getContent() %> </p>
-         </div>
-      </li>
-    <%
+       </li>
+      <%
         }
         boxNum++;
        }
       }
-    %>
-    <%
-      if (user != null && !conversationUsers.contains(user.getId())) {
-    %>
+     %>
+     <% if (user != null && !conversationUsers.contains(user.getId())) { %>
       <h2> Messages from this conversation will appear here! </h2>
       <p> To see these messages, you must first join the conversation. </p>
-    <%
+     <%
       }
-    %>
-    </div>
+     %>
+   </div>
 
     <hr/>
 
