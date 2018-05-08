@@ -110,12 +110,13 @@ public class DefaultDataStore {
     Collections.shuffle(randomUsernames);
 
     for (int i = 0; i < DEFAULT_USER_COUNT; i++) {
+      String name = getRandomElement(randomUsernames);
       User user =
           new User(
               UUID.randomUUID(),
-              getRandomElement(randomUsernames),
+              name,
               BCrypt.hashpw("password", BCrypt.gensalt()),
-              "this is a test biography",
+              "Hello world! It's me " + name + ".",
               Instant.now(),
               "codeUChatTest@gmail.com");
       PersistentStorageAgent.getInstance().writeThrough(user);

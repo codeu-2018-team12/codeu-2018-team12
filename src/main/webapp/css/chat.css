@@ -53,16 +53,8 @@
         background: #f9f9f9;
     }
 
-        .chat li img {
-          width: 60px;
-          height: 60px;
-          border-radius: 65em;
-          border:3px solid #c4c8ce;
-          -moz-border-radius: 65em;
-          -webkit-border-radius: 65em;
-        }
 
-    .chat li img .profile-pic {
+    .profile-pic {
       width: 60px;
       height: 60px;
       border-radius: 65em;
@@ -79,14 +71,6 @@
      margin-top: 15px;
      margin-bottom: 15px;
      max-width: 100%;
-    }
-
-    .chat-image{
-        height: 180px;
-        width: 180px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .chat-body {
@@ -185,3 +169,11 @@
             margin: 0;
             padding: 20;
         }
+
+            .chat-image{
+                height: 180px;
+                width: 180px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }

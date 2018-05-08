@@ -30,8 +30,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <title><%= conversation.getTitle() %></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css?esen1" type="text/css">
-    <link rel="stylesheet" href="/css/chat.css?2seen" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?esens1" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?2seesn" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <jsp:include page="./navbar.jsp" />
@@ -62,7 +62,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
           <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
         <% } else { %>
            <a href="/profile/<%= author %>">
-           <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>" alt="User
+           <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()
+           %>" alt="User
            Avatar"></a>
         <% } %>
         </span>
@@ -74,7 +75,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
           <% if (!message.containsImage()){%>
             <p><%= message.getContent()%></p>
           <% } else { %>
-             <img class="chat-image" src="../resources/codeU.png">
+             <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
           <% } %>
        </div>
       </li>
@@ -87,7 +88,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
           <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
         <% } else { %>
           <a href="/profile/<%= author %>">
-          <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"
+          <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()
+          %>"
           alt="User Avatar"></a>
        <% } %>
          </span>
@@ -99,7 +101,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
              <% if (!message.containsImage()){%>
                 <p> <%= message.getContent()%> </p>
              <% } else { %>
-                 <img class="chat-image" src="../resources/codeU.png">
+                <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
              <% } %>
          </div>
        </li>

@@ -21,8 +21,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <link rel="stylesheet" href="/css/main.css">
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
        id="bootstrap-css">
-      <link rel="stylesheet" href="/css/main.css?DwvEcerrgedfdfreEeE1e" type="text/css">
-      <link rel="stylesheet" href="/css/profile.css?DwvEcefrrgrfredEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/main.css?DwvEcefrrdgsefdddddfgddfdfrfdeEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/profile.css?DwvEcefrsdfdrgddfdrdddffdffgrdedEeE1e" type="text/css">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script>
@@ -33,56 +33,65 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
      <jsp:include page="./navbar.jsp" />
   </head>
   <body onload="scrollChat()">
-    <div class="container">
       <div class="row">
         <div class="col-md-2">
-          <% if (request.getSession().getAttribute("user") != null){
-             if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+          <% String name = user.getName().substring(0, 1).toUpperCase() + user.getName().substring(1);
+             if (loggedInUser != null){
+               if (loggedInUser.getName().equals(user.getName())) { %>
             <form id="pictureUpload" method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
               <label for="image">
                  <% if (loggedInUser.getProfilePicture() != null) { %>
-                   <img id="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
-                    .getProfilePicture()%>">
+                   <div class="image-username">
+                     <img id="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+                      .getProfilePicture()%>">
+                     <p class="user-name"><%=name%></p>
+                    </div>
                  <% } else { %>
-                   <img id="profile-picture" src="../resources/codeu.png">
+                   <div class="image-username">
+                     <img id="profile-picture" src="../resources/codeu.png">
+                     <p class="user-name"><%=name%></p>
+                   </div>
                  <% } %>
                  <input type="file" name="image" id="image" onchange="form.submit()" accept="image/*" style="display:
                   none;"/>
                </label>
              </form>
         <% } else { %>
-          <img id="profile-picture" src="../resources/codeu.png">
-        <% }
-        }%>
+        <div class="image-username">
+          <% if (user.getProfilePicture() != null) { %>
+             <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+              .getProfilePicture()%>">
+          <% } else { %>
+             <img id="profile-picture" src="../resources/codeu.png">
+          <% } %>
+           <p class="user-name"><%=name%></p> <br>
+
+                       <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals
+                       ("someContent"))
+                       && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+                      <form action="/direct/<%= user.getName() %>">
+                         <input class="btn btn-light btn-sm" type="submit" value="Message <%= user.getName() %>" />
+                      </form>
+                    <% }%>
+          </div>
+        <% } %>
+       <% } %>
       </div>
-      <div class="col-md-10">
-        <h1 id="title"><%= user.getName() %>'s Profile</h1>
-        <h2>Biography</h2>
-        <% if (user.getBio() != null) { %>
-           <%= user.getBio() %>
-        <%} else {%>
+     <div class="col-md-10">
+      <div id="container">
+       <h1 id="title">Welcome to <%=name%>'s Profile</h1>
+        <div id="profile-information">
+         <div class="profile-element">
+          <h2>Biography</h2>
+          <% if (user.getBio() != null) { %>
+             <%= user.getBio() %>
+           <%} else {%>
            <p> This biography has not yet been set up! </p>
         <% } %>
-        <% if (request.getSession().getAttribute("user") != null){
-           if (request.getSession().getAttribute("user").equals(user.getName())) { %>
-           <p> You can change your biography below: </p>
-        <form action="/profile/<%= user.getName() %>" method="POST">
-          <label for="newBio">New Bio: </label>
-          <input type="text" name="newBio" id="newBio">
-          <button type="submit" name="submitBiography" value="submitBiography">Submit</button>
-        </form>
-      <% } else {
-         if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
-          && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
-         <form action="/direct/<%= user.getName() %>">
-            <input type="submit" value="Send <%= user.getName() %> a direct message" />
-         </form>
-         <% } %>
-      <% } %>
-    <% } %>
-      <div id="container">
-        <h2>Recent Activity</h2>
-        <div id="activities">
+        </div>
+        <div class="profile-element">
+         <h2>Recent Activity</h2>
+         <div id="activities">
           <ul>
            <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
               && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
@@ -103,7 +112,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
               } %>
            </ul>
          </div>
-       </div>
+      </div>
      <% } else { %>
        <title>Profile Not Found</title>
        <link rel="stylesheet" href="/css/main.css" type="text/css">
@@ -111,6 +120,21 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
        <h1 id="title">Profile Not Found</h1>
     <% }%>
  </div>
+   <div class="profile-element">
+           <% if (request.getSession().getAttribute("user") != null){
+              if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+              <h2>Edit Your Profile Information</h2>
+              <p><b>Edit your profile picture:</b> Click on your profile picture to upload a new image </p> <br>
+              <p><b>Edit your bio:<b></p>
+           <form action="/profile/<%= user.getName() %>" method="POST" enctype="multipart/form-data">
+             <input type="text" name="newBio" id="newBio">
+             <button type="submit" class="btn btn-info" name="submitBiography" value="submitBiography">
+             Submit</button>
+           </form>
+                   <% } %>
+                  <% } %>
+   </div>
+  </div>
 </div>
 </div>
 </body>

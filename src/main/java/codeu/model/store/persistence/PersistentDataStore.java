@@ -195,9 +195,9 @@ public class PersistentDataStore {
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         String content = (String) entity.getProperty("content");
         boolean containsImage =
-                entity.getProperty("containsImage") == null
-                        ? true
-                        : ((boolean) entity.getProperty("containsImage"));
+                entity.getProperty("contains_image") == null
+                        ? false
+                        : ((String) entity.getProperty("contains_image")).equals("true");
         Message message = new Message(uuid, conversationUuid, authorUuid, content, creationTime, containsImage);
         messages.add(message);
       } catch (Exception e) {

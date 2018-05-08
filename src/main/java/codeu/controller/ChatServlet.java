@@ -185,6 +185,7 @@ public class ChatServlet extends HttpServlet {
       createMessage(request, cleanedMessageContent, user, conversation, false);
 
     } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
+      System.out.println("HELLO");
       ImageStorage imageStorage = new ImageStorage();
       String imageName = imageStorage.storeImage(image);
       createMessage(request, imageName, user, conversation, true);
@@ -272,6 +273,7 @@ public class ChatServlet extends HttpServlet {
       Conversation conversation,
       boolean containsImage) {
 
+    System.out.println(containsImage);
     Message message =
         new codeu.model.data.Message(
             UUID.randomUUID(),

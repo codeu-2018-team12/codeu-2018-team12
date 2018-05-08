@@ -26,13 +26,14 @@
    <title>CodeU Chat App</title>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="/css/main.css">
-   <link rel="stylesheet" href="/css/index.css?DwvEeedsedrecerreddrdEeE1e" type="text/css">
-   <jsp:include page="/WEB-INF/view/navbar.jsp" />
-   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
     id="bootstrap-css">
+   <link rel="stylesheet" href="/css/index.css?DwvEeedsedrecerreddrdEeE1e" type="text/css">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="/css/main.css">
+   <link rel="stylesheet" href="/css/index.css">
+   <jsp:include page="/WEB-INF/view/navbar.jsp" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
  <body>

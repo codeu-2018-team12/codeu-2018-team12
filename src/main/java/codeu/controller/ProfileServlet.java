@@ -115,14 +115,15 @@ public class ProfileServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
+    Part image = request.getPart("image");
+    String biography = request.getParameter("submitBiography");
     String name = requestUrl.substring("/profile/".length());
     User user = userStore.getUser(name);
 
-    if (request.getParameter("submitBiography") != null) {
+    if (biography != null) {
       user.setBio(request.getParameter("newBio"));
     }
 
-    Part image = request.getPart("image");
     if (image != null) {
       ImageStorage imageStorage = new ImageStorage();
       String imageName = imageStorage.storeImage(image);

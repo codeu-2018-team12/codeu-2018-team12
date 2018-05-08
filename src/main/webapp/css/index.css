@@ -1,8 +1,8 @@
 body,h1 {
-  font-family: "Raleway", sans-serif
+  font-family: "Raleway", sans-serif;
 }
 body, html {
-height: 100%
+height: 100%;
 }
 .bgimg {
     background-image: linear-gradient(to right top, #375f6f, #3b6b7a, #407783, #45848d, #4c9095);
