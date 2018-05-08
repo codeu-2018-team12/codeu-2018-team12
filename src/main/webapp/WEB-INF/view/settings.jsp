@@ -6,30 +6,30 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Settings</title>
- <link rel="stylesheet" href="/css/main.css">
- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
- <jsp:include page="./navbar.jsp" />
-</head>
-<body>
+  <head>
+    <title>Settings</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <jsp:include page="./navbar.jsp" />
+  </head>
+  <body>
     <h1 id="title">Settings Page</h1>
     <div id="container">
-        <p>
-          Welcome! This is your settings page, where you can adjust your preferences for this site, update <br>
-          your personal information, or choose what you would like to share with other site users.
-        </p>
-        <hr/>
-          <% if (request.getAttribute("error") != null) { %>
+       <p>
+         Welcome! This is your settings page, where you can adjust your preferences for this site, update <br>
+         your personal information, or choose what you would like to share with other site users.
+       </p>
+       <hr/>
+         <% if (request.getAttribute("error") != null) { %>
             <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-          <% }
+         <% }
             if (request.getAttribute("successInfo") != null) { %>
             <h2 style="color:green"><%= request.getAttribute("successInfo") %></h2>
-          <% } %>
+         <% } %>
 
         <h2><u>Update Information:</u></h2>
         <form action="/settings" method="POST">

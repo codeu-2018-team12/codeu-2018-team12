@@ -13,11 +13,7 @@
   #profile-picture {
     width: 85%;
     height: 85%;
-    margin-left: 20%;
     margin-top: 20%;
-    border-radius: 65em;
-    -moz-border-radius: 65em;
-    -webkit-border-radius: 65em;
     display: block;
 
   }

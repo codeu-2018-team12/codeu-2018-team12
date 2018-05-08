@@ -14,58 +14,38 @@ User otherUser = (User) request.getAttribute("otherUser");
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Messages With <%= otherUser.getName() %></title>
- <link rel="stylesheet" href="/css/main.css">
- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
- <jsp:include page="./navbar.jsp" />
-
-  <style>
-    #chat {
-      background-color: white;
-      height: 500px;
-      overflow-y: scroll;
-      word-break: break-all;
-      word-wrap: break-word;
-    }
-  </style>
-
-  <script>
-    // scroll the chat div to the bottom
-    function scrollChat() {
-      var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
-    };
-  </script>
-</head>
+  <head>
+    <title>Messages With <%= otherUser.getName() %></title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <jsp:include page="./navbar.jsp" />
+    <script>
+      function scrollChat() {
+        var chatDiv = document.getElementById('chat');
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      };
+    </script>
+ </head>
 <body onload="scrollChat()">
 
   <div id="container">
-
     <h1>Messages With <%= otherUser.getName() %>
-      <a href="" style="float: right">&#8635;</a></h1>
-
-    <hr/>
-
+      <a href="" style="float: right">&#8635;</a></h1><hr/>
     <div id="chat">
-      <ul>
-    <%
-      for (Message message : messages) {
-        String author = UserStore.getInstance()
-          .getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
-    <%
-      }
-    %>
-      </ul>
-    </div>
-
-    <hr/>
+    <ul>
+      <%
+        for (Message message : messages) {
+          String author = UserStore.getInstance()
+            .getUser(message.getAuthorId()).getName();
+      %>
+          <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
+      <% } %>
+    </ul>
+    </div><hr/>
 
     <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
@@ -77,10 +57,7 @@ User otherUser = (User) request.getAttribute("otherUser");
         <button type="submit">Send</button>
         </br>
     </form>
-
     <hr/>
-
   </div>
-
 </body>
 </html>

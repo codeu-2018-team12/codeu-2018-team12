@@ -17,23 +17,20 @@
 <%@ page import="codeu.model.data.User" %>
 <!DOCTYPE html>
 <html>
-<head>
- <title>CodeU Chat App</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
- <link rel="stylesheet" href="/css/main.css?d5eeddh3rddd">
-  <link rel="stylesheet" href="/css/about.css?ddehd3edserd5">
-   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
- <jsp:include page="/WEB-INF/view/navbar.jsp" />
-</head>
-
-</head>
-<body>
-
-  <div class="container">
-    <h1>About This Project</h1>
-    <p>
+  <head>
+    <title>CodeU Chat App</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <link rel="stylesheet" href="/css/main.css?d5eeddh3rddd">
+    <link rel="stylesheet" href="/css/about.css?ddehd3edserd5">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <jsp:include page="/WEB-INF/view/navbar.jsp" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>About This Project</h1>
+     <p>
         This project was created by Team 12 as part of CodeU, a program where groups of students, with the guidance
         of an engineer mentor, collaborate remotely over the course of 12 weeks to build a chat web app and
         practice their technical skills.<br><br>
@@ -43,41 +40,36 @@
         here</a></b> and load some <b><a href="/testdata"> test data</a></b>, or check out our project on
         <b><a href="https://github.com/codeu-2018-team12/codeu-2018-team12">Github</a></b>.<br>
     </p>
-
   </div>
-
   <div class="container">
-
-      <h1>About Team 12</h1>
-
-<div class="row">
- <div class="col-md-2 col-md-offset-1">
-   <img class="img-responsive" src="../resources/about-5.png" />
-   <p class="contributorName">Jeremy Archer</p>
-   <p>Jeremy is from Chicago, IL and works as a site reliability engineer in  New York.</p>
- </div>
- <div class="col-md-2">
-   <img class="img-responsive" src="../resources/about-4.png" />
-   <p class="contributorName">Alison Rosenman</p>
-   <p>Alison is from Mercer Island, WA and is a student at Haverford College.</p>
- </div>
-
- <div class="col-md-2">
-   <img class="img-responsive" src="../resources/about-3.png" />
-   <p class="contributorName">Marie Zimmerman</p>
-   <p>Marie is from Atlanta, Georgia and is a student at Georgia Tech.</p>
- </div>
- <div class="col-md-2">
-   <img class="img-responsive" src="../resources/about-2.png" />
-    <p class="contributorName">Kevin Kane</p>
-    <p>Kevin is from Laurel, Maryland and is a student at the University of Maryland, College Park.</p>
- </div>
- <div class="col-md-2">
-   <img class="img-responsive" src="../resources/about-1.png" />
-    <p class="contributorName">Maria Mahin</p>
-    <p>Maria is from Queens, NY and is a student at Hunter College.</p>
- </div>
-</div>
+    <h1>About Team 12</h1>
+    <div class="row">
+      <div class="col-md-2 col-md-offset-1">
+        <img class="img-responsive" src="../resources/about-5.png" />
+        <p class="contributorName">Jeremy Archer</p>
+        <p>Jeremy is from Chicago, IL and works as a site reliability engineer in  New York.</p>
+      </div>
+      <div class="col-md-2">
+        <img class="img-responsive" src="../resources/about-4.png" />
+        <p class="contributorName">Alison Rosenman</p>
+        <p>Alison is from Mercer Island, WA and is a student at Haverford College.</p>
+      </div>
+      <div class="col-md-2">
+        <img class="img-responsive" src="../resources/about-3.png" />
+        <p class="contributorName">Marie Zimmerman</p>
+        <p>Marie is from Atlanta, Georgia and is a student at Georgia Tech.</p>
+      </div>
+      <div class="col-md-2">
+        <img class="img-responsive" src="../resources/about-2.png" />
+        <p class="contributorName">Kevin Kane</p>
+        <p>Kevin is from Laurel, Maryland and is a student at the University of Maryland, College Park.</p>
+      </div>
+      <div class="col-md-2">
+        <img class="img-responsive" src="../resources/about-1.png" />
+        <p class="contributorName">Maria Mahin</p>
+        <p>Maria is from Queens, NY and is a student at Hunter College.</p>
+      </div>
+    </div>
  </div>
 </div>
 
@@ -105,37 +97,36 @@
       </div>
     </li>
     <li>
-        <li>
-          <div class="timeline-badge"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Users can now log out of the application</h4>
-              <p><small class="text-muted"></i>March 19, 2018</small></p>
-            </div>
-          </div>
-        </li>
+      <div class="timeline-badge">
+      </div>
+        <div class="timeline-panel">
+          <div class="timeline-heading">
+            <h4 class="timeline-title">Users can now log out of the application</h4>
+            <p><small class="text-muted"></i>March 19, 2018</small></p>
+           </div>
+         </div>
+       </li>
         <li class="timeline-inverted">
           <div class="timeline-badge warning"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Users can stay updated with the current activity of other
-               users on the site through an activity feed</h4>
-              <p><small class="text-muted"></i>March 20, 2018</small></p>
-            </div>
-          </div>
+             <div class="timeline-panel">
+              <div class="timeline-heading">
+                <h4 class="timeline-title">Users can stay updated with the current activity of other
+                 users on the site through an activity feed</h4>
+                <p><small class="text-muted"></i>March 20, 2018</small></p>
+              </div>
+           </div>
         </li>
         <li>
-          <li>
-              <div class="timeline-badge"></div>
-              <div class="timeline-panel">
-                <div class="timeline-heading">
-                  <h4 class="timeline-title">Text markdown and emojis are now supported in messages</h4>
-                  <p><small class="text-muted"></i>March 21, 2018</small></p>
-                </div>
+          <div class="timeline-badge"></div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+                <h4 class="timeline-title">Text markdown and emojis are now supported in messages</h4>
+                <p><small class="text-muted"></i>March 21, 2018</small></p>
               </div>
-            </li>
-            <li class="timeline-inverted">
-              <div class="timeline-badge warning"></div>
+            </div>
+          </li>
+          <li class="timeline-inverted">
+            <div class="timeline-badge warning"></div>
               <div class="timeline-panel">
                 <div class="timeline-heading">
                   <h4 class="timeline-title">Users can join and leave conversations</h4>
@@ -144,96 +135,90 @@
               </div>
             </li>
             <li>
-                <li>
-                  <div class="timeline-badge"></div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
-                      <h4 class="timeline-title">Users can search for other users on the site</h4>
-                      <p><small class="text-muted"></i>March 27, 2018</small></p>
-                    </div>
-                  </div>
-                </li>
-                <li class="timeline-inverted">
-                  <div class="timeline-badge warning"></div>
-                  <div class="timeline-panel">
-                    <div class="timeline-heading">
+            <div class="timeline-badge"></div>
+              <div class="timeline-panel">
+                <div class="timeline-heading">
+                  <h4 class="timeline-title">Users can search for other users on the site</h4>
+                  <p><small class="text-muted"></i>March 27, 2018</small></p>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-inverted">
+              <div class="timeline-badge warning"></div>
+                <div class="timeline-panel">
+                   <div class="timeline-heading">
                       <h4 class="timeline-title">Users can edit and display a biography on their profile pages</h4>
                       <p><small class="text-muted"></i>March 27, 2018</small></p>
                     </div>
                   </div>
                 </li>
-             <li>
+              <li>
+               <div class="timeline-badge"></div>
+                 <div class="timeline-panel">
+                   <div class="timeline-heading">
+                     <h4 class="timeline-title">Email notifications are now sent to users who receive a message in
+                      a conversation but are currently not logged into the chat app</h4>
+                   <p><small class="text-muted"></i>April 4, 2018</small></p>
+               </div>
+            </div>
+          </li>
+        <li class="timeline-inverted">
+          <div class="timeline-badge warning"></div>
+             <div class="timeline-panel">
+               <div class="timeline-heading">
+                 <h4 class="timeline-title">Activities on a user's activity feed are now personalized to
+                  each user</h4>
+                 <p><small class="text-muted"></i>April 5, 2018</small></p>
+               </div>
+            </div>
+          </li>
         <li>
           <div class="timeline-badge"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Email notifications are now sent to users who receive a message in
-              a conversation but are currently not logged into the chat app</h4>
-              <p><small class="text-muted"></i>April 4, 2018</small></p>
+            <div class="timeline-panel">
+               <div class="timeline-heading">
+                 <h4 class="timeline-title"> Users can now send private, direct-messages to one another</h4>
+                 <p><small class="text-muted"></i>April 14, 2018</small></p>
+              </div>
             </div>
-          </div>
+         </li>
+        <li class="timeline-inverted">
+           <div class="timeline-badge warning"></div>
+             <div class="timeline-panel">
+               <div class="timeline-heading">
+                 <h4 class="timeline-title">Users can update their personal information, change their settings, and
+                  specify their preferences for site privacy</h4>
+                  <p><small class="text-muted"></i>April 18, 2018</small></p>
+                </div>
+              </div>
+            </li>
+          <li>
+           <div class="timeline-badge"></div>
+             <div class="timeline-panel">
+              <div class="timeline-heading">
+               <h4 class="timeline-title"> Profile pictures can now be added to user profiles</h4>
+               <p><small class="text-muted"></i>April 28, 2018</small></p>
+             </div>
+           </div>
         </li>
         <li class="timeline-inverted">
           <div class="timeline-badge warning"></div>
-          <div class="timeline-panel">
-            <div class="timeline-heading">
-              <h4 class="timeline-title">Activities on a user's activity feed are now personalized to
-              each user</h4>
-              <p><small class="text-muted"></i>April 5, 2018</small></p>
-            </div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+               <h4 class="timeline-title">Users can search for conversations and messages</h4>
+                 <p><small class="text-muted"></i>April 29, 2018</small></p>
+             </div>
           </div>
         </li>
         <li>
-      <li>
-        <div class="timeline-badge"></div>
-        <div class="timeline-panel">
-          <div class="timeline-heading">
-            <h4 class="timeline-title"> Users can now send private, direct-messages to one another</h4>
-            <p><small class="text-muted"></i>April 14, 2018</small></p>
-          </div>
-        </div>
-      </li>
-      <li class="timeline-inverted">
-        <div class="timeline-badge warning"></div>
-        <div class="timeline-panel">
-          <div class="timeline-heading">
-            <h4 class="timeline-title">Users can update their personal information, change their settings, and
-            specify their preferences for site privacy</h4>
-            <p><small class="text-muted"></i>April 18, 2018</small></p>
-          </div>
-        </div>
-      </li>
-      <li>
-     <li>
-       <div class="timeline-badge"></div>
-       <div class="timeline-panel">
-         <div class="timeline-heading">
-           <h4 class="timeline-title"> Profile pictures can now be added to user profiles</h4>
-           <p><small class="text-muted"></i>April 28, 2018</small></p>
-         </div>
-       </div>
-     </li>
-     <li class="timeline-inverted">
-       <div class="timeline-badge warning"></div>
-       <div class="timeline-panel">
-         <div class="timeline-heading">
-           <h4 class="timeline-title">Users can search for conversations and messages</h4>
-           <p><small class="text-muted"></i>April 29, 2018</small></p>
-         </div>
-       </div>
-     </li>
-     <li>
-     <li>
-       <div class="timeline-badge"></div>
-       <div class="timeline-panel">
-         <div class="timeline-heading">
-           <h4 class="timeline-title">Images can be sent from one user to another through messages</h4>
-           <p><small class="text-muted"></i>May 2, 2018</small></p>
-         </div>
-       </div>
-     </li>
-  </ul>
-</div>
-
-</body>
+          <div class="timeline-badge"></div>
+            <div class="timeline-panel">
+              <div class="timeline-heading">
+                <h4 class="timeline-title">Images can be sent from one user to another through messages</h4>
+                <p><small class="text-muted"></i>May 2, 2018</small></p>
+              </div>
+            </div>
+          </li>
+       </ul>
+   </div>
+  </body>
 </html>

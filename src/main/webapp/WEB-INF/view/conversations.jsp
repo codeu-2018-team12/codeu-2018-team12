@@ -21,40 +21,34 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Conversations</title>
- <link rel="stylesheet" href="/css/main.css">
- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
- <jsp:include page="./navbar.jsp" />
-
+  <head>
+    <title>Conversations</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <jsp:include page="./navbar.jsp" />
 </head>
+
 <body>
   <div id="container">
-
     <% if(request.getAttribute("error") != null){ %>
-        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
-
     <% if(request.getSession().getAttribute("user") != null){ %>
       <h1>New Conversation</h1>
       <form action="/conversations" method="POST">
           <div class="form-group">
             <label class="form-control-label">Title:</label>
-          <input type="text" name="conversationTitle">
-        </div>
-
-        <button type="submit">Create</button>
+            <input type="text" name="conversationTitle">
+          </div>
+          <button type="submit">Create</button>
       </form>
-
       <hr/>
     <% } %>
 
     <h1>Conversations</h1>
-
     <%
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
@@ -62,26 +56,16 @@
     if(conversations == null || conversations.isEmpty()){
     %>
       <p>Create a conversation to get started.</p>
-    <%
-    }
-    else{
-    %>
+    <% } else{ %>
       <ul class="mdl-list">
-    <%
-      for(Conversation conversation : conversations){
-    %>
+    <% for(Conversation conversation : conversations){ %>
       <li><a href="/chat/<%= conversation.getTitle() %>">
         <%= conversation.getTitle() %></a></li>
-    <%
-      }
-    %>
-      </ul>
-    <%
-    }
-    %>
+    <% } %>
+    </ul>
+    <% } %>
     <hr/>
-    <% if(directMessages != null && !directMessages.isEmpty()){
-    %>
+    <% if(directMessages != null && !directMessages.isEmpty()){ %>
       <h1>Direct Messages</h1>
       <ul class="mdl-list">
       <%
@@ -98,13 +82,9 @@
       %>
       <li><a href="/direct/<%= otherUser.getName() %>">
         <%= otherUser.getName() %></a></li>
-      <%
-      }
-      %>
+      <% } %>
       </ul>
-    <%
-    }
-  %>
+    <% } %>
   </div>
 </body>
 </html>

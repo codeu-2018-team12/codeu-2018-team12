@@ -26,28 +26,27 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= conversation.getTitle() %></title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/main.css?1" type="text/css">
-  <link rel="stylesheet" href="/css/chat.css?2" type="text/css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <jsp:include page="./navbar.jsp" />
-  <script>
-    // scroll the chat div to the bottom
-    function scrollChat() {
-      var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
-    };
-  </script>
-</head>
-<body onload="scrollChat()">
+  <head>
+    <title><%= conversation.getTitle() %></title>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css?esen1" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?2seen" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <jsp:include page="./navbar.jsp" />
+    <script>
+      function scrollChat() {
+        var chatDiv = document.getElementById('chat');
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      };
+    </script>
+</head>
+
+<body onload="scrollChat()">
   <div id="container">
     <h1><%= conversation.getTitle() %>
     <a href="" style="float: right">&#8635;</a></h1>
-    <hr/>
     <div id="chat" class="col-md-8">
       <ul class="chat">
       <%
@@ -59,12 +58,12 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       %>
       <li class="left clearfix">
         <span class="chat-img pull-left">
-        <% if (user.getProfilePicture() == null) { %>
-            <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
-         <% } else { %>
-        <a href="/profile/<%= author %>">
-        <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"
-         alt="User Avatar"></a>
+        <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+          <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
+        <% } else { %>
+           <a href="/profile/<%= author %>">
+           <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>" alt="User
+           Avatar"></a>
         <% } %>
         </span>
         <div class="chat-body clearfix">
@@ -73,9 +72,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
           </div>
           <% if (!message.containsImage()){%>
-            <p> <%= message.getContent()%> </p>
+            <p><%= message.getContent()%></p>
           <% } else { %>
-             <img src="http://storage.googleapis.com/chatu-196017.appspot.com/" + message>
+             <img class="chat-image" src="../resources/codeU.png">
           <% } %>
        </div>
       </li>
@@ -83,12 +82,13 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         } else {
       %>
       <li class="right clearfix">
-        <% if (user.getProfilePicture() == null) { %>
-           <a href="/profile/<%= author %>"><img src="../resources/codeU.png" alt="User Avatar"></a>
+      <span class="chat-img pull-right">
+        <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+          <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
         <% } else { %>
-            <a href="/profile/<%= author %>">
-            <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>">
-            alt="User Avatar"></a>
+          <a href="/profile/<%= author %>">
+          <img src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture() %>"
+          alt="User Avatar"></a>
        <% } %>
          </span>
          <div class="chat-body clearfix">
@@ -99,7 +99,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
              <% if (!message.containsImage()){%>
                 <p> <%= message.getContent()%> </p>
              <% } else { %>
-                 <img src="http://storage.googleapis.com/chatu-196017.appspot.com/" + message>
+                 <img class="chat-image" src="../resources/codeU.png">
              <% } %>
          </div>
        </li>
@@ -110,13 +110,10 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       }
      %>
      <% if (user != null && !conversationUsers.contains(user.getId())) { %>
-      <h2> Messages from this conversation will appear here! </h2>
-      <p> To see these messages, you must first join the conversation. </p>
-     <%
-      }
-     %>
+       <h2> Messages from this conversation will appear here! </h2>
+       <p> To see these messages, you must first join the conversation. </p>
+     <% } %>
    </div>
-
     <hr/>
 
     <% if (request.getAttribute("error") != null) { %>
@@ -125,29 +122,24 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
     <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
-        <textarea placeholder="Enter your message here" name="message"></textarea>
-        </br>
+        <textarea placeholder="Enter your message here" name="message"></textarea></br>
         <label class="btn btn-info image">
-        <span class="glyphicon glyphicon-camera"></span>  Upload Photo
-        <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
+          <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+          <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
         </label>
-        <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit
-        </button>
-        <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation
-        </button>
+        <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
+        <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation</button>
     </form>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
-    <p> Join the conversation to send a message! </p>
-    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
-            <button type="submit" name="button" value="joinButton">Join Conversation</button>
-    </form>
+       <p> Join the conversation to send a message! </p>
+       <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
+          <button type="submit" name="button" value="joinButton">Join Conversation</button>
+       </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
 
     <hr/>
-
   </div>
-
 </body>
 </html>

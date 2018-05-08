@@ -1,0 +1,34 @@
+body,h1 {
+  font-family: "Raleway", sans-serif
+}
+body, html {
+height: 100%
+}
+.bgimg {
+    background-image: linear-gradient(to right top, #375f6f, #3b6b7a, #407783, #45848d, #4c9095);
+    min-height: 100%;
+    background-position: center;
+    background-size: cover;
+}
+
+ #title {
+    font-size: 64px!important;
+    font-family: "Raleway";
+    margin-bottom: 50px;
+ }
+
+ a {
+     margin-left: 40%;
+     margin-right: 50%;
+     text-align: center;
+ }
+
+ #aboutButton {
+    display: flex;
+    justify-content: center;
+ }
+
+.btn-primary{
+   background-color: #537DA9;
+   border-color: #537DA9;
+}

@@ -2,22 +2,22 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
 <html>
-<head>
-  <title>Register</title>
-   <link rel="stylesheet" href="/css/main.css">
-   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <head>
+     <title>Register</title>
+     <link rel="stylesheet" href="/css/main.css">
+     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+      id="bootstrap-css">
      <link rel="stylesheet" href="/css/main.css?DwvEeedsedreeeedE1e" type="text/css">
      <link rel="stylesheet" href="/css/register.css?3ewerfdeSeeSeeddD1" type="text/css">
-   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
-   <jsp:include page="./navbar.jsp" />
-</head>
-<body>
-    <div class="container">
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+     <jsp:include page="./navbar.jsp" />
+  </head>
+  <body>
+     <div class="container">
         <% if(request.getAttribute("error") != null){ %>
           <div class="alert alert-warning">
-            <strong>Error: Invalid username or password</strong>
+             <strong>Error: Invalid username or password</strong>
           </div>
          <% } %>
         <div class="card card-container">
@@ -35,7 +35,7 @@
                 <button class="btn btn-lg btn-primary btn-block btn-register" type="submit">Register</button>
             </form>
             <a href="/login"> Have an account? </a>
-        </div>
-    </div>
-</body>
+         </div>
+      </div>
+  </body>
 </html>
