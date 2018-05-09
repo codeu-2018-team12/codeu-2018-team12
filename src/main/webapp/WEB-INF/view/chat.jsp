@@ -63,7 +63,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                Avatar"></a>
            <% } else { %>
               <a href="/profile/<%= author %>">
-              <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture
+              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+              .getProfilePicture
               () %>" alt="User Avatar"></a>
           <% } %>
          </span>
@@ -95,7 +96,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
               Avatar"></a>
           <% } else { %>
           <a href="/profile/<%= author %>">
-          <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()%>"
+          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+          .getProfilePicture
+          ()%>"
           alt="User Avatar"></a>
          <% } %>
        </span>
