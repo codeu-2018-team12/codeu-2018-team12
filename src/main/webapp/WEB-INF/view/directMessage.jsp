@@ -40,7 +40,6 @@ User otherUser = (User) request.getAttribute("otherUser");
 <body onload="scrollChat()">
 
   <div id="container">
-
     <h1>Messages With <%= otherUser.getName() %>
       <a href="" style="float: right">&#8635;</a></h1>
 
