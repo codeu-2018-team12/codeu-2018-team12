@@ -21,11 +21,11 @@
     <title>Login</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrDFdrdEFeE1e" type="text/css">
-    <link rel="stylesheet" href="/css/login.css?3eweedserFhrDdrfrFdeSSeeddD1" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?DwvEceRrrdgedrDFFdrdEFeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/login.css?3eweedsderFhrDdrfrFdeSSeFeRddD1" type="text/css">
+    <jsp:include page="./navbar.jsp" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <jsp:include page="./navbar.jsp" />
   </head>
 <body>
   <div class="container">

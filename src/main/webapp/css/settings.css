@@ -1,36 +1,27 @@
-h1 {
-    font-size: 26px;
-}
-
-h2 {
-   font-size: 26px;
-   margin-bottom: 20px;
-}
-
-hr {
-   border-top: 2px solid #375F6F;
-}
-
-.change-info-box{
+ .change-info-box{
    height: 31px;
    margin-bottom: 10px;
-}
+ }
 
-input, button, select, textarea {
+ .form-inline .form-control {
+   margin-right: 0px;
+ }
+
+ h1 {
+   font-size: 26px;
+   font-color: #3C609E;
+ }
+
+ h2 {
+   font-size: 20px;
+   margin-bottom: 20px;
+   color: #375F6F;
+ }
+
+ hr {
+   border-top: 2px solid #375F6F;
+ }
+
+ input, button, select, textarea {
    margin-right: 10px;
-}
-
-.form-inline .form-control {
-    margin-right: 0px;
-}
-
-.btn-primary{
-  border-color: rgb(104, 145, 162);
-  background-color: rgb(104, 145, 162);
-}
-
-.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
-    color: #fff;
-    background-color: #03585D;
-    border-color: #03585D;
-}
+ }

@@ -1,32 +1,14 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
+<!DOCTYPE html>
 <html>
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <link rel="stylesheet" href="/css/main.css?2cRFdf">
+    <link rel="stylesheet" href="/css/navbar.css?3cRfFd">
+</head>
 <body>
-  <style>
-    #search-container {
-      padding-left:16px;
-      padding-bottom:20px
-    }
-    #logo {
-       width: 40px;
-       margin: 10px;
-       margin-top: 2px;
-    }
-
-    .form-inline .form-control {
-        width: 150px;
-        height: 30px;
-    }
-
-    button, html [type=button], [type=reset], [type=submit] {
-        height: 30px;
-    }
-
-    .btn {
-        padding 2px, 12px;
-        padding-top: 4px;
-    }
-  </style>
   <nav>
     <a id="navTitle" href="/"><img id="logo" src="../resources/chat-icon.png">CodeU Chat App</a>
     <% if (request.getSession().getAttribute("user") != null) { %>

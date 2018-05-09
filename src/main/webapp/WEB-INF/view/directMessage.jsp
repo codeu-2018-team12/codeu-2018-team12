@@ -18,11 +18,11 @@ User otherUser = (User) request.getAttribute("otherUser");
     <title>Messages With <%= otherUser.getName() %></title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgdedrdrdEeE1e" type="text/css">
-    <link rel="stylesheet" href="/css/chat.css?DwvEcerrgddedrdrdEeE1e" type="text/css">
+     <jsp:include page="./navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css?DwvEcerrgFdedrRdrddEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?DwvEcerrgddedRrdrddFEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <jsp:include page="./navbar.jsp" />
     <script>
       function scrollChat() {
         var chatDiv = document.getElementById('chat');
@@ -37,7 +37,6 @@ User otherUser = (User) request.getAttribute("otherUser");
        String otherName = otherUser.getName();%>
     <h1> <%= loggedInName + " and " + otherName %>
     <a href="" style="float: right">&#8635;</a></h1>
-    <hr>
     <div id="chat" class="col-md-8">
     <ul class="chat">
       <%
@@ -103,7 +102,7 @@ User otherUser = (User) request.getAttribute("otherUser");
              }
            %>
     </ul>
-    </div><hr/>
+    </div>
 
     <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>

@@ -1,0 +1,31 @@
+ .btn-info {
+   background-color: rgb(104, 145, 162);
+   border: rgb(104, 145, 162);
+ }
+
+ .btn-info:hover, .btn-info:focus, .btn-info:active,
+ .btn-info.active, .open>.dropdown-toggle.btn-info,
+ .btn-primary:active:focus{
+   color: #fff;
+   background-color: #03585D;
+   border-color: #03585D;
+ }
+
+ h1 {
+  margin-top: 40px;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #375F6F;
+ }
+
+ hr {
+   border-top: 2px solid #375F6F;
+ }
+
+ input {
+   font-size: 15px;
+   padding: 4px;
+   height: 25px;
+ }
+
+

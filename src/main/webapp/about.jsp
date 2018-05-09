@@ -21,11 +21,11 @@
     <title>CodeU Chat App</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?d5eeddfhF3rddefdd">
-    <link rel="stylesheet" href="/css/about.css?ddehdfF3eddseferd5">
+    <jsp:include page="/WEB-INF/view/navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css?d5eeddF3dFrRddFefdd">
+    <link rel="stylesheet" href="/css/about.css?ddefF3eddRFdsefFerd5">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <jsp:include page="/WEB-INF/view/navbar.jsp" />
   </head>
   <body>
     <div class="container">

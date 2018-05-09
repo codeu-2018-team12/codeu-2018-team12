@@ -25,10 +25,11 @@
     <title>Conversations</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+     <jsp:include page="./navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedRrdFdrdEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/conversations.css?DwvEcerrgReddrFdrdEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <jsp:include page="./navbar.jsp" />
 </head>
 
 <body>
@@ -43,7 +44,7 @@
             <label class="form-control-label">Title:</label>
             <input type="text" name="conversationTitle">
           </div>
-          <button type="submit">Create</button>
+          <button class="btn btn-info" type="submit">Create</button>
       </form>
       <hr/>
     <% } %>

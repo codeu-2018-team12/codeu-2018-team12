@@ -8,14 +8,13 @@
 <html>
   <head>
     <title>Settings</title>
-    <link rel="stylesheet" href="/css/main.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?Dw6vEcerrgecdrdfd6drdE4eE1e" type="text/css">
-    <link rel="stylesheet" href="/css/settings.css?D64wcvEcerdrdgedhrdrdEeE1e" type="text/css">
+    <jsp:include page="/WEB-INF/view/navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css?Dw6vEcerrgecdrdsRfsd6drddE4eFE1e" type="text/css">
+    <link rel="stylesheet" href="/css/settings.css?D64wcvEcerdrdRsgedshrddrdFEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <jsp:include page="./navbar.jsp" />
   </head>
   <body>
     <h1 id="title">Settings Page</h1>
