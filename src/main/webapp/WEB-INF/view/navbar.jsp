@@ -10,7 +10,7 @@
  </head>
  <body>
   <nav>
-    <a id="navTitle" href="/"><img id="logo" src="../resources/chat-icon.png">CodeU Chat App</a>
+    <a id="navTitle" href="/"><img id="logo" src="../resources/Chat-icon.png">CodeU Chat App</a>
     <% if (request.getSession().getAttribute("user") != null) { %>
       <a href="/activityFeed">Activity Feed</a>
       <a href="/conversations">Conversations</a>
