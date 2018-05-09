@@ -177,7 +177,8 @@ public class DirectMessageServlet extends HttpServlet {
         request.setAttribute("error", "Message body cannot be empty.");
         request.setAttribute("conversationUsers", conversation.getConversationUsers());
         request.setAttribute("conversation", conversation);
-        request.setAttribute("messages", messageStore.getMessagesInConversation(conversation.getId()));
+        request.setAttribute(
+            "messages", messageStore.getMessagesInConversation(conversation.getId()));
         request.setAttribute("loggedInUser", loggedInUser);
         request.setAttribute("otherUser", otherUser);
         request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);

@@ -150,8 +150,8 @@ public class ProfileServlet extends HttpServlet {
               loggedInUser == null
                   ? sort(activityStore.getAllPublicActivitiesWithUserId(user.getId()))
                   : sort(
-                  activityStore.getAllPermittedActivitiesWithUserId(
-                      user.getId(), loggedInUser.getId()));
+                      activityStore.getAllPermittedActivitiesWithUserId(
+                          user.getId(), loggedInUser.getId()));
           activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
         }
         request.setAttribute("error", "Please specify a biography.");
