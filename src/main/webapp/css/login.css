@@ -6,7 +6,7 @@ body, html {
 }
 
 .card-container.card {
-    max-width: 700px;
+    max-width: 500px;
     padding: 40px 40px;
 }
 
@@ -37,8 +37,8 @@ body, html {
 }
 
 .profile-img-card {
-    width: 96px;
-    height: 96px;
+    width: 76px;
+    height: 76px;
     margin: 0 auto 10px;
     display: block;
     -moz-border-radius: 50%;
@@ -72,7 +72,7 @@ body, html {
 .form-signin #inputUsername,
 .form-signin #inputPassword {
     direction: ltr;
-    height: 44px;
+    height: 34px;
     font-size: 16px;
 }
 
@@ -102,7 +102,7 @@ body, html {
     padding: 0px;
     font-weight: 700;
     font-size: 14px;
-    height: 36px;
+    height: 34px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;

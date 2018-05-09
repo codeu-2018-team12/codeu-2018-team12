@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?Dw6vEcerrgecdrdfd6rdE4eE1e" type="text/css">
+    <link rel="stylesheet" href="/css/settings.css?D64wcvEcerdrgedhrdrdEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <jsp:include page="./navbar.jsp" />
@@ -31,20 +32,22 @@
             <h2 style="color:green"><%= request.getAttribute("successInfo") %></h2>
          <% } %>
 
-        <h2><u>Update Information:</u></h2>
+        <h2><u>Update Information</u>:</h2>
         <form action="/settings" method="POST">
           <label for="password">Password:</label><br>
-          <input type="password" name="password" id="password"><br>
+          <input type="password" class="change-info-box" name="password" id="password"><br>
           <label for="confirmPassword">Confirm Password:</label><br>
-          <input type="password" name="confirmPassword" id="confirmPassword">
-          <button type="submit" name="submitPassword" value="submitPassword">Submit</button><br>
+          <input type="password" class="change-info-box" name="confirmPassword" id="confirmPassword">
+          <button type="submit" class="btn btn-primary btn-round-sm btn-sm" name="submitPassword"
+          value="submitPassword">Submit</button><br>
           <label for="email">Email:</label><br>
-          <input type="text" name="email" id="email">
-          <button type="submit" name="submitEmail" value="submitEmail">Submit</button><br>
+          <input type="text" class="change-info-box" name="email" id="email">
+          <button type="submit" class="btn btn-primary btn-round-sm btn-sm" name="submitEmail"
+          value="submitEmail">Submit</button><br>
         </form>
         <br>
         <hr/>
-        <h2><u>Site Privacy:</u></h2>
+        <h2><u>Site Privacy</u>:</h2>
         <% if (request.getAttribute("successPrivacy") != null) { %>
           <h2 style="color:green"><%= request.getAttribute("successPrivacy") %></h2>
         <% } %>
@@ -80,7 +83,8 @@
           <option value="someContent">Allow only users in conversations I have joined to direct message me and see my sent messages</option>
           <option value="noContent">Prohibit direct messages from all users and allow only myself to see my sent messages</option>
         </select>
-        <button type="submit" name="submit" value="submitProfilePrivacy">Submit</button>
+        <button type="submit" class="btn btn-primary btn-round-sm btn-sm" name="submit"
+        value="submitProfilePrivacy">Submit</button>
         <br><br>
         <label for="activityFeedPrivacyLabel">Activity Feed Privacy: </label> <br>
         <select name ="activityFeedPrivacy" >
@@ -88,7 +92,8 @@
           <option value="someContent">Allow only users in conversations I have joined to see my activities</option>
           <option value="noContent">Prohibit all users besides myself from seeing my activities</option>
         </select>
-        <button type="submit" name="submit" value="submitActivityFeedPrivacy">Submit</button>
+        <button type="submit" class="btn btn-primary btn-round-sm btn-sm" name="submit"
+        value="submitActivityFeedPrivacy">Submit</button>
         <br><br>
         <p>Note: Activities for CodeU Chat App include the following: </p>
         <ul>
@@ -101,7 +106,7 @@
         </form>
         <br><br>
         <hr/>
-        <h2><u>Notifications:</u></h2>
+        <h2><u>Notifications</u>:</h2>
         <% if (request.getAttribute("successNotifications") != null) { %>
               <h2 style="color:green"><%= request.getAttribute("successNotifications") %></h2>
         <% } %>
@@ -143,7 +148,8 @@
            <option value="everyDay">Every day</option>
         </select>
         <br><br>
-        <button type="submit" name="submitNotification" value="submitNotification">Submit</button>
+        <button type="submit" class="btn btn-primary btn-round-sm btn-sm" name="submitNotification"
+        value="submitNotification">Submit</button>
         </form>
         <br><br>
     </div>

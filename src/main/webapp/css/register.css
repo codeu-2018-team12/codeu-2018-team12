@@ -1,12 +1,12 @@
 body, html {
-    height: 100%;
     width: 100%;
     background-repeat: no-repeat;
     background-image: linear-gradient(to right top, #55a8a1, #3d888e, #2d6a76, #224c5c, #193140);
 }
 
 .card-container.card {
-    max-width: 700px;
+    max-width: 500px;
+    max-height: 600px;
     padding: 40px 40px;
 }
 
@@ -26,7 +26,7 @@ body, html {
 .card {
     background-color: #F7F7F7;
     padding: 20px 25px 30px;
-    margin: 0 auto 25px;
+    margin: 0 auto 100px;
     margin-top: 80px;
     -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
@@ -37,8 +37,8 @@ body, html {
 }
 
 .profile-img-card {
-    width: 96px;
-    height: 96px;
+    width: 76px;
+    height: 76px;
     margin: 0 auto 10px;
     display: block;
     -moz-border-radius: 50%;
@@ -58,7 +58,7 @@ body, html {
 .form-register #inputEmail,
 .form-register #inputPassword {
     direction: ltr;
-    height: 44px;
+    height: 34px;
     font-size: 16px;
 }
 
@@ -87,7 +87,7 @@ body, html {
     padding: 0px;
     font-weight: 700;
     font-size: 14px;
-    height: 36px;
+    height: 34px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     border-radius: 3px;

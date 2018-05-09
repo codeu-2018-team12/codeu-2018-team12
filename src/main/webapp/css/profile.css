@@ -2,6 +2,7 @@
   #activities {
     background-color: white;
     height: 500px;
+    width: 900px;
     overflow-y: scroll;
     padding: 40px;
   }
@@ -11,14 +12,11 @@
     width: 1000px;
    }
 
-  #profile-picture {
+  .profile-picture {
     width: 95%;
     height: 95%;
     display: block;
     margin-top: 40px;
-    border-radius: 65em;
-    -moz-border-radius: 65em;
-    -webkit-border-radius: 65em;
   }
 
   .user-name {
@@ -49,7 +47,12 @@
     margin-bottom: 70px;
   }
 
+  h1 {
+    font-size: 26px;
+  }
+
   h2{
+    font-size: 22px;
     text-align: center;
     margin-bottom: 40px;
   }
@@ -69,4 +72,17 @@
 
   .btn-sm {
     margin-left: 22%;
+  }
+
+  label {
+    font-weight: 300;
+  }
+
+  .btn {
+    height: 30px;
+  }
+
+  input {
+    height: 31px;
+    margin-right: 4px;
   }

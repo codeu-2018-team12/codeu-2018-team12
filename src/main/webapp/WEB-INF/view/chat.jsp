@@ -30,8 +30,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <title><%= conversation.getTitle() %></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css?esens1" type="text/css">
-    <link rel="stylesheet" href="/css/chat.css?2seesn" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?ese5rd4Dns1" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?2sed6e4Drsn" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <jsp:include page="./navbar.jsp" />
@@ -42,11 +42,11 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       };
     </script>
 </head>
-
 <body onload="scrollChat()">
   <div id="container">
     <h1><%= conversation.getTitle() %>
     <a href="" style="float: right">&#8635;</a></h1>
+    <hr>
     <div id="chat" class="col-md-8">
       <ul class="chat">
       <%
@@ -116,7 +116,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
        <p> To see these messages, you must first join the conversation. </p>
      <% } %>
    </div>
-    <hr/>
 
     <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
@@ -124,7 +123,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
     <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
-        <textarea placeholder="Enter your message here" name="message"></textarea></br>
+        <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
         <label class="btn btn-info image">
           <span class="glyphicon glyphicon-camera"></span>  Upload Photo
           <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
@@ -140,8 +139,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
-
-    <hr/>
   </div>
 </body>
 </html>

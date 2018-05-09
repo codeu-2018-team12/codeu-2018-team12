@@ -1,0 +1,25 @@
+h1 {
+    font-size: 26px;
+}
+
+h2 {
+   font-size: 26px;
+   margin-bottom: 20px;
+}
+
+hr {
+   border-top: 2px solid #375F6F;
+}
+
+.change-info-box{
+   height: 31px;
+   margin-bottom: 10px;
+}
+
+input, button, select, textarea {
+   margin-right: 10px;
+}
+
+.form-inline .form-control {
+    margin-right: 0px;
+}

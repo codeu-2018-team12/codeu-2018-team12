@@ -28,10 +28,9 @@
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
     id="bootstrap-css">
-   <link rel="stylesheet" href="/css/index.css?DwvEeedsedrecerreddrdEeE1e" type="text/css">
    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-   <link rel="stylesheet" href="/css/main.css">
-   <link rel="stylesheet" href="/css/index.css">
+   <link rel="stylesheet" href="/css/main.css?34d">
+   <link rel="stylesheet" href="/css/index.css?23d">
    <jsp:include page="/WEB-INF/view/navbar.jsp" />
    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -41,7 +40,7 @@
      <div class="w3-display-middle">
        <h1 id="title" class="w3-animate-top">Team 12's Chat App</h1>
          <div id="aboutButton">
-           <a href="/about.jsp" class="btn btn-primary btn-round-lg btn-lg">Explore This Project</a>
+           <a href="/about.jsp" class="btn btn-primary btn-round-sm btn-sm">Explore This Project</a>
         </div>
        </div>
     </div>

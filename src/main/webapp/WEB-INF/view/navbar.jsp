@@ -12,6 +12,20 @@
        margin: 10px;
        margin-top: 2px;
     }
+
+    .form-inline .form-control {
+        width: 150px;
+        height: 30px;
+    }
+
+    button, html [type=button], [type=reset], [type=submit] {
+        height: 30px;
+    }
+
+    .btn {
+        padding 2px, 12px;
+        padding-top: 4px;
+    }
   </style>
   <nav>
     <a id="navTitle" href="/"><img id="logo" src="../resources/chat-icon.png">CodeU Chat App</a>
@@ -19,7 +33,7 @@
       <a href="/activityFeed">Activity Feed</a>
       <a href="/conversations">Conversations</a>
       <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>
-      <a href="<%=profileaddress %>">Your Profile</a>
+      <a href="<%=profileaddress %>">Profile</a>
       <a href="/settings">Settings</a>
       <a href="/logout">Logout</a>
     <% } else { %>

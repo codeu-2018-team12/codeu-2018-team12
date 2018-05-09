@@ -33,17 +33,75 @@ User otherUser = (User) request.getAttribute("otherUser");
 <body onload="scrollChat()">
 
   <div id="container">
-    <h1>Messages With <%= otherUser.getName() %>
-      <a href="" style="float: right">&#8635;</a></h1><hr/>
-    <div id="chat">
-    <ul>
+    <% String loggedInName = loggedInUser.getName();%>
+       String otherName = otherUser.getName();
+    <h1> <%= loggedInName + " and " + otherName %>
+    <a href="" style="float: right">&#8635;</a></h1>
+    <hr>
+    <div id="chat" class="col-md-8">
+    <ul class="chat">
       <%
+        int boxNum = 1;
         for (Message message : messages) {
           String author = UserStore.getInstance()
             .getUser(message.getAuthorId()).getName();
+          if (boxNum % 2 == 0) {
       %>
-          <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
-      <% } %>
+      <li class="left clearfix">
+              <span class="chat-img pull-left">
+              <% User messageUser = UserStore.getInstance().getUser(message.getAuthorId());
+               if (messageUser.getProfilePicture() == null) { %>
+                <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
+              <% } else { %>
+                 <a href="/profile/<%= author %>">
+                 <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser.getProfilePicture()%>"
+                 alt="User
+                 Avatar"></a>
+              <% } %>
+              </span>
+              <div class="chat-body clearfix">
+                <div class="header">
+                  <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+                  <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
+                </div>
+                <% if (!message.containsImage()){%>
+                  <p><%= message.getContent()%></p>
+                <% } else { %>
+                   <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+                <% } %>
+             </div>
+            </li>
+            <%
+              } else {
+            %>
+            <li class="right clearfix">
+            <span class="chat-img pull-right">
+              <% User messageUser = UserStore.getInstance().getUser(message.getAuthorId());
+              if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+                <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
+              <% } else { %>
+                <a href="/profile/<%= author %>">
+                <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser.getProfilePicture()%>"
+                alt="User Avatar"></a>
+             <% } %>
+               </span>
+               <div class="chat-body clearfix">
+                 <div class="header">
+                   <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+                   <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins ago</small>
+                 </div>
+                   <% if (!message.containsImage()){%>
+                      <p> <%= message.getContent()%> </p>
+                   <% } else { %>
+                      <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+                   <% } %>
+               </div>
+             </li>
+            <%
+              }
+              boxNum++;
+             }
+           %>
     </ul>
     </div><hr/>
 
@@ -51,13 +109,21 @@ User otherUser = (User) request.getAttribute("otherUser");
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <form id="chatform" action="/direct/<%= otherUser.getName() %>" method="POST">
-        <textarea name="message"></textarea>
-        </br>
-        <button type="submit">Send</button>
-        </br>
+    <%
+    if (loggedInUser != null) { %>
+    <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
+        <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
+        <label class="btn btn-info image">
+          <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+          <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
+        </label>
+        <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
     </form>
-    <hr/>
+    <% } else { %>
+      <p><a href="/login">Login</a> to send a message.</p>
+    <% } %>
   </div>
+
 </body>
 </html>
+

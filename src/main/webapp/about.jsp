@@ -21,14 +21,15 @@
     <title>CodeU Chat App</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?d5eeddh3rddd">
-    <link rel="stylesheet" href="/css/about.css?ddehd3edserd5">
+    <link rel="stylesheet" href="/css/main.css?d5eeddfhF3rddefdd">
+    <link rel="stylesheet" href="/css/about.css?ddehdfF3eddseferd5">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <jsp:include page="/WEB-INF/view/navbar.jsp" />
   </head>
   <body>
     <div class="container">
+     <div id="about">
       <h1>About This Project</h1>
      <p>
         This project was created by Team 12 as part of CodeU, a program where groups of students, with the guidance
@@ -40,6 +41,7 @@
         here</a></b> and load some <b><a href="/testdata"> test data</a></b>, or check out our project on
         <b><a href="https://github.com/codeu-2018-team12/codeu-2018-team12">Github</a></b>.<br>
     </p>
+   </div>
   </div>
   <div class="container">
     <h1>About Team 12</h1>

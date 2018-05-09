@@ -294,7 +294,7 @@ public class ChatServlet extends HttpServlet {
     String activityMessage;
     if (containsImage) {
       activityMessage =
-          " sent a picture in"
+          " sent a picture in "
               + "<a href=\"/chat/"
               + conversation.getTitle()
               + "\">"

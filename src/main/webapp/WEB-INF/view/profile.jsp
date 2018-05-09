@@ -21,8 +21,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <link rel="stylesheet" href="/css/main.css">
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
        id="bootstrap-css">
-      <link rel="stylesheet" href="/css/main.css?DwvEcefrrdgsefdddddfgddfdfrfdeEeE1e" type="text/css">
-      <link rel="stylesheet" href="/css/profile.css?DwvEcefrsdfdrgddfdrdddffdffgrdedEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/main.css?DwvEcefrrdgsefddddFdfhgddfdfrfddeEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/profile.css?DwvEcefrsdfdrgdFdfudrdddffddffgrdedEeE1e" type="text/css">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script>
@@ -36,19 +36,18 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <div class="row">
         <div class="col-md-2">
           <% String name = user.getName().substring(0, 1).toUpperCase() + user.getName().substring(1);
-             if (loggedInUser != null){
-               if (loggedInUser.getName().equals(user.getName())) { %>
+               if (loggedInUser!= null && loggedInUser.getName().equals(user.getName())) { %>
             <form id="pictureUpload" method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
               <label for="image">
                  <% if (loggedInUser.getProfilePicture() != null) { %>
                    <div class="image-username">
-                     <img id="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+                     <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
                       .getProfilePicture()%>">
                      <p class="user-name"><%=name%></p>
                     </div>
                  <% } else { %>
                    <div class="image-username">
-                     <img id="profile-picture" src="../resources/codeu.png">
+                     <img class="profile-picture" src="../resources/codeu.png">
                      <p class="user-name"><%=name%></p>
                    </div>
                  <% } %>
@@ -62,7 +61,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
              <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
               .getProfilePicture()%>">
           <% } else { %>
-             <img id="profile-picture" src="../resources/codeu.png">
+             <img class="profile-picture" src="../resources/codeu.png">
           <% } %>
            <p class="user-name"><%=name%></p> <br>
 
@@ -74,7 +73,6 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
                       </form>
                     <% }%>
           </div>
-        <% } %>
        <% } %>
       </div>
      <div class="col-md-10">
