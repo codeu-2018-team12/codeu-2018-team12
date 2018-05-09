@@ -170,6 +170,22 @@
    background-color: #4C9095 !important;
  }
 
+ .timeline-badge.success {
+   background-color: #4C9095 !important;
+ }
+
+ .timeline-badge.warning {
+   background-color: #4C9095 !important;
+ }
+
+ .timeline-badge.danger {
+   background-color: #4C9095 !important;
+ }
+
+ .timeline-badge.info {
+   background-color: #4C9095 !important;
+ }
+
  .timeline-title {
    margin-top: 0;
    color: inherit;

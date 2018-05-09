@@ -47,8 +47,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
                    </div>
                  <% } else { %>
                    <div class="image-username">
-                     <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/codeU
-                     .png">
+                     <img class="profile-picture" src="../resources/codeU.png">
                      <p class="user-name"><%=name%></p>
                    </div>
                  <% } %>
@@ -62,7 +61,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
              <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
               .getProfilePicture()%>">
           <% } else { %>
-             <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/codeU.png">
+             <img class="profile-picture" src="../resources/codeU.png">
           <% } %>
            <p class="user-name"><%=name%></p> <br>
 
