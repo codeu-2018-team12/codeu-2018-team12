@@ -20,7 +20,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
     <title>Activity</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-     <jsp:include page="./navbar.jsp" />
+    <jsp:include page="./navbar.jsp" />
     <link rel="stylesheet" href="/css/main.css?2cRFddf">
     <link rel="stylesheet" href="/css/activityFeed.css?3cFdRfd">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -30,9 +30,8 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
         var activityDiv = document.getElementById('activity');
       };
    </script>
-</head>
-
-<body onload="scrollBox()">
+ </head>
+ <body onload="scrollBox()">
   <div id="container">
   	<h1 id="title">Activity Feed</h1>
   	<p>Here&#39s everything that happened on the site so far!</p>
@@ -55,7 +54,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
           <strong><%= time %>:</strong>
           <a href="/profile/<%= username %>"><%= username %></a> <%= message %>
         </li>
-         <% } %>
+        <% } %>
       </ul>
     </div>
     <div id="personalizeActivities">

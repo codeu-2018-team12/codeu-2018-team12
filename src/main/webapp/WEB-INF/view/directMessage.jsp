@@ -2,6 +2,8 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="java.time.*" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="java.util.UUID" %>
 
@@ -18,7 +20,7 @@ User otherUser = (User) request.getAttribute("otherUser");
     <title>Messages With <%= otherUser.getName() %></title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-     <jsp:include page="./navbar.jsp" />
+    <jsp:include page="./navbar.jsp" />
     <link rel="stylesheet" href="/css/main.css?DwvEcerrgFdedrRdrddEeE1e" type="text/css">
     <link rel="stylesheet" href="/css/chat.css?DwvEcerrgddedRrdrddFEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -30,7 +32,7 @@ User otherUser = (User) request.getAttribute("otherUser");
       };
     </script>
  </head>
-<body onload="scrollChat()">
+ <body onload="scrollChat()">
 
   <div id="container">
     <% String loggedInName = loggedInUser.getName();
@@ -38,30 +40,36 @@ User otherUser = (User) request.getAttribute("otherUser");
     <h1> <%= loggedInName + " and " + otherName %>
     <a href="" style="float: right">&#8635;</a></h1>
     <div id="chat" class="col-md-8">
-    <ul class="chat">
-      <%
-        int boxNum = 1;
-        for (Message message : messages) {
-          String author = UserStore.getInstance()
+      <ul class="chat">
+       <%
+         int boxNum = 1;
+         for (Message message : messages) {
+            String author = UserStore.getInstance()
             .getUser(message.getAuthorId()).getName();
-          if (boxNum % 2 == 0) {
-      %>
-      <li class="left clearfix">
+            if (boxNum % 2 == 0) {
+       %>
+            <li class="left clearfix">
               <span class="chat-img pull-left">
-              <% User messageUser = UserStore.getInstance().getUser(message.getAuthorId());
+               <% User messageUser = UserStore.getInstance().getUser(message.getAuthorId());
                if (messageUser.getProfilePicture() == null) { %>
-                <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
+                 <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
+                 Avatar"></a>
               <% } else { %>
                  <a href="/profile/<%= author %>">
                  <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser.getProfilePicture()%>"
-                 alt="User
-                 Avatar"></a>
+                 alt="User Avatar"></a>
               <% } %>
               </span>
               <div class="chat-body clearfix">
                 <div class="header">
                   <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-                  <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 12 mins ago</small>
+                  <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+                  <%
+                    Instant creationTime = message.getCreationTime();
+                    LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+                    String time = ldt.format(formatter);
+                   %> <%= time %></small>
                 </div>
                 <% if (!message.containsImage()){%>
                   <p><%= message.getContent()%></p>
@@ -87,7 +95,13 @@ User otherUser = (User) request.getAttribute("otherUser");
                <div class="chat-body clearfix">
                  <div class="header">
                    <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-                   <small class="pull-right text-muted"><i class="fa fa-clock-o"></i> 13 mins ago</small>
+                   <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+                   <%
+                     Instant creationTime = message.getCreationTime();
+                     LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+                     String time = ldt.format(formatter);
+                   %> <%= time %></small>
                  </div>
                    <% if (!message.containsImage()){%>
                       <p> <%= message.getContent()%> </p>
@@ -101,28 +115,26 @@ User otherUser = (User) request.getAttribute("otherUser");
               boxNum++;
              }
            %>
-    </ul>
+       </ul>
     </div>
 
     <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <%
-    if (loggedInUser != null) { %>
-    <form id="chatForm" action="/direct/<%= otherUser.getName() %>" method="POST" enctype="multipart/form-data">
-        <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
-        <label class="btn btn-info image">
-          <span class="glyphicon glyphicon-camera"></span>  Upload Photo
-          <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
-        </label>
+   <%if (loggedInUser != null) {%>
+      <form id="chatForm" action="/direct/<%= otherUser.getName() %>" method="POST" enctype="multipart/form-data">
+         <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
+         <label class="btn btn-info image">
+           <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+           <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
+         </label>
         <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
-    </form>
+     </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
   </div>
-
-</body>
+ </body>
 </html>
 

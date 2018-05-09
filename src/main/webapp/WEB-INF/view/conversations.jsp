@@ -30,23 +30,22 @@
     <link rel="stylesheet" href="/css/conversations.css?DwvEcerrgReddrFdrdEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-</head>
-
-<body>
-  <div id="container">
+  </head>
+  <body>
+   <div id="container">
     <% if(request.getAttribute("error") != null){ %>
        <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
     <% if(request.getSession().getAttribute("user") != null){ %>
       <h1>New Conversation</h1>
       <form action="/conversations" method="POST">
-          <div class="form-group">
+         <div class="form-group">
             <label class="form-control-label">Title:</label>
-            <input type="text" name="conversationTitle">
-          </div>
-          <button class="btn btn-info" type="submit">Create</button>
+              <input type="text" name="conversationTitle">
+         </div>
+         <button class="btn btn-info" type="submit">Create</button>
       </form>
-      <hr/>
+     <hr/>
     <% } %>
 
     <h1>Conversations</h1>
@@ -87,5 +86,5 @@
       </ul>
     <% } %>
   </div>
-</body>
+ </body>
 </html>

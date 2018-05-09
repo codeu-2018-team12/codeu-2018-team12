@@ -15,6 +15,8 @@
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.*" %>
 <%@ page import="java.util.UUID" %>
 
 <%
@@ -40,41 +42,46 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         chatDiv.scrollTop = chatDiv.scrollHeight;
       };
     </script>
-</head>
-<body onload="scrollChat()">
+ </head>
+ <body onload="scrollChat()">
   <div id="container">
-    <h1><%= conversation.getTitle() %>
-    <a href="" style="float: right">&#8635;</a></h1>
-    <div id="chat" class="col-md-8">
-      <ul class="chat">
-      <%
-      if (user != null && conversationUsers.contains(user.getId())) {
-        int boxNum = 1;
-        for (Message message : messages) {
-          String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-          if (boxNum % 2 == 0) {
-      %>
-      <li class="left clearfix">
-        <span class="chat-img pull-left">
-        <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
-          <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
-        <% } else { %>
-           <a href="/profile/<%= author %>">
-           <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()
-           %>" alt="User
-           Avatar"></a>
-        <% } %>
-        </span>
-        <div class="chat-body clearfix">
-          <div class="header">
-            <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-            <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><%= message
-            .getCreationTimeFormatted() %></small>
-          </div>
-          <% if (!message.containsImage()){%>
+     <h1><%= conversation.getTitle() %>
+     <a href="" style="float: right">&#8635;</a></h1>
+     <div id="chat" class="col-md-8">
+        <ul class="chat">
+       <%
+        if (user != null && conversationUsers.contains(user.getId())) {
+          int boxNum = 1;
+          for (Message message : messages) {
+            String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+            if (boxNum % 2 == 0) {
+            %>
+            <li class="left clearfix">
+            <span class="chat-img pull-left">
+           <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+              <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
+               Avatar"></a>
+           <% } else { %>
+              <a href="/profile/<%= author %>">
+              <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture
+              () %>" alt="User Avatar"></a>
+          <% } %>
+         </span>
+         <div class="chat-body clearfix">
+           <div class="header">
+             <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+             <%
+                Instant creationTime = message.getCreationTime();
+                LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+                String time = ldt.format(formatter);
+             %> <%= time %></small>
+         </div>
+         <% if (!message.containsImage()){%>
             <p><%= message.getContent()%></p>
-          <% } else { %>
-             <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+         <% } else { %>
+            <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
           <% } %>
        </div>
       </li>
@@ -82,27 +89,32 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         } else {
       %>
       <li class="right clearfix">
-      <span class="chat-img pull-right">
-        <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
-          <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
-        <% } else { %>
+        <span class="chat-img pull-right">
+          <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+             <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
+              Avatar"></a>
+          <% } else { %>
           <a href="/profile/<%= author %>">
-          <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()
-          %>"
+          <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user.getProfilePicture()%>"
           alt="User Avatar"></a>
-       <% } %>
-         </span>
-         <div class="chat-body clearfix">
-           <div class="header">
-             <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
-             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i><%= message
-             .getCreationTimeFormatted() %></small>
-           </div>
-             <% if (!message.containsImage()){%>
-                <p> <%= message.getContent()%> </p>
-             <% } else { %>
-                <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
-             <% } %>
+         <% } %>
+       </span>
+       <div class="chat-body clearfix">
+         <div class="header">
+            <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+             <%
+                Instant creationTime = message.getCreationTime();
+                LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+                String time = ldt.format(formatter);
+             %> <%= time %></small>
+          </div>
+          <% if (!message.containsImage()){%>
+             <p> <%= message.getContent()%> </p>
+          <% } else { %>
+            <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+          <% } %>
          </div>
        </li>
       <%
@@ -125,20 +137,20 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
         <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
         <label class="btn btn-info image">
-          <span class="glyphicon glyphicon-camera"></span>  Upload Photo
-          <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
+           <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+           <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
         </label>
         <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
         <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation</button>
     </form>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
-       <p> Join the conversation to send a message! </p>
-       <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
-          <button type="submit" name="button" class="btn btn-info" value="joinButton">Join Conversation</button>
-       </form>
+         <p> Join the conversation to send a message! </p>
+         <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
+            <button type="submit" name="button" class="btn btn-info" value="joinButton">Join Conversation</button>
+         </form>
     <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
+       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
   </div>
-</body>
+ </body>
 </html>

@@ -20,7 +20,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <title><%= user.getName() %></title>
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
        id="bootstrap-css">
-       <jsp:include page="./navbar.jsp" />
+      <jsp:include page="./navbar.jsp" />
       <link rel="stylesheet" href="/css/main.css?DwvEceFDfeeREeE1e" type="text/css">
       <link rel="stylesheet" href="/css/profile.css?DwfddDeffgRrdedFEeE1e" type="text/css">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -36,14 +36,15 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
         <div class="col-md-2">
           <% String name = user.getName().substring(0, 1).toUpperCase() + user.getName().substring(1);
                if (loggedInUser!= null && loggedInUser.getName().equals(user.getName())) { %>
-            <form id="pictureUpload" method="POST" action="/profile/<%= user.getName() %>" enctype="multipart/form-data">
-              <label for="image">
+                 <form id="pictureUpload" method="POST" action="/profile/<%= user.getName() %>"
+                 enctype="multipart/form-data">
+                 <label for="image">
                  <% if (loggedInUser.getProfilePicture() != null) { %>
                    <div class="image-username">
                      <img class="profile-picture" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
                       .getProfilePicture()%>">
                      <p class="user-name"><%=name%></p>
-                    </div>
+                   </div>
                  <% } else { %>
                    <div class="image-username">
                      <img class="profile-picture" src="../resources/codeu.png">
@@ -64,13 +65,12 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
           <% } %>
            <p class="user-name"><%=name%></p> <br>
 
-                       <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals
-                       ("someContent"))
-                       && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
-                      <form action="/direct/<%= user.getName() %>">
-                         <input class="btn btn-sm" type="submit" value="Message <%= user.getName() %>" />
-                      </form>
-                    <% }%>
+           <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+             && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
+                <form action="/direct/<%= user.getName() %>">
+                   <input class="btn btn-sm" type="submit" value="Message <%= user.getName() %>" />
+                </form>
+            <% }%>
           </div>
        <% } %>
       </div>
@@ -117,19 +117,19 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
        <h1 id="title">Profile Not Found</h1>
     <% }%>
  </div>
-   <div class="profile-element">
-           <% if (request.getSession().getAttribute("user") != null){
-              if (request.getSession().getAttribute("user").equals(user.getName())) { %>
-              <h2>Edit Your Profile Information</h2>
-              <p><b>Edit your profile picture:</b> Click on your profile picture to upload a new image </p> <br>
-              <p><b>Edit your bio:<b></p>
+  <div class="profile-element">
+     <% if (request.getSession().getAttribute("user") != null){
+        if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+           <h2>Edit Your Profile Information</h2>
+           <p><b>Edit your profile picture:</b> Click on your profile picture to upload a new image </p> <br>
+           <p><b>Edit your bio:<b></p>
            <form action="/profile/<%= user.getName() %>" method="POST" enctype="multipart/form-data">
              <input type="text" name="newBio" id="newBio">
              <button type="submit" class="btn btn-info" name="submitBiography" value="submitBiography">
              Submit</button>
-           </form>
-                   <% } %>
-                  <% } %>
+          </form>
+       <% } %>
+     <% } %>
    </div>
   </div>
 </div>

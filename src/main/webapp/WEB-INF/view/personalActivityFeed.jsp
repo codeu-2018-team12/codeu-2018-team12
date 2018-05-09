@@ -25,7 +25,6 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
   <link rel="stylesheet" href="/css/activityFeed.css?DwvEcerrgedrRdFrdEeE1e" type="text/css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
   <script>
     function scrollBox() {
       var activityDiv = document.getElementById('activity');

@@ -16,6 +16,8 @@ package codeu.model.data;
 
 import java.time.*;
 import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /** Class representing a message. Messages are sent by a User in a Conversation. */
 public class Message {
@@ -76,13 +78,8 @@ public class Message {
 
   /** Returns a formatted creation time */
   public String getCreationTimeFormatted() {
-    LocalDateTime time = LocalDateTime.ofInstant(creation, ZoneOffset.UTC);
-    String day = Integer.toString(time.getDayOfMonth());
-    String month = Integer.toString(time.getMonthValue());
-    String year = Integer.toString(time.getYear());
-    String hour = Integer.toString(time.getHour());
-    String min = Integer.toString(time.getMinute());
-
-    return day + "/" + month + "/" + year + "\t" + hour + ":" + min;
+    Date myDate = Date.from(creation);
+    SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
+    return formatter.format(myDate);
   }
 }
