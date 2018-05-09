@@ -135,6 +135,12 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.appengine.tools</groupId>
+      <artifactId>appengine-gcs-client</artifactId>
+      <version>0.7</version>
+    </dependency>
+
   </dependencies>
 
   <build>

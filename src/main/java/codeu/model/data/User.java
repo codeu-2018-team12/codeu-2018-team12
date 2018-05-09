@@ -36,6 +36,7 @@ public class User {
   private String profilePrivacy;
   private String activityFeedPrivacy;
   private List<UUID> conversationFriends;
+  private String profilePicture;
 
   /**
    * Constructs a new User.
@@ -65,6 +66,7 @@ public class User {
     this.profilePrivacy = "allContent";
     this.activityFeedPrivacy = "allContent";
     this.conversationFriends = new ArrayList<>();
+    this.profilePicture = null;
   }
 
   /** Returns the ID of this User. */
@@ -145,6 +147,10 @@ public class User {
     return activityFeedPrivacy;
   }
 
+  /** Returns the name of the profile picture file of a user */
+  public String getProfilePicture() {
+    return profilePicture;
+  }
   /** Returns the list of users that are in the same conversations as User */
   public List<UUID> getConversationFriends() {
     return conversationFriends;
@@ -183,6 +189,12 @@ public class User {
   public void setBio(String newBio) {
     biography = newBio;
     PersistentStorageAgent.getInstance().updateUserEntityBiography(this);
+  }
+
+  /** Sets the name of the profile image file in Cloud Datastore */
+  public void setProfilePicture(String newImageName) {
+    profilePicture = newImageName;
+    PersistentStorageAgent.getInstance().updateUserEntityProfilePicture(this);
   }
 
   /**

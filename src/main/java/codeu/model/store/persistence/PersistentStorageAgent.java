@@ -154,6 +154,11 @@ public class PersistentStorageAgent {
     persistentDataStore.updateUserEntityStoredNotifications(user);
   }
 
+  /** Updates the name of the profile picture of a User in the Datastore service */
+  public void updateUserEntityProfilePicture(User user) {
+    persistentDataStore.updateUserEntityProfilePicture(user);
+  }
+
   /** Updates the profile privacy of a User in the Datastore service */
   public void updateUserEntityProfilePrivacy(User user) {
     persistentDataStore.updateUserEntityProfilePrivacy(user);
