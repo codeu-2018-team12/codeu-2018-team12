@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
-    <link rel="stylesheet" href="/css/main.css?Dw6vEcerrgecdrdfd6rdE4eE1e" type="text/css">
-    <link rel="stylesheet" href="/css/settings.css?D64wcvEcerdrgedhrdrdEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?Dw6vEcerrgecdrdfd6drdE4eE1e" type="text/css">
+    <link rel="stylesheet" href="/css/settings.css?D64wcvEcerdrdgedhrdrdEeE1e" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <jsp:include page="./navbar.jsp" />

@@ -16,6 +16,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +25,12 @@ import javax.servlet.http.Part;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
+
+@MultipartConfig(
+        maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+        maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+        fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+)
 
 /** Servlet class responsible for the direct message page. */
 public class DirectMessageServlet extends HttpServlet {
@@ -138,7 +145,6 @@ public class DirectMessageServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
           throws IOException, ServletException {
     Part image = request.getPart("image");
-    String button = request.getParameter("button");
     String submitText = request.getParameter("submitText");
     String requestUrl = request.getRequestURI();
     String loggedInUsername = (String) request.getSession().getAttribute("user");
@@ -170,7 +176,7 @@ public class DirectMessageServlet extends HttpServlet {
     }
     String conversationTitle = requestUrl.substring("/chat/".length());
 
-    if (submitText != null && conversation.getConversationUsers().contains(loggedInUser.getId())) {
+    if (submitText != null) {
       String messageContent = request.getParameter("message");
       // this removes any HTML from the message content
       String cleanedMessageContent =
@@ -179,7 +185,7 @@ public class DirectMessageServlet extends HttpServlet {
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
       createMessage(request, cleanedMessageContent, loggedInUser, conversation, false);
 
-    } else if (image != null && conversation.getConversationUsers().contains(loggedInUser.getId())) {
+    } else if (image != null) {
       ImageStorage imageStorage = new ImageStorage();
       String imageName = imageStorage.storeImage(image);
       createMessage(request, imageName, loggedInUser, conversation, true);

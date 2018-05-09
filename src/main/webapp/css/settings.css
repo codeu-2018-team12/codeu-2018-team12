@@ -23,3 +23,14 @@ input, button, select, textarea {
 .form-inline .form-control {
     margin-right: 0px;
 }
+
+.btn-primary{
+  border-color: rgb(104, 145, 162);
+  background-color: rgb(104, 145, 162);
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: #03585D;
+    border-color: #03585D;
+}

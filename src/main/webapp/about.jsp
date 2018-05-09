@@ -168,7 +168,7 @@
           <div class="timeline-badge warning"></div>
              <div class="timeline-panel">
                <div class="timeline-heading">
-                 <h4 class="timeline-title">Activities on a user's activity feed are now personalized to
+                 <h4 class="timeline-title">Activities on a user's activity feed can be personalized to
                   each user</h4>
                  <p><small class="text-muted"></i>April 5, 2018</small></p>
                </div>
@@ -197,7 +197,7 @@
            <div class="timeline-badge"></div>
              <div class="timeline-panel">
               <div class="timeline-heading">
-               <h4 class="timeline-title"> Profile pictures can now be added to user profiles</h4>
+               <h4 class="timeline-title"> Users can now upload profile pictures</h4>
                <p><small class="text-muted"></i>April 28, 2018</small></p>
              </div>
            </div>

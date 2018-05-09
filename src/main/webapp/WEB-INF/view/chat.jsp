@@ -30,8 +30,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <title><%= conversation.getTitle() %></title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/main.css?ese5rd4Dns1" type="text/css">
-    <link rel="stylesheet" href="/css/chat.css?2sed6e4Drsn" type="text/css">
+    <link rel="stylesheet" href="/css/main.css?ese5drd4Dns1" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?2seddd6e4Drsn" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <jsp:include page="./navbar.jsp" />

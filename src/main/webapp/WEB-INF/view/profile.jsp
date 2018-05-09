@@ -21,8 +21,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <link rel="stylesheet" href="/css/main.css">
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
        id="bootstrap-css">
-      <link rel="stylesheet" href="/css/main.css?DwvEcefrrdgsefddddFdfhgddfdfrfddeEeE1e" type="text/css">
-      <link rel="stylesheet" href="/css/profile.css?DwvEcefrsdfdrgdFdfudrdddffddffgrdedEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/main.css?DwvEcefeEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/profile.css?DwfddffgrdedEeE1e" type="text/css">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script>
@@ -69,7 +69,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
                        ("someContent"))
                        && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
                       <form action="/direct/<%= user.getName() %>">
-                         <input class="btn btn-light btn-sm" type="submit" value="Message <%= user.getName() %>" />
+                         <input class="btn btn-sm" type="submit" value="Message <%= user.getName() %>" />
                       </form>
                     <% }%>
           </div>
