@@ -44,6 +44,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
 
+import static codeu.model.store.basic.ConversationStore.sort;
+
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
 
@@ -210,6 +212,14 @@ public class ChatServlet extends HttpServlet {
 
     if (button == null && conversation.getConversationUsers().contains(user.getId())) {
       String messageContent = request.getParameter("message");
+      if (messageContent.isEmpty()) {
+        request.setAttribute("error", "Message body cannot be empty.");
+        request.setAttribute("conversation", conversation);
+        request.setAttribute("messages", messageStore.getMessagesInConversation(conversation.getId()));
+        request.setAttribute("conversationUsers", conversation.getConversationUsers());
+        request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+        return;
+      }
 
       // this removes any HTML from the message content
       String cleanedMessageContent =

@@ -141,6 +141,26 @@ public class ProfileServlet extends HttpServlet {
     User user = userStore.getUser(name);
 
     if (request.getParameter("submitBiography") != null) {
+      if (request.getParameter("newBio").isEmpty()) {
+        User loggedInUser = userStore.getUser((String) request.getSession().getAttribute("user"));
+        List<Activity> activities = null;
+        List<Activity> activitiesPermitted;
+        if (user != null) {
+          activitiesPermitted =
+              loggedInUser == null
+                  ? sort(activityStore.getAllPublicActivitiesWithUserId(user.getId()))
+                  : sort(
+                  activityStore.getAllPermittedActivitiesWithUserId(
+                      user.getId(), loggedInUser.getId()));
+          activities = activityStore.getActivitiesPerPrivacy(user, activitiesPermitted);
+        }
+        request.setAttribute("error", "Please specify a biography.");
+        request.setAttribute("activities", activities);
+        request.setAttribute("loggedInUser", loggedInUser);
+        request.setAttribute("user", user);
+        request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+        return;
+      }
       user.setBio(request.getParameter("newBio"));
     }
     if (request.getParameter("submitProfilePic") != null) {

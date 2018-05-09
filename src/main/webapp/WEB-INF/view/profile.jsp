@@ -38,6 +38,9 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
   <body onload="scrollChat()">
   <h1 id="title"><%= user.getName() %>'s Profile</h1>
   <div id="container">
+    <% if (request.getAttribute("error") != null) { %>
+      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+    <% } %>
   <h2>Biography</h2>
     <% if (user.getBio() != null) { %>
        <%= user.getBio() %>
