@@ -45,6 +45,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
  </head>
  <body onload="scrollChat()">
   <div id="container">
+    <% if (request.getAttribute("error") != null) { %>
+      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+    <% } %>
      <h1><%= conversation.getTitle() %>
      <a href="" style="float: right">&#8635;</a></h1>
      <div id="chat" class="col-md-8">
@@ -131,11 +134,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
        <p> To see these messages, you must first join the conversation. </p>
      <% } %>
    </div>
-
-    <% if (request.getAttribute("error") != null) { %>
-      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-    <% } %>
-
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
     <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
         <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>

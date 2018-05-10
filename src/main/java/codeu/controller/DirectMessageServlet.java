@@ -126,7 +126,9 @@ public class DirectMessageServlet extends HttpServlet {
     }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
+    List<UUID> conversationUsers = conversation.getConversationUsers();
 
+    request.setAttribute("conversationUsers", conversationUsers);
     request.setAttribute("conversation", conversation);
     request.setAttribute("messages", messages);
     request.setAttribute("loggedInUser", loggedInUser);
@@ -175,8 +177,20 @@ public class DirectMessageServlet extends HttpServlet {
     }
     String conversationTitle = requestUrl.substring("/chat/".length());
 
-    if (submitText != null) {
+    if (submitText != null && conversation.getConversationUsers().contains(loggedInUser.getId())) {
       String messageContent = request.getParameter("message");
+
+      if (messageContent.isEmpty()) {
+        request.setAttribute("error", "Message body cannot be empty.");
+        request.setAttribute("conversationUsers", conversation.getConversationUsers());
+        request.setAttribute("conversation", conversation);
+        request.setAttribute(
+            "messages", messageStore.getMessagesInConversation(conversation.getId()));
+        request.setAttribute("loggedInUser", loggedInUser);
+        request.setAttribute("otherUser", otherUser);
+        request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+        return;
+      }
       // this removes any HTML from the message content
       String cleanedMessageContent =
           Jsoup.clean(

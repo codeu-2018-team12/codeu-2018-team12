@@ -80,6 +80,9 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
        <h1 id="title">Welcome to <%=name%>'s Profile</h1>
         <div id="profile-information">
          <div class="profile-element">
+           <% if (request.getAttribute("error") != null) { %>
+              <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+           <% } %>
           <h2>Biography</h2>
           <% if (user.getBio() != null) { %>
              <%= user.getBio() %>

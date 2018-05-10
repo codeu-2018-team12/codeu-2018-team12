@@ -47,9 +47,9 @@ User otherUser = (User) request.getAttribute("otherUser");
             String author = UserStore.getInstance()
             .getUser(message.getAuthorId()).getName();
             if (boxNum % 2 == 0) {
-       %>
-            <li class="left clearfix">
-              <span class="chat-img pull-left">
+          %>
+           <li class="left clearfix">
+            <span class="chat-img pull-left">
                <% User messageUser = UserStore.getInstance().getUser(message.getAuthorId());
                if (messageUser.getProfilePicture() == null) { %>
                  <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
