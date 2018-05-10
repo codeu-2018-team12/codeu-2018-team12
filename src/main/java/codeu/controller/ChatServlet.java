@@ -292,7 +292,6 @@ public class ChatServlet extends HttpServlet {
       Conversation conversation,
       boolean containsImage) {
 
-    System.out.println(containsImage);
     Message message =
         new codeu.model.data.Message(
             UUID.randomUUID(),
