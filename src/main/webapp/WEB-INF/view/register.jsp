@@ -6,8 +6,8 @@
      <title>Register</title>
      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
       id="bootstrap-css">
-     <link rel="stylesheet" href="/css/main.css?DwvEeedsRFedreVeeedE1e" type="text/css">
-     <link rel="stylesheet" href="/css/register.css?3ewerfdVeSeeFSeReddD1" type="text/css">
+     <link rel="stylesheet" href="/css/main.css" type="text/css">
+     <link rel="stylesheet" href="/css/register.css" type="text/css">
      <jsp:include page="./navbar.jsp" />
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
      <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>

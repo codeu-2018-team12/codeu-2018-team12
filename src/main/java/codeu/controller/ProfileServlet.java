@@ -10,7 +10,6 @@ import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
 import codeu.utils.ImageStorage;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -20,9 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 @MultipartConfig(
-        maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
-        maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
-        fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
 )
 
 /** Servlet class responsible for the profile page. */

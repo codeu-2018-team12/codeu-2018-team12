@@ -1,24 +1,22 @@
 package codeu.utils;
 
 import com.google.appengine.tools.cloudstorage.*;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.Part;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 @MultipartConfig(
   maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
   maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
   fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
 )
-
 public class ImageStorage {
 
   private final GcsService gcsService =

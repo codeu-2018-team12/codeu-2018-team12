@@ -21,8 +21,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
        id="bootstrap-css">
       <jsp:include page="./navbar.jsp" />
-      <link rel="stylesheet" href="/css/main.css?DwvEceFDfeeREeE1e" type="text/css">
-      <link rel="stylesheet" href="/css/profile.css?DwfddDeffgRrdedFEeE1e" type="text/css">
+      <link rel="stylesheet" href="/css/main.css" type="text/css">
+      <link rel="stylesheet" href="/css/profile.css" type="text/css">
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
       <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
       <script>
@@ -32,6 +32,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
      </script>
   </head>
   <body onload="scrollChat()">
+  <div class="container-fluid">
       <div class="row">
         <div class="col-md-2">
           <% String name = user.getName().substring(0, 1).toUpperCase() + user.getName().substring(1);
@@ -132,6 +133,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
      <% } %>
    </div>
   </div>
+</div>
 </div>
 </div>
 </body>

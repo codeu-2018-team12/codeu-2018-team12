@@ -8,9 +8,9 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.Email;
 import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
-import codeu.utils.Email;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -21,15 +21,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
 
 @MultipartConfig(
-        maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
-        maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
-        fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
 )
 
 /** Servlet class responsible for the direct message page. */
@@ -95,7 +94,7 @@ public class DirectMessageServlet extends HttpServlet {
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws IOException, ServletException {
+      throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
     String loggedInUsername = (String) request.getSession().getAttribute("user");
     String otherUsername = requestUrl.substring("/direct/".length());
@@ -113,15 +112,15 @@ public class DirectMessageServlet extends HttpServlet {
     }
 
     String convoName =
-            loggedInUsername.compareTo(otherUsername) < 0
-                    ? "direct:" + loggedInUsername + "-" + otherUsername
-                    : "direct:" + otherUsername + "-" + loggedInUsername;
+        loggedInUsername.compareTo(otherUsername) < 0
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
     Conversation conversation = conversationStore.getConversationWithTitle(convoName);
 
     if (conversation == null) {
       conversation =
-              new Conversation(
-                      UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
+          new Conversation(
+              UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
       conversation.addUser(otherUser.getId());
       conversationStore.addConversation(conversation);
     }
@@ -143,7 +142,7 @@ public class DirectMessageServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
-          throws IOException, ServletException {
+      throws IOException, ServletException {
     Part image = request.getPart("image");
     String submitText = request.getParameter("submitText");
     String requestUrl = request.getRequestURI();
@@ -164,9 +163,9 @@ public class DirectMessageServlet extends HttpServlet {
     }
 
     String convoName =
-            loggedInUsername.compareTo(otherUsername) < 0
-                    ? "direct:" + loggedInUsername + "-" + otherUsername
-                    : "direct:" + otherUsername + "-" + loggedInUsername;
+        loggedInUsername.compareTo(otherUsername) < 0
+            ? "direct:" + loggedInUsername + "-" + otherUsername
+            : "direct:" + otherUsername + "-" + loggedInUsername;
 
     Conversation conversation = conversationStore.getConversationWithTitle(convoName);
     if (conversation == null) {
@@ -180,8 +179,8 @@ public class DirectMessageServlet extends HttpServlet {
       String messageContent = request.getParameter("message");
       // this removes any HTML from the message content
       String cleanedMessageContent =
-              Jsoup.clean(
-                      messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
+          Jsoup.clean(
+              messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
       createMessage(request, cleanedMessageContent, loggedInUser, conversation, false);
 
@@ -194,23 +193,22 @@ public class DirectMessageServlet extends HttpServlet {
     response.sendRedirect("/direct/" + otherUser.getName());
   }
 
-
   /** Constructs a method object and adds it to messageStore */
   private void createMessage(
-          HttpServletRequest request,
-          String messageContent,
-          User user,
-          Conversation conversation,
-          boolean containsImage) {
+      HttpServletRequest request,
+      String messageContent,
+      User user,
+      Conversation conversation,
+      boolean containsImage) {
 
     Message message =
-            new codeu.model.data.Message(
-                    UUID.randomUUID(),
-                    conversation.getId(),
-                    user.getId(),
-                    messageContent,
-                    Instant.now(),
-                    containsImage);
+        new codeu.model.data.Message(
+            UUID.randomUUID(),
+            conversation.getId(),
+            user.getId(),
+            messageContent,
+            Instant.now(),
+            containsImage);
     messageStore.addMessage(message);
 
     createActivity(conversation, user, messageContent, containsImage);
@@ -218,39 +216,39 @@ public class DirectMessageServlet extends HttpServlet {
 
   /** Constructs an activity object and adds it to activityStore */
   private void createActivity(
-          Conversation conversation, User user, String messageContent, boolean containsImage) {
+      Conversation conversation, User user, String messageContent, boolean containsImage) {
 
     String activityMessage;
     if (containsImage) {
       activityMessage =
-              " sent a picture in"
-                      + "<a href=\"/chat/"
-                      + conversation.getTitle()
-                      + "\">"
-                      + conversation.getTitle()
-                      + "</a>.";
+          " sent a picture in"
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>.";
     } else {
       activityMessage =
-              " sent a direct message in "
-                      + "<a href=\"/chat/"
-                      + conversation.getTitle()
-                      + "\">"
-                      + conversation.getTitle()
-                      + "</a>"
-                      + ": "
-                      + messageContent;
+          " sent a direct message in "
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>"
+              + ": "
+              + messageContent;
     }
 
     Activity activity =
-            new Activity(
-                    UUID.randomUUID(),
-                    user.getId(),
-                    conversation.getId(),
-                    Instant.now(),
-                    "messageSent",
-                    activityMessage,
-                    conversation.getConversationUsers(),
-                    conversation.getIsPublic());
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "messageSent",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
     activityStore.addActivity(activity);
 
     Email email = new Email();

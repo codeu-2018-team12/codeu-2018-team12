@@ -17,7 +17,7 @@ List<User> users = (List<User>) request.getAttribute("users");
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
      id="bootstrap-css">
     <jsp:include page="./navbar.jsp" />
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrdRFEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <style>

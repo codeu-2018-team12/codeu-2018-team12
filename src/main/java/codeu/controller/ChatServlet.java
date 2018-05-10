@@ -22,9 +22,9 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.Email;
 import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
-import codeu.utils.Email;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
@@ -182,10 +182,9 @@ public class ChatServlet extends HttpServlet {
           Jsoup.clean(
               messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
-      createMessage(request, cleanedMessageContent, user, conversation, false);
+      createMessage(request, finalMessageContent, user, conversation, false);
 
     } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
-      System.out.println("HELLO");
       ImageStorage imageStorage = new ImageStorage();
       String imageName = imageStorage.storeImage(image);
       createMessage(request, imageName, user, conversation, true);

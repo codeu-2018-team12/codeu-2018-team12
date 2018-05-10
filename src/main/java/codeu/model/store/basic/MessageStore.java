@@ -140,6 +140,4 @@ public class MessageStore {
   public void setMessages(List<Message> messages) {
     this.messages = messages;
   }
-
-
 }

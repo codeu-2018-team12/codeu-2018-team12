@@ -9,8 +9,18 @@
    margin-bottom: 30px;
  }
 
+ body {
+   padding-bottom: 0px;
+ }
+
+ button, html input[type=button], input[type=reset], input[type=submit] {
+   font-family: sans-serif;
+   margin-left: 12%;
+ }
+
  .btn {
    height: 30px;
+   margin: 0px;
  }
 
  .btn-info {
@@ -31,7 +41,7 @@
  }
 
  .col-md-2 {
-   height: 100vh;
+   height: 180vh;
    background-color: #4C9095;
  }
 
@@ -93,7 +103,7 @@
  }
 
  .row {
-   height: 100%;
+   height: 100vh;
  }
 
  .user-name {

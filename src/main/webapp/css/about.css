@@ -47,6 +47,10 @@
    margin-top: 0px;
  }
 
+ #navTitle {
+   margin-bottom: 15px;
+   height: 50px;
+ }
  .page-header {
    border-bottom: none;
  }

@@ -14,10 +14,10 @@
 
 package codeu.model.data;
 
-import java.time.*;
-import java.util.UUID;
 import java.text.SimpleDateFormat;
+import java.time.*;
 import java.util.Date;
+import java.util.UUID;
 
 /** Class representing a message. Messages are sent by a User in a Conversation. */
 public class Message {
@@ -38,7 +38,13 @@ public class Message {
    * @param content the text content of this Message
    * @param creation the creation time of this Message
    */
-  public Message(UUID id, UUID conversation, UUID author, String content, Instant creation, boolean imageStatus) {
+  public Message(
+      UUID id,
+      UUID conversation,
+      UUID author,
+      String content,
+      Instant creation,
+      boolean imageStatus) {
     this.id = id;
     this.conversation = conversation;
     this.author = author;
@@ -68,7 +74,7 @@ public class Message {
   }
 
   /** Returns true if message contains image and false otherwise */
-  public boolean containsImage(){
+  public boolean containsImage() {
     return containsImage;
   }
   /** Returns the creation time of this Message. */

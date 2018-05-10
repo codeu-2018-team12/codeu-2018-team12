@@ -23,8 +23,8 @@
      id="bootstrap-css">
     <jsp:include page="/WEB-INF/view/navbar.jsp" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/css/main.css?DwvEcerrgedrdrRdE7edFeE1e" type="text/css">
-    <link rel="stylesheet" href="/css/testdata.css?DwvEcerrgeRd7rdrdFedEeE1e" type="text/css">
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/css/testdata.css" type="text/css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   </head>
 <body>
