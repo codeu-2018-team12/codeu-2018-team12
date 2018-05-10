@@ -54,10 +54,10 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         <ul class="chat">
        <%
         if (user != null && conversationUsers.contains(user.getId())) {
-          int boxNum = 1;
           for (Message message : messages) {
             String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-            if (boxNum % 2 == 0) {
+            String username = user.getName();
+            if (!author.equals(username)) {
             %>
             <li class="left clearfix">
             <span class="chat-img pull-left">
@@ -125,7 +125,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
        </li>
       <%
         }
-        boxNum++;
        }
       }
      %>
