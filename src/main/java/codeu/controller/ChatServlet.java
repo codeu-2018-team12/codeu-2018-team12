@@ -177,6 +177,15 @@ public class ChatServlet extends HttpServlet {
 
     } else if (submitText != null && conversation.getConversationUsers().contains(user.getId())) {
       String messageContent = request.getParameter("message");
+      if (messageContent.isEmpty()) {
+        request.setAttribute("error", "Message body cannot be empty.");
+        request.setAttribute("conversation", conversation);
+        request.setAttribute(
+            "messages", messageStore.getMessagesInConversation(conversation.getId()));
+        request.setAttribute("conversationUsers", conversation.getConversationUsers());
+        request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+        return;
+      }
 
       if (messageContent.isEmpty()) {
         request.setAttribute("error", "Message body cannot be empty.");
