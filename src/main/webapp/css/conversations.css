@@ -11,11 +11,41 @@
    border-color: #03585D;
  }
 
+ .conversation {
+   background-color: white;
+   padding: 20px;
+   height: 500px;
+   overflow-y: scroll;
+   padding: 30px;
+   padding-top: 10px;
+   padding-bottom: 5px;
+   margin-top: 0px;
+   margin-bottom: 30px;
+   padding-left: 0px;
+   padding-right: 0px;
+   padding-top: 5px;
+ }
+
+ .conversation-list {
+   list-style-type: none;
+   margin: 0;
+   padding: 20;
+ }
+
+ #direct-message {
+  height: 300px;
+ }
+
+ .far {
+  margin-right: 10px;
+ }
+
  h1 {
   margin-top: 40px;
   font-size: 22px;
   margin-bottom: 20px;
   color: #375F6F;
+  text-align: center;
  }
 
  hr {
@@ -25,7 +55,47 @@
  input {
    font-size: 15px;
    padding: 4px;
-   height: 25px;
+   height: 32px;
  }
+
+ #section-title {
+    margin-left: 320px;
+ }
+
+ .glyphicon {
+    margin-right: 10px;
+ }
+
+ .table {
+   margin-bottom: 0px;
+ }
+
+ .table-top {
+    background-color: #375F6F;
+    height: 50px;
+    padding: 16px;
+    font-family: sans-serif;
+    margin-top: 50px;
+    color: white;
+ }
+
+ .table>thead>tr>th {
+    border-top: none;
+    padding: 16px;
+    font-family: sans-serif;
+    color: #375F6F;
+ }
+
+ .table>tbody>tr>th,
+ .table>tbody>tr>td {
+    padding: 16px;
+    color: #375F6F;
+    font-family: sans-serif;
+ }
+
+ .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+   background-color: #f1f6f8;
+ }
+
 
 

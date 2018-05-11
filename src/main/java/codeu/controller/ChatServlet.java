@@ -123,6 +123,7 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    messages = messageStore.sort(messages);
     List<UUID> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
@@ -186,17 +187,6 @@ public class ChatServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
         return;
       }
-
-      if (messageContent.isEmpty()) {
-        request.setAttribute("error", "Message body cannot be empty.");
-        request.setAttribute("conversation", conversation);
-        request.setAttribute(
-            "messages", messageStore.getMessagesInConversation(conversation.getId()));
-        request.setAttribute("conversationUsers", conversation.getConversationUsers());
-        request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
-        return;
-      }
-
       // this removes any HTML from the message content
       String cleanedMessageContent =
           Jsoup.clean(
@@ -252,10 +242,8 @@ public class ChatServlet extends HttpServlet {
       for (User u1 : oldFriends) {
         // if the two users are friends in only one conversation,
         // ensure they are no longer friends
-        if (u1 != null) {
           currentUser.removeConversationFriend(u1);
           u1.removeConversationFriend(currentUser);
-        }
       }
     }
   }
@@ -280,10 +268,8 @@ public class ChatServlet extends HttpServlet {
       }
       for (User u1 : newFriends) {
         // if the two users are not friends, ensure they become friends
-        if (u1 != null) {
           currentUser.addConversationFriend(u1);
           u1.addConversationFriend(currentUser);
-        }
       }
     }
   }
