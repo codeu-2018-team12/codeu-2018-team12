@@ -116,7 +116,5 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <% } %>
 
     <hr/>
-    <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
-  </div>
 </body>
 </html>

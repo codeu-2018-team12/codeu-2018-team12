@@ -107,8 +107,6 @@
     <%
     }
   %>
-  <hr/>
-  <font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>on:</b>MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
   </div>
 </body>
 </html>
