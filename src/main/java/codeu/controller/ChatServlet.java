@@ -252,8 +252,10 @@ public class ChatServlet extends HttpServlet {
       for (User u1 : oldFriends) {
         // if the two users are friends in only one conversation,
         // ensure they are no longer friends
-        currentUser.removeConversationFriend(u1);
-        u1.removeConversationFriend(currentUser);
+        if (u1 != null) {
+          currentUser.removeConversationFriend(u1);
+          u1.removeConversationFriend(currentUser);
+        }
       }
     }
   }
@@ -278,8 +280,10 @@ public class ChatServlet extends HttpServlet {
       }
       for (User u1 : newFriends) {
         // if the two users are not friends, ensure they become friends
-        currentUser.addConversationFriend(u1);
-        u1.addConversationFriend(currentUser);
+        if (u1 != null) {
+          currentUser.addConversationFriend(u1);
+          u1.addConversationFriend(currentUser);
+        }
       }
     }
   }
