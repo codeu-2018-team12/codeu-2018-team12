@@ -122,6 +122,7 @@ public class DirectMessageServlet extends HttpServlet {
           new Conversation(
               UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
       conversation.addUser(otherUser.getId());
+      conversation.addUser(loggedInUser.getId());
       conversationStore.addConversation(conversation);
     }
 
@@ -234,6 +235,8 @@ public class DirectMessageServlet extends HttpServlet {
             messageContent,
             Instant.now(),
             containsImage);
+
+    conversation.addUser(user.getId());
     messageStore.addMessage(message);
 
     createActivity(conversation, user, messageContent, containsImage);

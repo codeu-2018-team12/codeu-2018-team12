@@ -15,6 +15,7 @@
 package codeu.model.data;
 
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.time.*;
 import java.util.Date;
 import java.util.UUID;
@@ -84,8 +85,8 @@ public class Message {
 
   /** Returns a formatted creation time */
   public String getCreationTimeFormatted() {
-    Date myDate = Date.from(creation);
-    SimpleDateFormat formatter = new SimpleDateFormat("dd MM yyyy HH:mm:ss");
-    return formatter.format(myDate);
+    LocalDateTime ldt = LocalDateTime.ofInstant(creation, ZoneId.systemDefault());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+    return ldt.format(formatter);
   }
 }

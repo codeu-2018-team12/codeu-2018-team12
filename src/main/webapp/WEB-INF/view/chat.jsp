@@ -75,12 +75,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
            <div class="header">
              <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
              <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
-             <%
-                Instant creationTime = message.getCreationTime();
-                LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
-                String time = ldt.format(formatter);
-             %> <%= time %></small>
+             <% String time = message.getCreationTimeFormatted();%>
+             <%= time %></small>
          </div>
          <% if (!message.containsImage()){%>
             <p><%= message.getContent()%></p>
@@ -109,13 +105,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
          <div class="header">
             <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
              <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
-             <%
-                Instant creationTime = message.getCreationTime();
-                LocalDateTime ldt = LocalDateTime.ofInstant(creationTime, ZoneId.systemDefault());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
-                String time = ldt.format(formatter);
-             %> <%= time %></small>
-          </div>
+             <% String time = message.getCreationTimeFormatted();%>
+              <%= time %></small>
+           </div>
           <% if (!message.containsImage()){%>
              <p> <%= message.getContent()%> </p>
           <% } else { %>

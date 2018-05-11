@@ -17,7 +17,10 @@
 <%@ page import="java.util.UUID" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.store.basic.ConversationStore" %>
+<%@ page import="codeu.model.store.basic.MessageStore" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="codeu.model.data.Message" %>
 
 <!DOCTYPE html>
 <html>
@@ -50,7 +53,9 @@
     <%
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
+      ConversationStore.getInstance().sort(conversations);
     List<Conversation> directMessages = (List<Conversation>) request.getAttribute("directMessages");
+    ConversationStore.getInstance().sort(directMessages);
     if(conversations == null || conversations.isEmpty()){
     %>
       <p>Create a conversation to get started.</p>
@@ -61,15 +66,25 @@
          <tr>
            <th scope="col">Conversation Name</th>
            <th scope="col">Conversation Creator</th>
-           <th scope="col">Last Activity</th>
+           <th scope="col">Last Active</th>
          </tr>
        </thead>
-    <% for(Conversation conversation : conversations){ %>
+    <% for(Conversation conversation : conversations){
+         String time = null;
+         UUID conversationId = conversation.getId();
+         List <Message> messageList = MessageStore.getInstance().getMessagesInConversation(conversationId);
+         if (!messageList.isEmpty()) {
+           Message latestMessage = MessageStore.getInstance().sort(messageList).get(messageList.size() - 1);
+           time = latestMessage.getCreationTimeFormatted();
+         } else {
+          time = conversation.getCreationTimeFormatted();
+         }
+         %>
     <tr onclick="window.location='/chat/<%= conversation.getTitle() %>';">
       <th scope="row"><%= conversation.getTitle() %></a></th>
       <% String userName = UserStore.getInstance().getUser(conversation.getOwnerId()).getName(); %>
        <td><%= userName %></td>
-       <td>Otto</td>
+       <td><%=time%></td>
      </tr>
     <% } %>
     </tbody>
@@ -96,9 +111,9 @@
              <tbody>
                <thead>
                  <tr>
-                   <th scope="col">Message Name</th>
+                   <th scope="col">Recipient</th>
                    <th scope="col">Message Creator</th>
-                   <th scope="col">Last Activity</th>
+                   <th scope="col">Last Active</th>
                  </tr>
                </thead>
       <%
@@ -111,13 +126,22 @@
             otherUser = UserStore.getInstance().getUser(id);
             break;
           }
-        }
+        }        String time = null;
+                 UUID conversationId = conversation.getId();
+                  List <Message> messageList = MessageStore.getInstance().getMessagesInConversation(conversationId);
+                  if (!messageList.isEmpty()){
+                   Message latestMessage = MessageStore.getInstance().sort(messageList).get(messageList.size() - 1);
+                   time = latestMessage.getCreationTimeFormatted();
+                   } else {
+                     time = conversation.getCreationTimeFormatted();
+                   }
+
       %>
           <tr onclick="window.location='/direct/<%= otherUser.getName()%>';">
             <th scope="row"><%= otherUser.getName() %></a></th>
             <% String userName = UserStore.getInstance().getUser(conversation.getOwnerId()).getName(); %>
              <td><%= userName %></td>
-             <td>Otto</td>
+             <td><%=time%></td>
            </tr>
       <% } %>
       </ul>

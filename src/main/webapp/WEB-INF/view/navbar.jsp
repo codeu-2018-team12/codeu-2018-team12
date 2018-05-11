@@ -17,12 +17,13 @@
       <% String profileaddress = (String) "/profile/" + request.getSession().getAttribute("user"); %>
       <a href="<%=profileaddress %>">Profile</a>
       <a href="/settings">Settings</a>
+      <a href="/about.jsp">About</a>
       <a href="/logout">Logout</a>
     <% } else { %>
       <a href="/login">Login</a>
       <a href="/register">Register</a>
+      <a href="/about.jsp">About</a>
     <% } %>
-    <a href="/about.jsp">About</a>
     <div id="search-container">
       <form action="/search" id="search" class="form-inline" method="GET">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" name="search" aria-label="Search">

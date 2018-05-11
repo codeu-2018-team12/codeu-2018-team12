@@ -81,8 +81,8 @@ public class MessageStoreTest {
     List<Message> resultMessages = sort(messageStore.getMessagesByAuthor(USER_ID_ONE));
 
     Assert.assertEquals(2, resultMessages.size());
-    assertEquals(MESSAGE_ONE, resultMessages.get(1));
-    assertEquals(MESSAGE_TWO, resultMessages.get(0));
+    assertEquals(MESSAGE_ONE, resultMessages.get(0));
+    assertEquals(MESSAGE_TWO, resultMessages.get(1));
   }
 
   @Test
