@@ -52,7 +52,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 <body onload="scrollChat()">
 
   <div id="container">
-
+    <% if (request.getAttribute("error") != null) { %>
+      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
+    <% } %>
     <h1><%= conversation.getTitle() %>
       <a href="" style="float: right">&#8635;</a>
       <%
@@ -95,10 +97,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     </div>
 
     <hr/>
-
-    <% if (request.getAttribute("error") != null) { %>
-      <h2 style="color:red"><%= request.getAttribute("error") %></h2>
-    <% } %>
 
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
