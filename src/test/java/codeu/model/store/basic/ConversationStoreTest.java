@@ -25,13 +25,12 @@ public class ConversationStoreTest {
       new User(UUID.randomUUID(), "user_two", null, null, Instant.ofEpochMilli(2000), null);
 
   private Conversation CONVERSATION_ONE =
-      CONVERSATION_ONE =
-          new Conversation(
-              UUID.randomUUID(),
-              UUID.randomUUID(),
-              "conversation_one",
-              Instant.ofEpochMilli(1000),
-              true);
+      new Conversation(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          "conversation_one",
+          Instant.ofEpochMilli(1000),
+          true);
   private final Conversation CONVERSATION_TWO =
       new Conversation(
           UUID.randomUUID(),

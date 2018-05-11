@@ -56,7 +56,20 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
     <h1><%= conversation.getTitle() %>
-      <a href="" style="float: right">&#8635;</a></h1>
+      <a href="" style="float: right">&#8635;</a>
+      <%
+        if (user != null && conversationUsers.contains(user.getId())) {
+      %>
+      <div>
+        <form action="/search" method="GET">
+          <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
+          <button type="submit" name="searchbutton" value="<%= conversation.getTitle() %>">Search</button>
+        </form>
+      </div>
+      <%
+        }
+      %>
+    </h1>
 
     <hr/>
 
@@ -96,15 +109,14 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
     <p> Join the conversation to send a message! </p>
     <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
-            <button type="submit" name="button" value="joinButton">Join Conversation</button>
+        <button type="submit" name="button" value="joinButton">Join Conversation</button>
     </form>
     <% } else { %>
       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
 
     <hr/>
-
+    <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
   </div>
-
 </body>
 </html>

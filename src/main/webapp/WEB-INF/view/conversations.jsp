@@ -50,6 +50,13 @@
 
     <h1>Conversations</h1>
 
+    <div>
+      <form action="/search" method="GET">
+        <input type="text" placeholder="Search for a conversation..." name="searchconvo" id="searchconvo">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
     <%
     List<Conversation> conversations =
       (List<Conversation>) request.getAttribute("conversations");
@@ -100,6 +107,8 @@
     <%
     }
   %>
+  <hr/>
+  <font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>on:</b>MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
   </div>
 </body>
 </html>
