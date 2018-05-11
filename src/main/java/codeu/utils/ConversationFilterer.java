@@ -54,15 +54,14 @@ public class ConversationFilterer {
     List<String> tokensList = new ArrayList<String>(Arrays.asList(tokens));
     List<Conversation> result =
         new ArrayList<Conversation>(filterConversationsByTokens(originalConvos, tokensList));
-    List<Conversation> direct = new ArrayList<Conversation>();
+    List<Conversation> finalresult = new ArrayList<Conversation>();
     for (Conversation convo : result) {
-      if (convo.getTitle().startsWith("direct:")) {
-        direct.add(convo);
+      if (!convo.getTitle().startsWith("direct:")) {
+        finalresult.add(convo);
       }
     }
-    result.removeAll(direct);
-    result.sort(convoComparator);
-    return result;
+    finalresult.sort(convoComparator);
+    return finalresult;
   }
 
   /* Handles the [A -> B AND A | B OR A | B] branch of the CFG
