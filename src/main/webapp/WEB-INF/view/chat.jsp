@@ -80,19 +80,23 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
    </div>
    <div id="Direct Messages">
    <a class="section-title" href="../conversations#direct-message">Direct Messages</a>
-     <%
+     <% List<Conversation> permittedConversations = ConversationStore.getInstance().getAllPermittedConversations
+     (user.getId());
         int count2 = 0;
-         for (int i = 0 ; i < chatConversations.size(); i++) {
+         for (int i = 0 ; i < permittedConversations.size(); i++) {
            if (count2 == 5) {
              break;
            }
-           if (chatConversations.get(i).getTitle().startsWith("direct:")) {
+           if (permittedConversations.get(i).getTitle().startsWith("direct:")) {
+
              String recipient = null;
-             List<UUID> convoUsers = chatConversations.get(i).getConversationUsers();
-           if(convoUsers.get(0) == user.getId()){
-              recipient = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
+             List<UUID> convoUsers = permittedConversations.get(i).getConversationUsers();
+              String firstUser = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
+              String secondUser = UserStore.getInstance().getUser(convoUsers.get(1)).getName();
+           if (!user.getName().equals(firstUser)){
+              recipient = firstUser;
            } else {
-              recipient = UserStore.getInstance().getUser(convoUsers.get(1)).getName();
+              recipient = secondUser;
            }
           %>
            <div class="message-entry">
@@ -120,6 +124,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
        <%
         if (user != null && conversationUsers.contains(user.getId())) {
           for (Message message : messages) {
+            User authorOfMessage = UserStore.getInstance().getUser(message.getAuthorId());
             String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
             String username = user.getName();
             if (!author.equals(username)) {
@@ -131,7 +136,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                Avatar"></a>
            <% } else { %>
               <a href="/profile/<%= author %>">
-              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= authorOfMessage
               .getProfilePicture() %>" alt="User Avatar"></a>
           <% } %>
          </span>
@@ -159,7 +164,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
               Avatar"></a>
           <% } else { %>
           <a href="/profile/<%= author %>">
-          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= authorOfMessage
           .getProfilePicture
           ()%>"
           alt="User Avatar"></a>
