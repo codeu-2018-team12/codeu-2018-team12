@@ -47,7 +47,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
          document.getElementById("mySidenav").style.width = "250px";
          document.getElementById("main").style.marginLeft = "250px";
       }
-
       function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft= "0";
@@ -88,7 +87,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
              break;
            }
            if (permittedConversations.get(i).getTitle().startsWith("direct:")) {
-
              String recipient = null;
              List<UUID> convoUsers = permittedConversations.get(i).getConversationUsers();
               String firstUser = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
