@@ -1,0 +1,33 @@
+  nav a:hover {
+    color: white;
+  }
+
+ .btn {
+   padding 2px, 12px;
+   padding-top: 4px;
+ }
+
+ button, html [type=button], [type=reset], [type=submit] {
+   height: 30px;
+ }
+
+ .form-inline .form-control {
+   width: 150px;
+   height: 30px;
+ }
+
+ #logo {
+   width: 40px;
+   margin: 10px;
+   margin-top: 2px;
+   position: sticky;
+ }
+
+ #search-container {
+   padding-left:16px;
+   padding-bottom:20px
+ }
+
+ p {
+  font-family: sans-serif;
+ }

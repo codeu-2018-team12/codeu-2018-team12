@@ -104,7 +104,8 @@ public class ChatServletTest {
             fakeConversationId,
             UUID.randomUUID(),
             "test message",
-            Instant.now()));
+            Instant.now(),
+            false));
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
         .thenReturn(fakeMessageList);
 
@@ -196,6 +197,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     chatServlet.doPost(mockRequest, mockResponse);
@@ -229,6 +231,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message"))
         .thenReturn("Contains <b>html</b> and <script>JavaScript</script> content.");
 
@@ -290,6 +293,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     chatServlet.doPost(mockRequest, mockResponse);
@@ -323,6 +327,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("**test**");
 
     chatServlet.doPost(mockRequest, mockResponse);
@@ -356,6 +361,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn(":japanese_goblin:");
 
     chatServlet.doPost(mockRequest, mockResponse);
@@ -389,6 +395,7 @@ public class ChatServletTest {
 
     fakeConversation.getConversationUsers().add(fakeUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     Activity activity =

@@ -8,26 +8,28 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.Email;
+import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.Instant;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
+
+@MultipartConfig(
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+)
 
 /** Servlet class responsible for the direct message page. */
 public class DirectMessageServlet extends HttpServlet {
@@ -119,11 +121,12 @@ public class DirectMessageServlet extends HttpServlet {
       conversation =
           new Conversation(
               UUID.randomUUID(), loggedInUser.getId(), convoName, Instant.now(), false);
-      conversation.addUser(otherUser.getId());
       conversationStore.addConversation(conversation);
+      conversation.addUser(otherUser.getId());
     }
-    List<UUID> conversationUsers = conversation.getConversationUsers();
+
     List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
+    List<UUID> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversationUsers", conversationUsers);
     request.setAttribute("conversation", conversation);
@@ -142,6 +145,8 @@ public class DirectMessageServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+    Part image = request.getPart("image");
+    String submitText = request.getParameter("submitText");
     String requestUrl = request.getRequestURI();
     String loggedInUsername = (String) request.getSession().getAttribute("user");
     String otherUsername = requestUrl.substring("/direct/".length());
@@ -170,8 +175,9 @@ public class DirectMessageServlet extends HttpServlet {
       response.sendRedirect("/conversations");
       return;
     }
+    String conversationTitle = requestUrl.substring("/chat/".length());
 
-    if (conversation.getConversationUsers().contains(loggedInUser.getId())) {
+    if (submitText != null && conversation.getConversationUsers().contains(loggedInUser.getId())) {
       String messageContent = request.getParameter("message");
       if (messageContent.isEmpty()) {
         request.setAttribute("error", "Message body cannot be empty.");
@@ -185,95 +191,94 @@ public class DirectMessageServlet extends HttpServlet {
         return;
       }
 
+      if (messageContent.isEmpty()) {
+        request.setAttribute("error", "Message body cannot be empty.");
+        request.setAttribute("conversationUsers", conversation.getConversationUsers());
+        request.setAttribute("conversation", conversation);
+        request.setAttribute(
+            "messages", messageStore.getMessagesInConversation(conversation.getId()));
+        request.setAttribute("loggedInUser", loggedInUser);
+        request.setAttribute("otherUser", otherUser);
+        request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
+        return;
+      }
       // this removes any HTML from the message content
       String cleanedMessageContent =
           Jsoup.clean(
               messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+      createMessage(request, cleanedMessageContent, loggedInUser, conversation, false);
 
-      Message message =
-          new codeu.model.data.Message(
-              UUID.randomUUID(),
-              conversation.getId(),
-              loggedInUser.getId(),
-              finalMessageContent,
-              Instant.now());
-      messageStore.addMessage(message);
-
-      String activityMessage =
-          " sent a direct message to " + otherUser.getName() + ": " + finalMessageContent;
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              loggedInUser.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "messageSent",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
-      sendEmailNotification(loggedInUser, conversation);
+    } else if (image != null) {
+      ImageStorage imageStorage = new ImageStorage();
+      String imageName = imageStorage.storeImage(image);
+      createMessage(request, imageName, loggedInUser, conversation, true);
     }
     // redirect to a GET request
     response.sendRedirect("/direct/" + otherUser.getName());
   }
 
-  /**
-   * Method to send an email notification to all users in a conversation who are not logged on other
-   * than the message sender
-   */
-  public void sendEmailNotification(User user, Conversation conversation) {
+  /** Constructs a method object and adds it to messageStore */
+  private void createMessage(
+      HttpServletRequest request,
+      String messageContent,
+      User user,
+      Conversation conversation,
+      boolean containsImage) {
 
-    Properties props = new Properties();
-    Session session = Session.getDefaultInstance(props, null);
+    Message message =
+        new codeu.model.data.Message(
+            UUID.randomUUID(),
+            conversation.getId(),
+            user.getId(),
+            messageContent,
+            Instant.now(),
+            containsImage);
 
-    List<UUID> conversationUsers = conversation.getConversationUsers();
+    conversation.addUser(user.getId());
+    messageStore.addMessage(message);
 
-    String msgBody =
-        user.getName()
-            + " sent a message in "
-            + conversation.getTitle()
-            + " on "
-            + conversation.getCreationTime()
-            + " while you were away. \n \n ";
+    createActivity(conversation, user, messageContent, containsImage);
+  }
 
-    SessionListener currentSession = SessionListener.getInstance();
+  /** Constructs an activity object and adds it to activityStore */
+  private void createActivity(
+      Conversation conversation, User user, String messageContent, boolean containsImage) {
 
-    for (UUID conversationUserUUID : conversationUsers) {
-      User conversationUser = userStore.getUser(conversationUserUUID);
-      if (conversationUser != user
-          && conversationUser != null
-          && !currentSession.isLoggedIn(conversationUser.getName())
-          && conversationUser.getNotificationStatus()) {
-
-        if (user.getNotificationFrequency().equals("everyMessage")) {
-          try {
-            javax.mail.Message msg = new MimeMessage(session);
-            msg.setFrom(
-                new InternetAddress(
-                    "chatMessageAdmin@chatu-196017.appspotmail.com", "CodeU Team 12 Admin"));
-            msg.addRecipient(
-                javax.mail.Message.RecipientType.TO,
-                new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
-            msg.setSubject(user.getName() + " has sent you a message");
-            msgBody += " Please log in to view this message";
-            msg.setText(msgBody);
-            Transport.send(msg);
-          } catch (AddressException e) {
-            System.out.println("Invalid email address formatting. Email not sent.");
-            System.out.println("AddressException:" + e);
-          } catch (MessagingException e) {
-            System.out.println("An error has occurred with this message. Email not sent.");
-            System.out.println("MessagingException:" + e);
-          } catch (UnsupportedEncodingException e) {
-            System.out.println("This character encoding is not supported. Email not sent");
-            System.out.println("UnsupportedEncodingException:" + e);
-          }
-        }
-      } else {
-        user.addNotification(msgBody);
-      }
+    String activityMessage;
+    if (containsImage) {
+      activityMessage =
+          " sent a picture in"
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>.";
+    } else {
+      activityMessage =
+          " sent a direct message in "
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>"
+              + ": "
+              + messageContent;
     }
+
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "messageSent",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
+    activityStore.addActivity(activity);
+
+    Email email = new Email();
+    email.sendEmailNotification(user, conversation);
   }
 }

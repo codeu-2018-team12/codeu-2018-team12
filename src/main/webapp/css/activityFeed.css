@@ -1,0 +1,33 @@
+ #activity {
+   background-color: white;
+   padding: 20px;
+   height: 500px;
+   overflow-y: scroll;
+   padding: 30px;
+   padding-top: 40px;
+   margin-top: 40px;
+   margin-bottom: 30px;
+ }
+
+ .btn-primary{
+   border-color: rgb(104, 145, 162);
+   background-color: rgb(104, 145, 162);
+ }
+
+ .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
+   color: #fff;
+   background-color: #03585D;
+   border-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
+ }
+
+ h1 {
+  font-size: 28px;
+  color: #375F6F;
+ }
+
+ li {
+   padding-top:4px;
+   padding-bottom: 4px;
+ }

@@ -17,20 +17,24 @@
 <%@ page import="codeu.model.data.User" %>
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Load Test Data</title>
-  <link rel="stylesheet" href="/css/main.css">
-  <jsp:include page="./navbar.jsp" />
-</head>
+  <head>
+    <title>Load Test Data</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <jsp:include page="/WEB-INF/view/navbar.jsp" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/css/testdata.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  </head>
 <body>
-
   <div id="container">
     <h1>Load Test Data</h1>
     <p>This will load a number of users, conversations, and messages for testing
         purposes.</p>
     <form action="/testdata" method="POST">
-      <button type="submit" value="confirm" name="confirm">Confirm</button>
-      <button type="submit" value="cancel" name="cancel">Do Nothing</button>
+      <button type="submit" value="confirm" class="btn btn-primary btn-round-md btn-md"name="confirm">Confirm</button>
+      <button type="submit" value="cancel" class="btn btn-primary btn-round-md btn-md"name="cancel">Do Nothing</button>
     </form>
   </div>
 </body>

@@ -104,7 +104,12 @@ public class SearchServletTest {
     List<Message> fakeMessageList = new ArrayList<Message>();
     fakeMessageList.add(
         new Message(
-            UUID.randomUUID(), fakeConversation.getId(), UUID.randomUUID(), "test", Instant.now()));
+            UUID.randomUUID(),
+            fakeConversation.getId(),
+            UUID.randomUUID(),
+            "test",
+            Instant.now(),
+            true));
 
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversation.getId()))
         .thenReturn(fakeMessageList);

@@ -1,0 +1,122 @@
+ #activities {
+   background-color: white;
+   height: 500px;
+   width: 900px;
+   overflow-y: scroll;
+   padding: 30px;
+   padding-top: 40px;
+   margin-top: 40px;
+   margin-bottom: 30px;
+ }
+
+ body {
+   padding-bottom: 0px;
+ }
+
+ button, html input[type=button], input[type=reset], input[type=submit] {
+   font-family: sans-serif;
+   margin-left: 12%;
+ }
+
+ .btn {
+   height: 30px;
+   margin: 0px;
+ }
+
+ .btn-info {
+   background-color: rgb(104, 145, 162);
+   border: rgb(104, 145, 162);
+ }
+
+ .btn-info:hover, .btn-info:focus, .btn-info:active,
+ .btn-info.active, .open>.dropdown-toggle.btn-info,
+ .btn-primary:active:focus{
+   color: #fff;
+   background-color: #03585D;
+   border-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
+ }
+
+ .btn-sm {
+   margin-left: 22%;
+ }
+
+ .col-md-2 {
+   height: 180vh;
+   background-color: #4C9095;
+ }
+
+ #container {
+   margin-left: 100px;
+   width: 1000px;
+ }
+
+ h1 {
+   font-size: 26px;
+   color: #375F6F;
+ }
+
+ h2{
+   font-size: 22px;
+   text-align: center;
+   margin-bottom: 40px;
+   color: #375F6F;
+ }
+
+ .image-username {
+   display: block;
+   margin: 10%;
+ }
+
+ input {
+   height: 31px;
+   font-size: 12px;
+   font-weight: 200;
+   padding: 5px;
+ }
+
+ label {
+   display: block;
+   font-weight: 300;
+ }
+
+ li {
+   padding-top: 3px;
+   padding-bottom: 3px;
+ }
+
+ .profile-element {
+   margin-left: 0px;
+   margin-right: 0px;
+   margin-top: 40px;
+   margin-bottom: 70px;
+ }
+
+ .profile-information {
+   display: center;
+ }
+
+ .profile-picture {
+   width: 95%;
+   height: 95%;
+   display: block;
+   margin-top: 40px;
+ }
+
+ .row {
+   height: 100vh;
+ }
+
+ #title {
+  color: #375F6F;
+ }
+
+ .user-name {
+   margin-top: 10%;
+   color: white;
+   text-align: center;
+   font-size: 18px;
+   font-family: sans-serif;
+ }
+

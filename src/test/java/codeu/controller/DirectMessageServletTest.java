@@ -110,7 +110,8 @@ public class DirectMessageServletTest {
             fakeConversationId,
             UUID.randomUUID(),
             "test message",
-            Instant.now()));
+            Instant.now(),
+            false));
     Mockito.when(mockMessageStore.getMessagesInConversation(fakeConversationId))
         .thenReturn(fakeMessageList);
 
@@ -245,6 +246,7 @@ public class DirectMessageServletTest {
 
     fakeConversation.getConversationUsers().add(testloggedInUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     directMessageServlet.doPost(mockRequest, mockResponse);
@@ -281,6 +283,7 @@ public class DirectMessageServletTest {
 
     fakeConversation.getConversationUsers().add(testloggedInUser.getId());
 
+    Mockito.when(mockRequest.getParameter("submitText")).thenReturn("submitText");
     Mockito.when(mockRequest.getParameter("message")).thenReturn("Test message.");
 
     Activity activity =

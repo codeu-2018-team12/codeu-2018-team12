@@ -22,36 +22,27 @@
 
 <!DOCTYPE html>
 <html>
-<head>
- <link rel="stylesheet" href="/css/main.css">
- <jsp:include page="/WEB-INF/view/navbar.jsp" />
-</head>
-
-
-<body>
-
-
-  <div id="container">
-    <div
-      style="width:75%; margin-left:auto; margin-right:auto; margin-top: 50px;">
-
-      <h1>CodeU Chat App</h1>
-      <img src="/resources/codeU.png">
-      <h2>Welcome to Team 12's CodeU 2018 Project!</h2>
-
-      <ul>
-        <li><a href="/login">Login</a> to get started.</li>
-        <li>Go to the <a href="/conversations">conversations</a> page to
-            create or join a conversation.</li>
-        <li>View the <a href="/about.jsp">about</a> page to learn more about us
-            and the project.</li>
-        <li>You can <a href="/testdata">load test data</a> to fill the site with
-            example data.</li>
-        <li>You can view the project's GitHub page
-            <a href="https://github.com/codeu-2018-team12/codeu-2018-team12">
-              here</a>.</li>
-      </ul>
+ <head>
+   <title>CodeU Chat App</title>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+    id="bootstrap-css">
+   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   <link rel="stylesheet" href="/css/main.css">
+   <link rel="stylesheet" href="/css/index.css">
+   <jsp:include page="/WEB-INF/view/navbar.jsp" />
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+   <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+ <body>
+   <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+     <div class="w3-display-middle">
+       <h1 id="title-homepage" class="w3-animate-top">Team 12's Chat App</h1>
+         <div id="aboutButton">
+           <a href="/about.jsp" class="btn btn-primary btn-round-md btn-md">Explore This Project</a>
+        </div>
+       </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

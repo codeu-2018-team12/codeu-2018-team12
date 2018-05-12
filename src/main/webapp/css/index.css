@@ -1,0 +1,41 @@
+ a {
+   margin-left: 40%;
+   margin-right: 50%;
+   text-align: center;
+ }
+
+ #aboutButton {
+   display: flex;
+   justify-content: center;
+ }
+
+ .bgimg {
+   background-image: linear-gradient(to right top, #375f6f, #3b6b7a, #407783, #45848d, #4c9095);
+   min-height: 100%;
+   background-position: center;
+   background-size: cover;
+ }
+
+ body,h1 {
+  font-family: sans-serif;
+  color: white;
+ }
+
+ body, html {
+  height: 100%;
+ }
+
+ #title {
+   font-size: 40px!important;
+   font-family: sans-serif;
+   margin-bottom: 30px;
+   margin-top: 0px;
+ }
+
+ #title-homepage{
+   text-align: center;
+   margin-top: 40px;
+   margin-bottom: 40px;
+   color: white;
+   font-weight: 150;
+ }

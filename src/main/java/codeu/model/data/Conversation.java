@@ -16,6 +16,9 @@ package codeu.model.data;
 
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -124,18 +127,27 @@ public class Conversation {
     conversationUsers = newUsers;
   }
 
+  /** Returns true if conversation is public, false, otherwise */
   public boolean getIsPublic() {
     return isPublic;
   }
 
+  /** Sets the privacy status of a conversation */
   public void setIsPublic(boolean isPublic) {
     this.isPublic = isPublic;
   }
 
+  /** Returns true if user has permission to access a conversation, false if otherwise */
   public boolean hasPermission(UUID user) {
     if (isPublic) {
       return true;
     }
     return conversationUsers.contains(user);
+  }
+
+  public String getCreationTimeFormatted() {
+    LocalDateTime ldt = LocalDateTime.ofInstant(creation, ZoneId.systemDefault());
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
+    return ldt.format(formatter);
   }
 }

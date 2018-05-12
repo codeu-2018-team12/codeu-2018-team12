@@ -22,27 +22,24 @@ import codeu.model.store.basic.ActivityStore;
 import codeu.model.store.basic.ConversationStore;
 import codeu.model.store.basic.MessageStore;
 import codeu.model.store.basic.UserStore;
+import codeu.utils.Email;
+import codeu.utils.ImageStorage;
 import codeu.utils.TextFormatter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.util.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document.OutputSettings;
 import org.jsoup.safety.Whitelist;
+
+@MultipartConfig(
+  maxFileSize = 10 * 1024 * 1024, // max size for uploaded files
+  maxRequestSize = 20 * 1024 * 1024, // max size for multipart/form-data
+  fileSizeThreshold = 5 * 1024 * 1024 // start writing to Cloud Storage after 5MB
+)
 
 /** Servlet class responsible for the chat page. */
 public class ChatServlet extends HttpServlet {
@@ -126,6 +123,7 @@ public class ChatServlet extends HttpServlet {
     UUID conversationId = conversation.getId();
 
     List<Message> messages = messageStore.getMessagesInConversation(conversationId);
+    messages = messageStore.sort(messages);
     List<UUID> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversation", conversation);
@@ -144,7 +142,9 @@ public class ChatServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
 
+    Part image = request.getPart("image");
     String button = request.getParameter("button");
+    String submitText = request.getParameter("submitText");
 
     String username = (String) request.getSession().getAttribute("user");
     if (username == null) {
@@ -171,44 +171,12 @@ public class ChatServlet extends HttpServlet {
     }
 
     if ("joinButton".equals(button)) {
-      addConversationFriends(user, conversation);
-      conversation.addUser(user.getId());
+      joinConversation(user, conversation);
 
-      String activityMessage =
-          " joined " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "leftConvo",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
-    }
+    } else if ("leaveButton".equals(button)) {
+      leaveConversation(user, conversation);
 
-    if ("leaveButton".equals(button)) {
-      removeConversationFriends(user, conversation);
-      conversation.removeUser(user.getId());
-
-      String activityMessage =
-          " left " + "<a href=\"/chat/" + conversationTitle + "\">" + conversationTitle + "</a>.";
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "leftConvo",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
-    }
-
-    if (button == null && conversation.getConversationUsers().contains(user.getId())) {
+    } else if (submitText != null && conversation.getConversationUsers().contains(user.getId())) {
       String messageContent = request.getParameter("message");
       if (messageContent.isEmpty()) {
         request.setAttribute("error", "Message body cannot be empty.");
@@ -219,104 +187,21 @@ public class ChatServlet extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/view/chat.jsp").forward(request, response);
         return;
       }
-
       // this removes any HTML from the message content
       String cleanedMessageContent =
           Jsoup.clean(
               messageContent, "", Whitelist.none(), new OutputSettings().prettyPrint(false));
       String finalMessageContent = TextFormatter.formatForDisplay(cleanedMessageContent);
+      createMessage(request, finalMessageContent, user, conversation, false);
 
-      Message message =
-          new codeu.model.data.Message(
-              UUID.randomUUID(),
-              conversation.getId(),
-              user.getId(),
-              finalMessageContent,
-              Instant.now());
-      messageStore.addMessage(message);
-
-      String activityMessage =
-          " sent a message in "
-              + "<a href=\"/chat/"
-              + conversationTitle
-              + "\">"
-              + conversationTitle
-              + "</a>"
-              + ": "
-              + finalMessageContent;
-      Activity activity =
-          new Activity(
-              UUID.randomUUID(),
-              user.getId(),
-              conversation.getId(),
-              Instant.now(),
-              "messageSent",
-              activityMessage,
-              conversation.getConversationUsers(),
-              conversation.getIsPublic());
-      activityStore.addActivity(activity);
-
-      sendEmailNotification(user, conversation);
+    } else if (image != null && conversation.getConversationUsers().contains(user.getId())) {
+      ImageStorage imageStorage = new ImageStorage();
+      String imageName = imageStorage.storeImage(image);
+      createMessage(request, imageName, user, conversation, true);
     }
+
     // redirect to a GET request
     response.sendRedirect("/chat/" + conversationTitle);
-  }
-
-  /**
-   * Method to send an email notification to all users in a conversation who are not logged on other
-   * than the message sender
-   */
-  public void sendEmailNotification(User user, Conversation conversation) {
-
-    Properties props = new Properties();
-    Session session = Session.getDefaultInstance(props, null);
-
-    List<UUID> conversationUsers = conversation.getConversationUsers();
-
-    String msgBody =
-        user.getName()
-            + " sent a message in "
-            + conversation.getTitle()
-            + " on "
-            + conversation.getCreationTime()
-            + " while you were away. \n \n ";
-
-    SessionListener currentSession = SessionListener.getInstance();
-
-    for (UUID conversationUserUUID : conversationUsers) {
-      User conversationUser = userStore.getUser(conversationUserUUID);
-      if (conversationUser != user
-          && conversationUser != null
-          && !currentSession.isLoggedIn(conversationUser.getName())
-          && conversationUser.getNotificationStatus()) {
-        if (user.getNotificationFrequency().equals("everyMessage")) {
-          try {
-            javax.mail.Message msg = new MimeMessage(session);
-            msg.setFrom(
-                new InternetAddress(
-                    "chatMessageAdmin@chatu-196017.appspotmail.com", "CodeU Team 12 Admin"));
-            msg.addRecipient(
-                javax.mail.Message.RecipientType.TO,
-                new InternetAddress(conversationUser.getEmail(), conversationUser.getName()));
-            msg.setSubject(user.getName() + " has sent you a message");
-            msgBody += " Please log in to view this message";
-            msg.setText(msgBody);
-            Transport.send(msg);
-          } catch (AddressException e) {
-            System.out.println("Invalid email address formatting. Email not sent.");
-            System.out.println("AddressException:" + e);
-          } catch (MessagingException e) {
-            System.out.println("An error has occurred with this message. Email not sent.");
-            System.out.println("MessagingException:" + e);
-          } catch (UnsupportedEncodingException e) {
-            System.out.println("This character encoding is not supported. Email not sent");
-            System.out.println("UnsupportedEncodingException:" + e);
-          }
-        }
-      } else {
-        user.addNotification(msgBody);
-      }
-    }
   }
 
   /**
@@ -387,5 +272,119 @@ public class ChatServlet extends HttpServlet {
         u1.addConversationFriend(currentUser);
       }
     }
+  }
+
+  /** Constructs a method object and adds it to messageStore */
+  private void createMessage(
+      HttpServletRequest request,
+      String messageContent,
+      User user,
+      Conversation conversation,
+      boolean containsImage) {
+
+    Message message =
+        new codeu.model.data.Message(
+            UUID.randomUUID(),
+            conversation.getId(),
+            user.getId(),
+            messageContent,
+            Instant.now(),
+            containsImage);
+    messageStore.addMessage(message);
+
+    createActivity(conversation, user, messageContent, containsImage);
+  }
+
+  /** Constructs an activity object and adds it to activityStore */
+  private void createActivity(
+      Conversation conversation, User user, String messageContent, boolean containsImage) {
+
+    String activityMessage;
+    if (containsImage) {
+      activityMessage =
+          " sent a picture in "
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>.";
+    } else {
+      activityMessage =
+          " sent a message in "
+              + "<a href=\"/chat/"
+              + conversation.getTitle()
+              + "\">"
+              + conversation.getTitle()
+              + "</a>"
+              + ": "
+              + messageContent;
+    }
+
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "messageSent",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
+    activityStore.addActivity(activity);
+
+    Email email = new Email();
+    email.sendEmailNotification(user, conversation);
+  }
+
+  /** Removes a user from a conversation */
+  private void leaveConversation(User user, Conversation conversation) {
+    removeConversationFriends(user, conversation);
+    conversation.removeUser(user.getId());
+
+    String activityMessage =
+        " left "
+            + "<a href=\"/chat/"
+            + conversation.getTitle()
+            + "\">"
+            + conversation.getTitle()
+            + "</a>.";
+
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "leftConvo",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
+    activityStore.addActivity(activity);
+  }
+
+  /** Adds a user to a conversation */
+  private void joinConversation(User user, Conversation conversation) {
+    addConversationFriends(user, conversation);
+    conversation.addUser(user.getId());
+
+    String activityMessage =
+        " joined "
+            + "<a href=\"/chat/"
+            + conversation.getTitle()
+            + "\">"
+            + conversation.getTitle()
+            + "</a>.";
+
+    Activity activity =
+        new Activity(
+            UUID.randomUUID(),
+            user.getId(),
+            conversation.getId(),
+            Instant.now(),
+            "leftConvo",
+            activityMessage,
+            conversation.getConversationUsers(),
+            conversation.getIsPublic());
+    activityStore.addActivity(activity);
   }
 }

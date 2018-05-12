@@ -16,18 +16,15 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
 
 <!DOCTYPE html>
 <html>
-<head>
+ <head>
   <title>Personalized Activities</title>
-  <link rel="stylesheet" href="/css/main.css">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+  id="bootstrap-css">
   <jsp:include page="./navbar.jsp" />
-  <style>
-    #activity {
-      background-color: white;
-      height: 500px;
-      overflow-y: scroll
-    }
-  </style>
-
+  <link rel="stylesheet" href="/css/main.css" type="text/css">
+  <link rel="stylesheet" href="/css/activityFeed.css" type="text/css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
   <script>
     function scrollBox() {
       var activityDiv = document.getElementById('activity');
@@ -38,11 +35,11 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
   <div id="container">
   	<h1 id="title">Personalized Activities</h1>
   	<p>Here&#39s everything that has happened that pertains to you!</p>
-    <div id="activity">
-      <ul>
-        <%
-        User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
-          for (Activity activity : activities) {
+  <div id="activity">
+  <ul>
+    <%
+      User user = (User) UserStore.getInstance().getUser((String) request.getSession().getAttribute("user"));
+        for (Activity activity : activities) {
             String type = activity.getActivityType();
             String message = activity.getActivityMessage();
             UUID userID = activity.getUserId();
@@ -57,9 +54,7 @@ List<Activity> activities = (List<Activity>) request.getAttribute("activities");
           <strong><%= time %>:</strong>
           <a href="/profile/<%= username %>"><%= username %></a> <%= message %>
         </li>
-         <%
-          }
-         %>
+         <% } %>
       </ul>
     </div>
   </div>

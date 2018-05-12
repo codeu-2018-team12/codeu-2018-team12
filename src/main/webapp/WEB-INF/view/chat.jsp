@@ -14,7 +14,10 @@
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.store.basic.ConversationStore" %>
 <%@ page import="codeu.model.data.User" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="java.time.*" %>
 <%@ page import="java.util.UUID" %>
 
 <%
@@ -26,97 +29,195 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title><%= conversation.getTitle() %></title>
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
-  <jsp:include page="./navbar.jsp" />
+  <head>
+    <title><%= conversation.getTitle() %></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <jsp:include page="./navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css?" type="text/css">
+    <link rel="stylesheet" href="/css/chat.css?" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      function scrollChat() {
+        var chatDiv = document.getElementById('chat');
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      }
 
-  <style>
-    #chat {
-      background-color: white;
-      height: 500px;
-      overflow-y: scroll;
-      word-break: break-all;
-      word-wrap: break-word;
-    }
-  </style>
+      function openNav() {
+         document.getElementById("mySidenav").style.width = "250px";
+         document.getElementById("main").style.marginLeft = "250px";
+      }
 
-  <script>
-    // scroll the chat div to the bottom
-    function scrollChat() {
-      var chatDiv = document.getElementById('chat');
-      chatDiv.scrollTop = chatDiv.scrollHeight;
-    };
-  </script>
-</head>
-<body onload="scrollChat()">
-
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+      }
+    </script>
+ </head>
+ <body onload="scrollChat()">
+ <div id="mySidenav" class="sidenav">
+ <%List<Conversation> chatConversations = ConversationStore.getInstance().getAllConversations();%>
+   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+   <div id="conversations">
+      <a class="section-title" href="../conversations#group-message">Conversations</a>
+      <%
+        int count1 = 0;
+        for (int i = 0 ; i < chatConversations.size(); i++) {
+          if (count1 == 8) {
+            break;
+          }
+          if(!chatConversations.get(i).getTitle().startsWith("direct:")) {
+       %>
+          <div class="conversation-entry">
+            <p>
+              <% String title = chatConversations.get(i).getTitle(); %>
+              <a class="convo-title" href="/chat/<%=title%>" ><%=title%></a>
+           </p>
+         </div>
+       <% count1++;
+         }
+       }%>
+   </div>
+   <div id="Direct Messages">
+   <a class="section-title" href="../conversations#direct-message">Direct Messages</a>
+     <%
+        int count2 = 0;
+         for (int i = 0 ; i < chatConversations.size(); i++) {
+           if (count2 == 5) {
+             break;
+           }
+           if (chatConversations.get(i).getTitle().startsWith("direct:")) {
+             String recipient = null;
+             List<UUID> convoUsers = chatConversations.get(i).getConversationUsers();
+           if(convoUsers.get(0) == user.getId()){
+              recipient = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
+           } else {
+              recipient = UserStore.getInstance().getUser(convoUsers.get(1)).getName();
+           }
+          %>
+           <div class="message-entry">
+             <p>
+               <a class="convo-title" href="/direct/<%=recipient%>"><%=recipient%></a>
+            </p>
+          </div>
+          <% count2++;
+            }
+          }%>
+     </div>
+   </div>
+ <label onclick="openNav()" class="btn btn-primary">Chat With Other Users
+ <span id="glyph" class="glyphicon glyphicon-align-justify"></span></button>
+ </label>
+ <div id="main">
   <div id="container">
     <% if (request.getAttribute("error") != null) { %>
       <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
-    <h1><%= conversation.getTitle() %>
-      <a href="" style="float: right">&#8635;</a>
-      <%
+     <h1><%= conversation.getTitle() %>
+     <a href="" style="float: right">&#8635;</a></h1>
+     <div id="chat" class="col-md-8">
+        <ul class="chat">
+       <%
         if (user != null && conversationUsers.contains(user.getId())) {
+          for (Message message : messages) {
+            String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
+            String username = user.getName();
+            if (!author.equals(username)) {
+            %>
+            <li class="left clearfix">
+            <span class="chat-img pull-left">
+           <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+              <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
+               Avatar"></a>
+           <% } else { %>
+              <a href="/profile/<%= author %>">
+              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+              .getProfilePicture() %>" alt="User Avatar"></a>
+          <% } %>
+         </span>
+         <div class="chat-body clearfix">
+           <div class="header">
+             <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+             <% String time = message.getCreationTimeFormatted();%>
+             <%= time %></small>
+         </div>
+         <% if (!message.containsImage()){%>
+            <p><%= message.getContent()%></p>
+         <% } else { %>
+            <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+          <% } %>
+       </div>
+      </li>
+      <%
+        } else {
       %>
-      <div>
-        <form action="/search" method="GET">
-          <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
-          <button type="submit" name="searchbutton" value="<%= conversation.getTitle() %>">Search</button>
-        </form>
-      </div>
+      <li class="right clearfix">
+        <span class="chat-img pull-right">
+          <% if (UserStore.getInstance().getUser(message.getAuthorId()).getProfilePicture() == null) { %>
+             <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User
+              Avatar"></a>
+          <% } else { %>
+          <a href="/profile/<%= author %>">
+          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+          .getProfilePicture
+          ()%>"
+          alt="User Avatar"></a>
+         <% } %>
+       </span>
+       <div class="chat-body clearfix">
+         <div class="header">
+            <strong class="primary-font"><a href="/profile/<%= author %>"><%= author %></a></strong>
+             <small class="pull-right text-muted"><i class="fa fa-clock-o"></i>
+             <% String time = message.getCreationTimeFormatted();%>
+              <%= time %></small>
+           </div>
+          <% if (!message.containsImage()){%>
+             <p> <%= message.getContent()%> </p>
+          <% } else { %>
+            <img class="chat-image" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%=message.getContent()%>"
+          <% } %>
+         </div>
+       </li>
       <%
         }
-      %>
-    </h1>
-
-    <hr/>
-
-    <div id="chat">
-      <ul>
-    <%
-      if (user != null && conversationUsers.contains(user.getId())) {
-        for (Message message : messages) {
-          String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
-    %>
-      <li><strong><a href="/profile/<%= author %>"><%= author %></a>:</strong> <%= message.getContent() %></li>
-    <%
-        }
+       }
       }
-    %>
-    <%
-      if (user != null && !conversationUsers.contains(user.getId())) {
-    %>
-      <h2> Messages from this conversation will appear here! </h2>
-      <p> To see these messages, you must first join the conversation. </p>
-    <%
-      }
-    %>
-      </ul>
-    </div>
-
-    <hr/>
-
+     %>
+     <% if (user != null && !conversationUsers.contains(user.getId())) { %>
+       <h2 id="join-conversation"> Messages from this conversation will appear here! </h2>
+       <p> To see these messages, you must first join the conversation. </p>
+     <% } %>
+   </div>
     <% if (user != null && conversationUsers.contains(user.getId())) { %>
-    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <textarea name="message"></textarea>
-        </br>
-        <button type="submit">Send</button>
-        </br>
-        <button type="submit" name="button" value="leaveButton">Leave Conversation</button>
+    <form id="chatForm" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype="multipart/form-data">
+        <textarea placeholder="Enter your message here" data-gramm_editor="false" name="message"></textarea></br>
+        <label class="btn btn-info image">
+           <span class="glyphicon glyphicon-camera"></span>  Upload Photo
+           <input type="file" id="image" onchange="chatForm.submit()"  name="image" accept="image/*" hidden>
+        </label>
+        <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
+        <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation</button>
     </form>
+    <br>
+          <div id="search-container">
+             <form action="/search" id="search" class="form-inline" method="GET">
+                <input type="search" class="form-control mr-sm-2" placeholder="Find a message" name="searchmessage"
+                 id="searchmessage">
+                  <button type="submit" class="btn btn-info" name="searchbutton" value="<%= conversation.getTitle()
+                  %>">Search</button>
+              </form>
+           </div>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
-    <p> Join the conversation to send a message! </p>
-    <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST">
-        <button type="submit" name="button" value="joinButton">Join Conversation</button>
-    </form>
+         <p> Join the conversation to send a message! </p>
+         <form id="chatform" style="margin-left: 0px;" action="/chat/<%= conversation.getTitle() %>" method="POST"
+         enctype='multipart/form-data'>
+            <button type="submit" name="button" class="btn btn-info" value="joinButton">Join Conversation</button>
+         </form>
     <% } else { %>
-      <p><a href="/login">Login</a> to send a message.</p>
+       <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
-
-    <hr/>
-    <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
   </div>
 </body>
 </html>
+

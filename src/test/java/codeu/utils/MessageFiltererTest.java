@@ -38,7 +38,8 @@ public class MessageFiltererTest {
           UUID.randomUUID(),
           USER_ONE.getId(),
           "message one",
-          ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant());
+          ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant(),
+          false);
 
   private final Message MESSAGE_TWO =
       new Message(
@@ -46,7 +47,8 @@ public class MessageFiltererTest {
           UUID.randomUUID(),
           USER_TWO.getId(),
           "message two",
-          ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant());
+          ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant(),
+          false);
 
   private final Message MESSAGE_THREE =
       new Message(
@@ -54,7 +56,8 @@ public class MessageFiltererTest {
           UUID.randomUUID(),
           USER_ONE.getId(),
           "message three",
-          ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant());
+          ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant(),
+          false);
 
   @Before
   public void setup() {

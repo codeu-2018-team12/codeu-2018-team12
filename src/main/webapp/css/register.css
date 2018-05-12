@@ -1,0 +1,114 @@
+ .alert .alert-warning{
+   width:300px;
+ }
+
+ body, html {
+   width: 100%;
+   background-repeat: no-repeat;
+   background-image: linear-gradient(to right top, #55a8a1, #3d888e, #2d6a76, #224c5c, #193140);
+ }
+
+ .btn {
+   font-weight: 700;
+   height: 36px;
+   -moz-user-select: none;
+   -webkit-user-select: none;
+   user-select: none;
+   cursor: default;
+ }
+
+ .card-container.card {
+   max-width: 500px;
+   max-height: 600px;
+   padding: 40px 40px;
+ }
+
+ .card {
+   background-color: #F7F7F7;
+   padding: 20px 25px 30px;
+   margin: 0 auto 100px;
+   margin-top: 80px;
+   -moz-border-radius: 2px;
+   -webkit-border-radius: 2px;
+   border-radius: 2px;
+   -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+   -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+ }
+
+ .form-register #inputUsername,
+ .form-register #inputEmail,
+ .form-register #inputPassword {
+   direction: ltr;
+   height: 34px;
+   font-size: 16px;
+ }
+
+ .form-register input[type=text],
+ .form-register input[type=password],
+ .form-register button {
+   width: 100%;
+   display: block;
+   margin-bottom: 10px;
+   z-index: 1;
+   position: relative;
+   -moz-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   box-sizing: border-box;
+ }
+
+ .btn.btn-register {
+   background-color: rgb(104, 145, 162);
+   padding: 0px;
+   font-weight: 700;
+   font-size: 14px;
+   height: 34px;
+   -moz-border-radius: 3px;
+   -webkit-border-radius: 3px;
+   border-radius: 3px;
+   border: none;
+   -o-transition: all 0.218s;
+   -moz-transition: all 0.218s;
+   -webkit-transition: all 0.218s;
+   transition: all 0.218s;
+ }
+
+ .btn.btn-register:hover,
+ .btn.btn-register:active,
+ .btn.btn-register:focus {
+   background-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
+ }
+
+ .form-register .form-control:focus {
+   border-color: rgb(104, 145, 162);
+   outline: 0;
+   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+   box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+ }
+
+ label {
+   display: inline-block;
+   width: 100px;
+ }
+
+ .profile-img-card {
+   width: 76px;
+   height: 76px;
+   margin: 0 auto 10px;
+   display: block;
+   -moz-border-radius: 50%;
+   -webkit-border-radius: 50%;
+   border-radius: 50%;
+ }
+
+ .profile-name-card {
+   font-size: 16px;
+   font-weight: bold;
+   text-align: center;
+   margin: 10px 0 0;
+   min-height: 1em;
+ }
+
+

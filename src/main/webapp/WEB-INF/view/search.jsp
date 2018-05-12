@@ -14,26 +14,29 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
 
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Search Results</title>
-  <link rel="stylesheet" href="/css/main.css" type="text/css">
-   <jsp:include page="./navbar.jsp" />
-   <style>
+  <head>
+    <title>Search Results</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet"
+     id="bootstrap-css">
+    <jsp:include page="./navbar.jsp" />
+    <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
      #results {
        background-color: white;
        height: 500px;
        overflow-y: scroll
      }
-   </style>
-
-   <script>
+    </style>
+    <script>
      // scroll the chat div to the bottom
      function scrollChat() {
        var resultsDiv = document.getElementById('results');
        resultsDiv.scrollTop = 0;
      };
    </script>
-  </head>
+ </head>
   <body onload="scrollChat()">
   <h1 id="title">Search Results</h1>
   <div id="container">
@@ -59,7 +62,7 @@ List<Message> messages = (List<Message>) request.getAttribute("messages");
       %>
           <li><a href="/chat/<%= convo.getTitle() %>">
           <%= convo.getTitle() %></a></li>
-   <%
+     <%
         }
     } else if (messages != null) { %>
       <h2>Messages</h2>
