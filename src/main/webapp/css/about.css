@@ -27,6 +27,16 @@
    color: #375F6F;
  }
 
+ h2 {
+  font-size: 25px;
+  color: #375F6F;
+ }
+
+ h3 {
+  font-size: 18px;
+  color: #375F6F;
+ }
+
  img {
    width: 80px;
    padding-bottom: 20px;
@@ -53,6 +63,11 @@
  }
  .page-header {
    border-bottom: none;
+ }
+
+ p {
+  font-family: sans-serif;
+  font-size: 15px;
  }
 
  .timeline {

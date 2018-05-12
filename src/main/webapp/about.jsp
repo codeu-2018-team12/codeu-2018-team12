@@ -222,5 +222,50 @@
           </li>
        </ul>
    </div>
+   <div class="container">
+   <div id="about">
+     <div class="page-header">
+       <h1 id="timeline">Additional Information On Features</h1>
+     </div>
+     <h2>Search</h2>
+           <p>
+             You can search for conversations and messages using a variety of filters (listed below).
+             You can even combine these filters using AND, OR, and parentheses for priority! For example,
+             if you wanted to search for all messages before 5-11-2018 by user_one or user_two, you could enter
+             "before:5-11-2018 AND (by:user_one OR by:user_two)". Or, if you wanted to search for all conversations
+             that user_one is a member of that also have "convo" in their name, you could enter "with:user_one AND convo".
+           </p>
+
+           <h3>Conversation Filters</h3>
+           <ul>
+             <li><strong>before:</strong>MM-dd-YYYY - finds all conversations created before the given day</li>
+             <li><strong>on:</strong>MM-dd-YYYY - finds all conversations created on the given day</li>
+             <li><strong>after:</strong>MM-dd-YYYY - finds all conversations created after the given day</li>
+             <li><strong>with:</strong>username - finds all conversations the given user has joined</li>
+             <li>If none of these filters are given, the app will find any conversations whose title contains the given string</li>
+           </ul>
+
+           <h3>Message Filters</h3>
+           <ul>
+             <li><strong>before:</strong>MM-dd-YYYY - finds all messages in the current conversation posted before the given day</li>
+             <li><strong>on:</strong>MM-dd-YYYY - finds all messages in the current conversation posted on the given day</li>
+             <li><strong>after:</strong>MM-dd-YYYY - finds all messages in the current conversation posted after the given day</li>
+             <li><strong>with:</strong>username - finds all messages in the current conversation posted by the given user</li>
+             <li>If none of these filters are given, the app will find any messages whose content contains the given string</li>
+           </ul>
+
+           <h2>Markdown</h2>
+           <p>
+             Messages posted to both the chat and direct message pages support formatting using Markdown. For more information on the
+             options supported by Markdown, visit <a href="http://commonmark.org/help/">http://commonmark.org/help/</a>
+           </p>
+
+           <h2>Emojis</h2>
+           <p>
+             Messages posted to both the chat and direct messages pages support the use of Emojis. For more information on the
+             supported emojis, visit <a href="https://github.com/vdurmont/emoji-java">https://github.com/vdurmont/emoji-java</a>
+         </div>
+     </div>
+     </div>
   </body>
 </html>
