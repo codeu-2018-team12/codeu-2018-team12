@@ -31,7 +31,7 @@
     <div class="container">
       <% if(request.getAttribute("error") != null){ %>
       <div class="alert alert-warning">
-        <strong>Error: Invalid username or password</strong>
+        <strong><%= request.getAttribute("error") %></strong>
       </div>
      <% } %>
      <div class="card card-container">
