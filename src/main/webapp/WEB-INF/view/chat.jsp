@@ -199,24 +199,26 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
         <button type="submit" class="btn btn-info" name="submitText" value="submitText"> Submit</button>
         <button type="submit" class="btn btn-info" name="button" value="leaveButton"> Leave Conversation</button>
     </form>
+    <br>
+          <div id="search-container">
+             <form action="/search" id="search" class="form-inline" method="GET">
+                <input type="search" class="form-control mr-sm-2" placeholder="Find a message" name="searchmessage"
+                 id="searchmessage">
+                  <button type="submit" class="btn btn-info" name="searchbutton" value="<%= conversation.getTitle()
+                  %>">Search</button>
+              </form>
+           </div>
+       <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy.
+       <br> You can even combine these filters with AND and OR!</font>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
          <p> Join the conversation to send a message! </p>
-         <form id="chatform" action="/chat/<%= conversation.getTitle() %>" method="POST" enctype='multipart/form-data'>
+         <form id="chatform" style="margin-left: 0px;" action="/chat/<%= conversation.getTitle() %>" method="POST"
+         enctype='multipart/form-data'>
             <button type="submit" name="button" class="btn btn-info" value="joinButton">Join Conversation</button>
          </form>
     <% } else { %>
        <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
-    <br>
-    <br>
-      <div>
-         <form action="/search" method="GET">
-            <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
-              <button type="submit" name="searchbutton" value="<%= conversation.getTitle() %>">Search</button>
-          </form>
-       </div>
-    <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy.
-     You can even combine these filters with AND and OR!</font>
   </div>
 </body>
 </html>

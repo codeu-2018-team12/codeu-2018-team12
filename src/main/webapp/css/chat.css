@@ -229,6 +229,7 @@
    .sidenav {padding-top: 15px;}
    .sidenav a {font-size: 18px;}
  }
+
  #main {
    transition: margin-left .5s;
    padding: 16px;
@@ -244,6 +245,10 @@
    border:3px solid #c4c8ce;
    -moz-border-radius: 65em;
    -webkit-border-radius: 65em;
+ }
+
+ p {
+  font-family: sans-serif;
  }
 
  .sidenav {
@@ -281,6 +286,11 @@
    padding-left: 40px;
    display: block;
    transition: 0.3s;
+ }
+
+ #search-container {
+  padding-left: 0px;
+  padding-bottom: 10px;
  }
 
  textarea{

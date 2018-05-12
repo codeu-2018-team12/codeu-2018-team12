@@ -26,7 +26,7 @@
     <% } %>
     <div id="search-container">
       <form action="/search" id="search" class="form-inline" method="GET">
-        <input type="search" class="form-control mr-sm-2" list="autocomplete" placeholder="Search for a user..."
+        <input type="search" class="form-control mr-sm-2" list="autocomplete" placeholder="Enter a user..."
         name="searchuser" id="searchuser" aria-label="Search">
         <datalist id="autocomplete">
         <% for (User user : UserStore.getInstance().getUsers()) { %>

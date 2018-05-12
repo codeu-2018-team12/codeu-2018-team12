@@ -95,18 +95,16 @@
    <form action="/conversations" method="POST">
      <div class="form-group">
         <label class="form-control-label">New Conversation:</label>
-        <input type="text" name="conversationTitle">
+        <input type="text" name="conversationTitle" placeholder="Conversation Name">
         <button class="btn btn-info" type="submit">Create</button>
      </div>
    </form>
-   <br>
-   <br>
+    <p><font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>
+     on:</b>MM-dd-yyyy.<br> You can even combine these filters with AND and OR!</font><p>
        <div>
-       <font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>
-       on:</b>MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
-         <form action="/search" method="GET">
-           <input type="text" placeholder="Search for a conversation..." name="searchconvo" id="searchconvo">
-           <button type="submit">Search</button>
+         <form action="/search" id="search" class="form-inline" method="GET">
+           <input type="search" class="form-control mr-sm-2" placeholder="Find a conversation..." name="searchconvo" id="searchconvo">
+           <button type="submit" class="btn btn-info">Search</button>
          </form>
        </div>
  <% } %>
