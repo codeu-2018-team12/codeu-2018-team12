@@ -129,8 +129,10 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
            <p><b>Edit your bio:<b></p>
            <form action="/profile/<%= user.getName() %>" method="POST" enctype="multipart/form-data">
              <input type="text" name="newBio" id="newBio">
+             <div>
              <button type="submit" class="btn btn-info" name="submitBiography" value="submitBiography">
              Submit</button>
+             </div>
           </form>
        <% } %>
      <% } %>

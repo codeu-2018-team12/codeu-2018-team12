@@ -60,9 +60,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
    <div id="conversations">
       <a class="section-title" href="../conversations#group-message">Conversations</a>
       <%
-        int count1 = 0;
+        int counterOne = 0;
         for (int i = 0 ; i < chatConversations.size(); i++) {
-          if (count1 == 8) {
+          if (counterOne == 8) {
             break;
           }
           if(!chatConversations.get(i).getTitle().startsWith("direct:")) {
@@ -73,7 +73,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
               <a class="convo-title" href="/chat/<%=title%>" ><%=title%></a>
            </p>
          </div>
-       <% count1++;
+       <% counterOne++;
          }
        }%>
    </div>
@@ -81,9 +81,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
    <a class="section-title" href="../conversations#direct-message">Direct Messages</a>
      <% List<Conversation> permittedConversations = ConversationStore.getInstance().getAllPermittedConversations
      (user.getId());
-        int count2 = 0;
+        int counterTwo = 0;
          for (int i = 0 ; i < permittedConversations.size(); i++) {
-           if (count2 == 5) {
+           if (counterTwo == 5) {
              break;
            }
            if (permittedConversations.get(i).getTitle().startsWith("direct:")) {
@@ -102,7 +102,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                <a class="convo-title" href="/direct/<%=recipient%>"><%=recipient%></a>
             </p>
           </div>
-          <% count2++;
+          <% counterTwo++;
             }
           }%>
      </div>
