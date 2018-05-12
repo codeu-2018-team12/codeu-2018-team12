@@ -60,6 +60,11 @@
    height: 32px;
  }
 
+ #new-message {
+   width: 150px;
+   height: 30px;
+ }
+
  #section-title {
     margin-left: 320px;
  }

@@ -208,8 +208,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                   %>">Search</button>
               </form>
            </div>
-       <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy.
-       <br> You can even combine these filters with AND and OR!</font>
     <% } else if (user != null && !(conversationUsers.contains(user.getId()))) { %>
          <p> Join the conversation to send a message! </p>
          <form id="chatform" style="margin-left: 0px;" action="/chat/<%= conversation.getTitle() %>" method="POST"

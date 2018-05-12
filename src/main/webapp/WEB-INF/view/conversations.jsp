@@ -32,6 +32,7 @@
      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
      <jsp:include page="./navbar.jsp" />
     <link rel="stylesheet" href="/css/main.css" type="text/css">
+    <link rel="stylesheet" href="/css/navbar.css" type="text/css">
     <link rel="stylesheet" href="/css/conversations.css" type="text/css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -92,17 +93,18 @@
   <% } %>
   </div>
   <% if(request.getSession().getAttribute("user") != null){ %>
-   <form action="/conversations" method="POST">
+   <form action="/conversations" class="form-inline" method="POST">
      <div class="form-group">
-        <label class="form-control-label">New Conversation:</label>
-        <input type="text" name="conversationTitle" placeholder="Conversation Name">
+        <label class="form-control-label" >New Conversation:</label>
+        <input type="text" class="form-control mr-sm-2" name="conversationTitle"
+        placeholder="Conversation Name">
         <button class="btn btn-info" type="submit">Create</button>
      </div>
    </form>
-    <p><font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>
-     on:</b>MM-dd-yyyy.<br> You can even combine these filters with AND and OR!</font><p>
+   <br>
        <div>
          <form action="/search" id="search" class="form-inline" method="GET">
+         <label class="form-control-label" >Search:</label>
            <input type="search" class="form-control mr-sm-2" placeholder="Find a conversation..." name="searchconvo" id="searchconvo">
            <button type="submit" class="btn btn-info">Search</button>
          </form>
