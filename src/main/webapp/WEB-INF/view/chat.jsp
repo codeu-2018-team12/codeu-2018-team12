@@ -105,7 +105,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
           }%>
      </div>
    </div>
-
  <label onclick="openNav()" class="btn btn-primary">Chat With Other Users
  <span id="glyph" class="glyphicon glyphicon-align-justify"></span></button>
  </label>
@@ -208,7 +207,17 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
     <% } else { %>
        <p><a href="/login">Login</a> to send a message.</p>
     <% } %>
+    <br>
+    <br>
+      <div>
+         <form action="/search" method="GET">
+            <input type="text" placeholder="Search for a message..." name="searchmessage" id="searchmessage">
+              <button type="submit" name="searchbutton" value="<%= conversation.getTitle() %>">Search</button>
+          </form>
+       </div>
+    <font size="2">Tip: you can search for messages using filters like <b>by:</b>username and <b>before</b>:MM-dd-yyyy.
+     You can even combine these filters with AND and OR!</font>
   </div>
-  </div>
- </body>
+</body>
 </html>
+

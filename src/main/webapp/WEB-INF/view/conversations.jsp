@@ -99,6 +99,16 @@
         <button class="btn btn-info" type="submit">Create</button>
      </div>
    </form>
+   <br>
+   <br>
+       <div>
+       <font size="2">Tip: you can search for conversations using filters like <b>with:</b>username and <b>
+       on:</b>MM-dd-yyyy. You can even combine these filters with AND and OR!</font>
+         <form action="/search" method="GET">
+           <input type="text" placeholder="Search for a conversation..." name="searchconvo" id="searchconvo">
+           <button type="submit">Search</button>
+         </form>
+       </div>
  <% } %>
   <hr/>
   <% if(directMessages != null && !directMessages.isEmpty()){ %>
