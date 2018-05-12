@@ -21,46 +21,46 @@ import org.junit.Test;
 public class ConversationFiltererTest {
 
   private final LocalServiceTestHelper helper =
-          new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   private ConversationFilterer filterer;
 
   private final DateTimeFormatter FORMATTER =
-          new DateTimeFormatterBuilder()
-                  .appendPattern("MM-dd-yyyy")
-                  .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
-                  .toFormatter()
-                  .withZone(ZoneId.systemDefault());
+      new DateTimeFormatterBuilder()
+          .appendPattern("MM-dd-yyyy")
+          .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
+          .toFormatter()
+          .withZone(ZoneId.systemDefault());
 
   private final Conversation CONVERSATION_ONE =
-          new Conversation(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  "conversation_one",
-                  ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant(),
-                  true);
+      new Conversation(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          "conversation_one",
+          ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant(),
+          true);
 
   private final Conversation CONVERSATION_TWO =
-          new Conversation(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  "conversation_two",
-                  ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant(),
-                  true);
+      new Conversation(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          "conversation_two",
+          ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant(),
+          true);
 
   private final Conversation CONVERSATION_THREE =
-          new Conversation(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  "conversation_three",
-                  ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant(),
-                  true);
+      new Conversation(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          "conversation_three",
+          ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant(),
+          true);
 
   private final User USER_ONE =
-          new User(UUID.randomUUID(), "one", null, null, Instant.ofEpochMilli(1000), null);
+      new User(UUID.randomUUID(), "one", null, null, Instant.ofEpochMilli(1000), null);
 
   private final User USER_TWO =
-          new User(UUID.randomUUID(), "two", null, null, Instant.ofEpochMilli(1000), null);
+      new User(UUID.randomUUID(), "two", null, null, Instant.ofEpochMilli(1000), null);
 
   @Before
   public void setup() {
@@ -172,13 +172,13 @@ public class ConversationFiltererTest {
   @Test
   public void testFilterConvosChain() {
     List<Conversation> res1 =
-            filterer.filterConversations("(with:one OR with:two) AND before:04-26-2018");
+        filterer.filterConversations("(with:one OR with:two) AND before:04-26-2018");
     Assert.assertEquals(2, res1.size());
     assertEquals(CONVERSATION_THREE, res1.get(0));
     assertEquals(CONVERSATION_ONE, res1.get(1));
 
     List<Conversation> res2 =
-            filterer.filterConversations("(conversation AND with:one) OR before:04-27-2018");
+        filterer.filterConversations("(conversation AND with:one) OR before:04-27-2018");
     Assert.assertEquals(3, res2.size());
     assertEquals(CONVERSATION_TWO, res2.get(0));
     assertEquals(CONVERSATION_THREE, res2.get(1));
@@ -190,6 +190,6 @@ public class ConversationFiltererTest {
     Assert.assertEquals(expectedConversation.getOwnerId(), actualConversation.getOwnerId());
     Assert.assertEquals(expectedConversation.getTitle(), actualConversation.getTitle());
     Assert.assertEquals(
-            expectedConversation.getCreationTime(), actualConversation.getCreationTime());
+        expectedConversation.getCreationTime(), actualConversation.getCreationTime());
   }
 }

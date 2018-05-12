@@ -20,44 +20,44 @@ public class MessageFiltererTest {
   private MessageFilterer filterer;
 
   private final DateTimeFormatter FORMATTER =
-          new DateTimeFormatterBuilder()
-                  .appendPattern("MM-dd-yyyy")
-                  .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
-                  .toFormatter()
-                  .withZone(ZoneId.systemDefault());
+      new DateTimeFormatterBuilder()
+          .appendPattern("MM-dd-yyyy")
+          .parseDefaulting(ChronoField.NANO_OF_DAY, 0)
+          .toFormatter()
+          .withZone(ZoneId.systemDefault());
 
   private final User USER_ONE =
-          new User(UUID.randomUUID(), "one", null, null, Instant.ofEpochMilli(1000), null);
+      new User(UUID.randomUUID(), "one", null, null, Instant.ofEpochMilli(1000), null);
 
   private final User USER_TWO =
-          new User(UUID.randomUUID(), "two", null, null, Instant.ofEpochMilli(1000), null);
+      new User(UUID.randomUUID(), "two", null, null, Instant.ofEpochMilli(1000), null);
 
   private final Message MESSAGE_ONE =
-          new Message(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  USER_ONE.getId(),
-                  "message one",
-                  ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant(),
-                  false);
+      new Message(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          USER_ONE.getId(),
+          "message one",
+          ZonedDateTime.parse("04-24-2018", FORMATTER).toInstant(),
+          false);
 
   private final Message MESSAGE_TWO =
-          new Message(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  USER_TWO.getId(),
-                  "message two",
-                  ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant(),
-                  false);
+      new Message(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          USER_TWO.getId(),
+          "message two",
+          ZonedDateTime.parse("04-26-2018", FORMATTER).toInstant(),
+          false);
 
   private final Message MESSAGE_THREE =
-          new Message(
-                  UUID.randomUUID(),
-                  UUID.randomUUID(),
-                  USER_ONE.getId(),
-                  "message three",
-                  ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant(),
-                  false);
+      new Message(
+          UUID.randomUUID(),
+          UUID.randomUUID(),
+          USER_ONE.getId(),
+          "message three",
+          ZonedDateTime.parse("04-25-2018", FORMATTER).toInstant(),
+          false);
 
   @Before
   public void setup() {
@@ -177,7 +177,7 @@ public class MessageFiltererTest {
     assertEquals(res3.get(1), MESSAGE_ONE);
 
     List<Message> res4 =
-            filterer.filterMessages("(after:04-25-2018 OR on:04-25-2018) AND before:04-25-2018");
+        filterer.filterMessages("(after:04-25-2018 OR on:04-25-2018) AND before:04-25-2018");
     Assert.assertEquals(0, res4.size());
   }
 

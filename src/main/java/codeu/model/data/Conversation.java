@@ -150,5 +150,4 @@ public class Conversation {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
     return ldt.format(formatter);
   }
-
 }

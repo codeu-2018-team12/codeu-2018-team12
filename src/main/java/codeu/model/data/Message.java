@@ -14,10 +14,8 @@
 
 package codeu.model.data;
 
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.time.*;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /** Class representing a message. Messages are sent by a User in a Conversation. */
