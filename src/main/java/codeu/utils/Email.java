@@ -43,7 +43,8 @@ public class Email {
       if (conversationUser != user
           && conversationUser != null
           && !currentSession.isLoggedIn(conversationUser.getName())
-          && conversationUser.getNotificationStatus()) {
+          && conversationUser.getNotificationStatus()
+              && !conversationUser.getEmail().equals("codeUChatTest@gmail.com")) {
         if (user.getNotificationFrequency().equals("everyMessage")) {
           try {
             javax.mail.Message msg = new MimeMessage(session);
