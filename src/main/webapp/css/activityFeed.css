@@ -18,11 +18,13 @@
    color: #fff;
    background-color: #03585D;
    border-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
  }
 
  h1 {
   font-size: 28px;
-  color: #3C609E;
+  color: #375F6F;
  }
 
  li {

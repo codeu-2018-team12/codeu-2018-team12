@@ -145,11 +145,10 @@ public class Conversation {
     return conversationUsers.contains(user);
   }
 
-  public String getCreationTimeFormatted(){
+  public String getCreationTimeFormatted() {
     LocalDateTime ldt = LocalDateTime.ofInstant(creation, ZoneId.systemDefault());
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy h:mm:ss a");
     return ldt.format(formatter);
   }
 
-  public String getLast
 }

@@ -37,16 +37,15 @@ User otherUser = (User) request.getAttribute("otherUser");
   <div id="container">
     <% String loggedInName = loggedInUser.getName();
        String otherName = otherUser.getName();%>
-    <h1> <%= loggedInName + " and " + otherName %>
+    <h1 style="margin-top:60px;"> <%= loggedInName + " and " + otherName %>
     <a href="" style="float: right">&#8635;</a></h1>
     <div id="chat" class="col-md-8">
       <ul class="chat">
        <%
-         int boxNum = 1;
          for (Message message : messages) {
             String author = UserStore.getInstance()
             .getUser(message.getAuthorId()).getName();
-            if (boxNum % 2 == 0) {
+            if (!author.equals(loggedInName)) {
           %>
            <li class="left clearfix">
             <span class="chat-img pull-left">
@@ -112,7 +111,6 @@ User otherUser = (User) request.getAttribute("otherUser");
              </li>
             <%
               }
-              boxNum++;
              }
            %>
        </ul>

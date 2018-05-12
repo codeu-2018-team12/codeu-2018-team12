@@ -34,6 +34,8 @@
    color: #fff;
    background-color: #03585D;
    border-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
  }
 
  .btn-sm {
@@ -52,7 +54,7 @@
 
  h1 {
    font-size: 26px;
-   color: #3C609E;
+   color: #375F6F;
  }
 
  h2{
@@ -106,6 +108,10 @@
    height: 100vh;
  }
 
+ #title {
+  color: #375F6F;
+ }
+
  .user-name {
    margin-top: 10%;
    color: white;
@@ -113,3 +119,4 @@
    font-size: 18px;
    font-family: sans-serif;
  }
+

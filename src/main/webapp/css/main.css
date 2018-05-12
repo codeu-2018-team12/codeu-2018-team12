@@ -37,6 +37,9 @@
    color: #fff;
    background-color: #03585D;
    border-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
+
  }
 
  #container {
@@ -46,14 +49,12 @@
  }
 
  h1 {
-  color: #3C609E;
+  color: #375F6F;
  }
-
 
  h4, .h4 {
   font-size: 15px;
  }
-
 
  img {
    margin: 0 auto;
@@ -92,7 +93,7 @@
    text-align: center;
    margin-top: 40px;
    margin-bottom: 40px;
-   color: #3C609E;
+   color: #375F6F;
  }
 
  textarea {

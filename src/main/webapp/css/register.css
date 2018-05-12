@@ -77,6 +77,8 @@
  .btn.btn-register:active,
  .btn.btn-register:focus {
    background-color: #03585D;
+   outline: none !important;
+   box-shadow: none !important;
  }
 
  .form-register .form-control:focus {
