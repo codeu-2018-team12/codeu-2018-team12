@@ -163,9 +163,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
           <% } else { %>
           <a href="/profile/<%= author %>">
           <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= authorOfMessage
-          .getProfilePicture
-          ()%>"
-          alt="User Avatar"></a>
+          .getProfilePicture()%>" alt="User Avatar"></a>
          <% } %>
        </span>
        <div class="chat-body clearfix">

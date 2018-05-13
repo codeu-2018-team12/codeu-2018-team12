@@ -115,9 +115,6 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
          </div>
       </div>
      <% } else { %>
-       <title>Profile Not Found</title>
-       <link rel="stylesheet" href="/css/main.css" type="text/css">
-       <jsp:include page="./navbar.jsp" />
        <h1 id="title">Profile Not Found</h1>
     <% }%>
  </div>
@@ -128,7 +125,7 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
            <p><b>Edit your profile picture:</b> Click on your profile picture to upload a new image </p> <br>
            <p><b>Edit your bio:<b></p>
            <form action="/profile/<%= user.getName() %>" method="POST" enctype="multipart/form-data">
-             <input type="text" name="newBio" id="newBio">
+             <textarea placeholder="Enter your bio here" type="text" name="newBio" id="newBio"></textarea>
              <div>
              <button type="submit" class="btn btn-info" name="submitBiography" value="submitBiography">
              Submit</button>
