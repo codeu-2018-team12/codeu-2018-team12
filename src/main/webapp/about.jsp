@@ -250,7 +250,7 @@
              <li><strong>before:</strong>MM-dd-YYYY - finds all messages in the current conversation posted before the given day</li>
              <li><strong>on:</strong>MM-dd-YYYY - finds all messages in the current conversation posted on the given day</li>
              <li><strong>after:</strong>MM-dd-YYYY - finds all messages in the current conversation posted after the given day</li>
-             <li><strong>with:</strong>username - finds all messages in the current conversation posted by the given user</li>
+             <li><strong>by:</strong>username - finds all messages in the current conversation posted by the given user</li>
              <li>If none of these filters are given, the app will find any messages whose content contains the given string</li>
            </ul>
 
