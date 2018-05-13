@@ -55,7 +55,8 @@ User otherUser = (User) request.getAttribute("otherUser");
                  Avatar"></a>
               <% } else { %>
                  <a href="/profile/<%= author %>">
-                 <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser.getProfilePicture()%>"
+                 <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser
+                 .getProfilePicture()%>"
                  alt="User Avatar"></a>
               <% } %>
               </span>
@@ -87,7 +88,8 @@ User otherUser = (User) request.getAttribute("otherUser");
                 <a href="/profile/<%= author %>"><img class="profile-pic" src="../resources/codeU.png" alt="User Avatar"></a>
               <% } else { %>
                 <a href="/profile/<%= author %>">
-                <img "profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser.getProfilePicture()%>"
+                <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= messageUser
+                .getProfilePicture()%>"
                 alt="User Avatar"></a>
              <% } %>
                </span>

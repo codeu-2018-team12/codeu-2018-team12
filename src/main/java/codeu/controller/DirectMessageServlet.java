@@ -126,6 +126,7 @@ public class DirectMessageServlet extends HttpServlet {
     }
 
     List<Message> messages = messageStore.getMessagesInConversation(conversation.getId());
+    messages = messageStore.sort(messages);
     List<UUID> conversationUsers = conversation.getConversationUsers();
 
     request.setAttribute("conversationUsers", conversationUsers);

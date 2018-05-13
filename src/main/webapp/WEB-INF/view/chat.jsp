@@ -47,7 +47,6 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
          document.getElementById("mySidenav").style.width = "250px";
          document.getElementById("main").style.marginLeft = "250px";
       }
-
       function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft= "0";
@@ -61,9 +60,9 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
    <div id="conversations">
       <a class="section-title" href="../conversations#group-message">Conversations</a>
       <%
-        int count1 = 0;
+        int counterOne = 0;
         for (int i = 0 ; i < chatConversations.size(); i++) {
-          if (count1 == 8) {
+          if (counterOne == 8) {
             break;
           }
           if(!chatConversations.get(i).getTitle().startsWith("direct:")) {
@@ -74,25 +73,28 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
               <a class="convo-title" href="/chat/<%=title%>" ><%=title%></a>
            </p>
          </div>
-       <% count1++;
+       <% counterOne++;
          }
        }%>
    </div>
    <div id="Direct Messages">
    <a class="section-title" href="../conversations#direct-message">Direct Messages</a>
-     <%
-        int count2 = 0;
-         for (int i = 0 ; i < chatConversations.size(); i++) {
-           if (count2 == 5) {
+     <% List<Conversation> permittedConversations = ConversationStore.getInstance().getAllPermittedConversations
+     (user.getId());
+        int counterTwo = 0;
+         for (int i = 0 ; i < permittedConversations.size(); i++) {
+           if (counterTwo == 5) {
              break;
            }
-           if (chatConversations.get(i).getTitle().startsWith("direct:")) {
+           if (permittedConversations.get(i).getTitle().startsWith("direct:")) {
              String recipient = null;
-             List<UUID> convoUsers = chatConversations.get(i).getConversationUsers();
-           if(convoUsers.get(0) == user.getId()){
-              recipient = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
+             List<UUID> convoUsers = permittedConversations.get(i).getConversationUsers();
+              String firstUser = UserStore.getInstance().getUser(convoUsers.get(0)).getName();
+              String secondUser = UserStore.getInstance().getUser(convoUsers.get(1)).getName();
+           if (!user.getName().equals(firstUser)){
+              recipient = firstUser;
            } else {
-              recipient = UserStore.getInstance().getUser(convoUsers.get(1)).getName();
+              recipient = secondUser;
            }
           %>
            <div class="message-entry">
@@ -100,7 +102,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                <a class="convo-title" href="/direct/<%=recipient%>"><%=recipient%></a>
             </p>
           </div>
-          <% count2++;
+          <% counterTwo++;
             }
           }%>
      </div>
@@ -120,6 +122,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
        <%
         if (user != null && conversationUsers.contains(user.getId())) {
           for (Message message : messages) {
+            User authorOfMessage = UserStore.getInstance().getUser(message.getAuthorId());
             String author = UserStore.getInstance().getUser(message.getAuthorId()).getName();
             String username = user.getName();
             if (!author.equals(username)) {
@@ -131,7 +134,7 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
                Avatar"></a>
            <% } else { %>
               <a href="/profile/<%= author %>">
-              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
+              <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= authorOfMessage
               .getProfilePicture() %>" alt="User Avatar"></a>
           <% } %>
          </span>
@@ -159,10 +162,8 @@ User user = (User) UserStore.getInstance().getUser((String) request.getSession()
               Avatar"></a>
           <% } else { %>
           <a href="/profile/<%= author %>">
-          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= user
-          .getProfilePicture
-          ()%>"
-          alt="User Avatar"></a>
+          <img class="profile-pic" src="http://storage.googleapis.com/chatu-196017.appspot.com/<%= authorOfMessage
+          .getProfilePicture()%>" alt="User Avatar"></a>
          <% } %>
        </span>
        <div class="chat-body clearfix">
