@@ -94,7 +94,8 @@ User loggedInUser = (User) request.getAttribute("loggedInUser");
          <h2>Recent Activity</h2>
          <div id="activities">
           <ul>
-           <% if ((!(user.getProfilePrivacy().equals("noContent"))) || ((user.getProfilePrivacy().equals("someContent"))
+           <% if (((user.getProfilePrivacy().equals("noContent")) && (loggedInUser.equals(user)))
+              || ((user.getProfilePrivacy().equals("allContent"))) || ((user.getProfilePrivacy().equals("someContent"))
               && (loggedInUser.getConversationFriends().contains(user.getId())))) { %>
            <%
              for (Activity activity : activities) {

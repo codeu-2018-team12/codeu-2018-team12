@@ -82,32 +82,32 @@ public class PersonalActivityServlet extends HttpServlet {
     UUID userID = user.getId();
     List<Conversation> conversations = sort(conversationStore.getAllConversations());
     List<Activity> conversationActivities = new ArrayList<>();
-    List<Activity> tailoredActivities = new ArrayList<>();
 
     // retrieve activities for the conversations a user has joined
     for (Conversation conversation : conversations) {
-      List<UUID> conversationUsers = conversation.getConversationUsers();
-      if (conversationUsers.contains(user.getId())) {
-        conversationActivities.add(
-            activityStore.getActivityWithConversationID(conversation.getId()));
+      if (conversation.getConversationUsers() != null) {
+        List<UUID> conversationUsers = conversation.getConversationUsers();
+        if (conversationUsers.contains(user.getId())) {
+          conversationActivities.add(
+              activityStore.getActivityWithConversationID(conversation.getId()));
+        }
       }
     }
-    tailoredActivities.addAll(conversationActivities);
+    List<Activity> tailoredActivities = new ArrayList<>(conversationActivities);
 
     // retrieve user activities
     List<Activity> userActivities = activityStore.getActivitiesWithUserID(userID);
-    tailoredActivities.addAll(userActivities);
+    if (userActivities != null) {
+      tailoredActivities.addAll(userActivities);
+    }
 
     // remove any duplicates
-    Set<Activity> hashSet = new HashSet<>();
-    hashSet.addAll(tailoredActivities);
+    Set<Activity> hashSet = new HashSet<>(tailoredActivities);
     tailoredActivities.clear();
     tailoredActivities.addAll(hashSet);
 
-    // sort the activities
-    List<Activity> personalizedActivities = sort(tailoredActivities);
     List<Activity> privacyActivities =
-        sort(activityStore.getActivitiesPerPrivacy(user, personalizedActivities));
+        sort(activityStore.getActivitiesPerPrivacy(user, tailoredActivities));
 
     request.setAttribute("activities", privacyActivities);
     request
