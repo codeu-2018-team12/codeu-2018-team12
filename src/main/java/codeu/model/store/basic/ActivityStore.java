@@ -128,21 +128,29 @@ public class ActivityStore {
   public List<Activity> getActivitiesPerPrivacy(User currentUser, List<Activity> activities1) {
     UserStore userstore = UserStore.getInstance();
     List<Activity> activitiesPerPrivacy = new ArrayList<>();
-    for (Activity activity : activities1) {
-      UUID activityUserID = activity.getUserId();
-      User user = userstore.getUser(activityUserID);
-      if (currentUser != null
-          && user != null
-          && currentUser.getConversationFriends().contains(activityUserID)
-          && (user.getActivityFeedPrivacy().equals("someContent"))) {
-        activitiesPerPrivacy.add(activity);
-      } else if (user != null && user.getActivityFeedPrivacy().equals("allContent")) {
-        activitiesPerPrivacy.add(activity);
-      } else if (currentUser != null && activityUserID.equals(currentUser.getId())) {
-        activitiesPerPrivacy.add(activity);
+    if (activities1 == null) {
+      return activitiesPerPrivacy;
+    } else {
+      for (Activity activity : activities1) {
+        if (activity != null) {
+          UUID activityUserID = activity.getUserId();
+          User user = userstore.getUser(activityUserID);
+          if (user != null && user.equals(currentUser)) {
+            activitiesPerPrivacy.add(activity);
+          } else if (currentUser != null
+              && user != null
+              && currentUser.getConversationFriends().contains(activityUserID)
+              && (user.getActivityFeedPrivacy().equals("someContent"))) {
+            activitiesPerPrivacy.add(activity);
+          } else if (user != null && user.getActivityFeedPrivacy().equals("allContent")) {
+            activitiesPerPrivacy.add(activity);
+          } else if (currentUser != null && activityUserID.equals(currentUser.getId())) {
+            activitiesPerPrivacy.add(activity);
+          }
+        }
       }
+      return activitiesPerPrivacy;
     }
-    return activitiesPerPrivacy;
   }
 
   /** Add a new activity to the current set of activities known to the application. */
