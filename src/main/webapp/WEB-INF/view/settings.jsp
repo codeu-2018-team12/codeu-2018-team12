@@ -136,7 +136,7 @@
         <label for="notificationStatus">Notifications: </label><br>
         <select name= "notificationStatus">
            <option value="optIn">Yes, I would like to receive notifications</option>
-           <option value="optOut">No, I would not like receive notifications</option>
+           <option value="optOut">No, I would not like to receive notifications</option>
         </select>
         <br><br>
         <label for="notificationFrequency">Notification Frequency: </label> <br>
