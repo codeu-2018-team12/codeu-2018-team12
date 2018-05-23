@@ -84,6 +84,7 @@
 
  .chat-body {
    padding-bottom: 30px;
+   word-break: keep-all;
  }
 
  .chat li.left .chat-body {
